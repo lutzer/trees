@@ -3,6 +3,11 @@
 #include "ofMain.h"
 
 class ofApp : public ofBaseApp{
+    
+    private:
+        ofEasyCam cam;
+        ofMesh tree;
+        ofMesh ground;
 
 	public:
 		void setup();
