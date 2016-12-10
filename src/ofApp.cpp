@@ -3,7 +3,8 @@
 
 using namespace trees;
 
-#define GROUND_SIZE 100
+static const int GROUND_SIZE = 100;
+static const int UPDATE_INTERVAL = 250;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -33,15 +34,18 @@ void ofApp::setup(){
     glPointSize(3);// make the points bigger
 
     
-    lastUpdateTime = ofGetElapsedTimeMicros();
+    lastUpdateTime = ofGetElapsedTimeMillis();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    // grow tree once
-    tree = iterateTree(tree,{0,0});
-    treeMesh = TreeModel(tree).getMesh();
+    if ( ofGetElapsedTimeMillis() - lastUpdateTime > UPDATE_INTERVAL ) {
+        // grow tree once
+        tree = iterateTree(tree,{0,0});
+        treeMesh = TreeModel(tree).getMesh();
+        lastUpdateTime = ofGetElapsedTimeMillis();
+    }
 
 }
 
