@@ -21,6 +21,10 @@ bool randBool() {
     return distribution(gen) == 0;
 }
 
+double randDouble() {
+    return randDouble(0, 1);
+}
+
 double randDouble(double minBound, double maxBound) {
     std::uniform_real_distribution<double> distribution(minBound, maxBound);
     auto gen = generator();

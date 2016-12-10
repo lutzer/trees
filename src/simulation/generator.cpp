@@ -8,6 +8,10 @@
 
 #include "generator.hpp"
 
+#include <math.h>
+
+#include "random.hpp"
+
 using namespace trees;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
@@ -34,6 +38,14 @@ Tree treeWithUpdatedBranches(Tree tree) {
         newBranch.length = branch.length + 0.5; // Make each branch longer.
 
         // Create a new child branch?
+        if (randBool()) {
+            Branch newBranch = {};
+            newBranch.position = randDouble();
+            newBranch.angle = randDouble(0, M_PI);
+            newBranch.length = 0;
+            newBranch.thickness = 0;
+            branch.children.insert(newBranch.children.end(), newBranch);
+        }
 
         return newBranch;
     });
