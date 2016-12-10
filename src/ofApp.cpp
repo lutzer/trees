@@ -1,5 +1,5 @@
 #include "ofApp.h"
-#include "tree.hpp"
+#include "generator.hpp"
 
 using namespace trees;
 
@@ -24,18 +24,24 @@ void ofApp::setup(){
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
 
     // generate Tree
-    TreeMesh tree = TreeMesh(generateSapling());
+    tree = generateSapling();
 
     // create tree Mesh
-    treeMesh = tree.getMesh();
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
     glPointSize(3);// make the points bigger
+
+    
+    lastUpdateTime = ofGetElapsedTimeMicros();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+    // grow tree once
+    tree = iterateTree(tree,{0,0});
+    treeMesh = TreeModel(tree).getMesh();
 
 }
 

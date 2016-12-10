@@ -6,20 +6,20 @@
 //
 //
 
-#include "TreeMesh.hpp"
+#include "TreeModel.hpp"
 #include "ofMain.h"
 
 // declare private methods
 void addBranchesToMesh(ofMesh &mesh, ofPoint origin, trees::Branch branch);
 
-TreeMesh::TreeMesh() {
+TreeModel::TreeModel() {
 }
 
-TreeMesh::TreeMesh(trees::Tree tree) {
+TreeModel::TreeModel(trees::Tree tree) {
     this->tree = tree;
 }
 
-ofMesh TreeMesh::getMesh() {
+ofMesh TreeModel::getMesh() {
     ofMesh mesh;
     mesh.setMode(OF_PRIMITIVE_LINES);
     addBranchesToMesh(mesh,ofPoint(tree.origin.x,tree.origin.y,0),tree.base);

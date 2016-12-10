@@ -1,14 +1,18 @@
 #pragma once
 
 #include "ofMain.h"
-#include "TreeMesh.hpp"
+#include "TreeModel.hpp"
+#include "tree.hpp"
 
 class ofApp : public ofBaseApp{
 
 private:
     ofEasyCam cam;
     ofMesh treeMesh;
+    trees::Tree tree;
     ofMesh groundMesh;
+
+    long lastUpdateTime;
 
 public:
     void setup();

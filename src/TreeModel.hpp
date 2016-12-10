@@ -15,11 +15,11 @@
 
 //class ofMesh;
 
-class TreeMesh {
+class TreeModel {
     
 public:
-    TreeMesh();
-    TreeMesh(trees::Tree tree);
+    TreeModel();
+    TreeModel(trees::Tree tree);
     ofMesh getMesh();
 
 
