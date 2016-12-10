@@ -26,9 +26,7 @@ ofMesh TreeModel::getMesh() {
 
     trees::Branch emptyBranch = {};
 
-    double startAngle = 0;
-
-    addBranchesToMesh(mesh, ofPoint( tree.origin.x, tree.origin.y, 0), startAngle, tree.base);
+    addBranchesToMesh(mesh, ofPoint( tree.origin.x, tree.origin.y, 0), 0, tree.base);
     return mesh;
 }
 

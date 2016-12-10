@@ -15,7 +15,8 @@
 using namespace trees;
 
 static const double BRANCHOUT_ANGLE_VARIATION = 0.05;
-static const double GROWTH_RATE = 0.1;
+static const double GROWTH_RATE = 1;
+static const double BRANCH_POSSIBLITY = 0.1;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree tree);
@@ -44,7 +45,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
         newBranch.length = branch.length + GROWTH_RATE; // Make each branch longer.
 
         // Create a new child branch?
-        if (randDouble() < 0.1) {
+        if (randDouble() < BRANCH_POSSIBLITY) {
             Branch newChild = {};
             newChild.position = randDouble();
             newChild.angle = branchOutAngle(branch.angle, BRANCHOUT_ANGLE_VARIATION);
