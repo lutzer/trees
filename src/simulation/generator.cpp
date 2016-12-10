@@ -38,7 +38,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
         newBranch.length = branch.length + 0.5; // Make each branch longer.
 
         // Create a new child branch?
-        if (randBool()) {
+        if (randDouble() < 0.1) {
             Branch newChild = {};
             newChild.position = randDouble();
             newChild.angle = randDouble(0, M_PI);
@@ -69,8 +69,9 @@ Branch mapBranchRecursively(Branch branch, F lambda) {
         return mapBranchRecursively(branch, lambda);
     });
 
-    Branch mappedBranch = lambda(branch);
-    mappedBranch.children = mappedChildren;
+    auto newBranch = branch;
+    newBranch.children = mappedChildren;
+    auto mappedBranch = lambda(newBranch);
 
     return mappedBranch;
 }
