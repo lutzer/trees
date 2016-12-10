@@ -14,8 +14,12 @@
 
 using namespace trees;
 
+static const double BRANCHOUT_ANGLE_VARIATION = 0.05;
+static const double GROWTH_RATE = 0.1;
+
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree tree);
+double brancheoutAngle(double oldAngle, double variation);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
@@ -35,13 +39,13 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
     newTree.base = mapBranchRecursively(newTree.base, [](Branch branch) {
         auto newBranch = branch;
-        newBranch.length = branch.length + 0.5; // Make each branch longer.
+        newBranch.length = branch.length + GROWTH_RATE; // Make each branch longer.
 
         // Create a new child branch?
         if (randDouble() < 0.1) {
             Branch newChild = {};
             newChild.position = randDouble();
-            newChild.angle = randDouble(0, M_PI);
+            newChild.angle = brancheoutAngle(branch.angle,0.2);
             newChild.length = 0;
             newChild.thickness = 0;
             newBranch.children.insert(newBranch.children.end(), newChild);
@@ -54,6 +58,10 @@ Tree treeWithUpdatedBranches(Tree tree) {
 }
 
 #pragma mark - Helpers
+
+double brancheoutAngle(double oldAngle, double variation) {
+    return (randDouble(0, M_PI) - M_PI_2) * variation + oldAngle;
+}
 
 template<typename F>
 Branch mapBranchRecursively(Branch branch, F lambda) {
