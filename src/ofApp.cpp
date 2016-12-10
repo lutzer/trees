@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "tree.hpp"
 
 #define GROUND_SIZE 100
 
@@ -20,6 +21,7 @@ void ofApp::setup(){
     ground.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
     ground.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
 
+    func();
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
