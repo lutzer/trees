@@ -26,7 +26,7 @@ double branchOutAngle(double oldAngle, double variation);
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
 /// lambda to each of them.
-Branch mapBranchRecursively(Branch branch, F lambda);
+Branch mapBranchRecursively(Branch branch, F mapLambda);
 
 #pragma mark - Public
 
@@ -66,22 +66,22 @@ double branchOutAngle(double oldAngle, double variation) {
 }
 
 template<typename F>
-Branch mapBranchRecursively(Branch branch, F lambda) {
+Branch mapBranchRecursively(Branch branch, F mapLambda) {
     // If the given branch has no children, just return the branch mapped.
     if (branch.children.size() == 0) {
-        return lambda(branch);
+        return mapLambda(branch);
     }
 
     // Otherwise, return the branch with all of its children mapped.
     auto children = branch.children;
     vector<Branch> mappedChildren;
-    std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [lambda](Branch branch) {
-        return mapBranchRecursively(branch, lambda);
+    std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [mapLambda](Branch branch) {
+        return mapBranchRecursively(branch, mapLambda);
     });
 
     auto newBranch = branch;
     newBranch.children = mappedChildren;
-    auto mappedBranch = lambda(newBranch);
+    auto mappedBranch = mapLambda(newBranch);
 
     return mappedBranch;
 }
