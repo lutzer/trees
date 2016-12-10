@@ -15,24 +15,29 @@
 using namespace std;
 
 namespace pts {
+    /// A point in space.
     struct Point {
         double x, y;
     };
 }
 
 namespace trees {
+    /// Represents a branch on a tree, including some attributes and child branches.
     struct Branch {
-        double angle, length, thickness;
+        double position, angle, length, thickness;
         vector<Branch> children;
     };
 
+    /// Represents a tree, with the root branch (base/stem/trunk) and an origin point.
     struct Tree {
         Branch base;
         pts::Point origin;
     };
+
+    /// Returns a tree embryo.
+    trees::Tree generateSapling();
+
 }
 
-
-trees::Tree generateSapling();
 
 #endif /* tree_hpp */

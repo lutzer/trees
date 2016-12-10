@@ -11,32 +11,30 @@
 using namespace trees;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
-Tree createBranches(Tree tree);
+Tree treeWithUpdatedBranches(Tree tree);
 
 template<typename F>
-/// Iterates over the given branch and all of its subbranches recursively, applying the given lambda
-/// to each of them.
-Branch mapBranch(Branch branch, F lambda);
+/// Iterates over the given branch and all of its sub-branches recursively, applying the given
+/// lambda to each of them.
+Branch mapBranchRecursively(Branch branch, F lambda);
 
 #pragma mark - Public
 
 Tree iterateTree(Tree tree, pts::Point sun) {
-    return createBranches(tree);
+    return treeWithUpdatedBranches(tree);
 }
 
 #pragma mark - Generator Helpers
 
-Tree createBranches(Tree tree) {
-    auto branchMappingFunction = [] (Branch branch) {
+Tree treeWithUpdatedBranches(Tree tree) {
+    auto newTree = tree;
+
+    newTree.base = mapBranchRecursively(newTree.base, [](Branch branch) {
         auto newBranch = branch;
         newBranch.length = branch.length + 0.5;
 
         return newBranch;
-    };
-
-    auto newTree = tree;
-    auto newBase = mapBranch(newTree.base, branchMappingFunction);
-    newTree.base = newBase;
+    });
 
     return newTree;
 }
@@ -44,7 +42,21 @@ Tree createBranches(Tree tree) {
 #pragma mark - Helpers
 
 template<typename F>
-Branch mapBranch(Branch branch, F lambda) {
-    auto newBranch = lambda(branch);
-    return newBranch;
+Branch mapBranchRecursively(Branch branch, F lambda) {
+    // If the given branch has no children, just return the branch mapped.
+    if (branch.children.size() == 0) {
+        return lambda(branch);
+    }
+
+    // Otherwise, return the branch with all of its children mapped.
+    auto children = branch.children;
+    vector<Branch> mappedChildren;
+    std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [lambda](Branch branch) {
+        return mapBranchRecursively(branch, lambda);
+    });
+
+    Branch mappedBranch = lambda(branch);
+    mappedBranch.children = mappedChildren;
+
+    return mappedBranch;
 }

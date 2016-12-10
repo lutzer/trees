@@ -11,7 +11,6 @@
 #include <iostream>
 #include <math.h>
 
-
-trees::Tree generateSapling() {
-    return { { M_PI_2, 50, 1, {} }, { 0, 0 } };
+trees::Tree trees::generateSapling() {
+    return { { 0, M_PI_2, 20, 1, {} }, { 0, 0 } };
 }
