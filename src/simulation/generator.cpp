@@ -39,12 +39,12 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
         // Create a new child branch?
         if (randBool()) {
-            Branch newBranch = {};
-            newBranch.position = randDouble();
-            newBranch.angle = randDouble(0, M_PI);
-            newBranch.length = 0;
-            newBranch.thickness = 0;
-            branch.children.insert(newBranch.children.end(), newBranch);
+            Branch newChild = {};
+            newChild.position = randDouble();
+            newChild.angle = randDouble(0, M_PI);
+            newChild.length = 0;
+            newChild.thickness = 0;
+            newBranch.children.insert(newBranch.children.end(), newChild);
         }
 
         return newBranch;
