@@ -1,6 +1,8 @@
 #include "ofApp.h"
 #include "tree.hpp"
 
+using namespace trees;
+
 #define GROUND_SIZE 100
 
 //--------------------------------------------------------------
@@ -15,11 +17,17 @@ void ofApp::setup(){
     cam.setDistance(100);
 
     // create ground mesh
-    ground.setMode(OF_PRIMITIVE_LINE_LOOP);
-    ground.addVertex(ofPoint(-GROUND_SIZE/2,-GROUND_SIZE/2,0));
-    ground.addVertex(ofPoint(GROUND_SIZE/2,-GROUND_SIZE/2,0));
-    ground.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
-    ground.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
+    groundMesh.setMode(OF_PRIMITIVE_LINE_LOOP);
+    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,-GROUND_SIZE/2,0));
+    groundMesh.addVertex(ofPoint(GROUND_SIZE/2,-GROUND_SIZE/2,0));
+    groundMesh.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
+    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
+
+    // generate Tree
+    TreeMesh tree = TreeMesh(generateSapling());
+
+    // create tree Mesh
+    treeMesh = tree.getMesh();
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
@@ -38,7 +46,8 @@ void ofApp::draw(){
 
     // even points can overlap with each other, let's avoid that
     cam.begin();
-    ground.draw();
+    groundMesh.draw();
+    treeMesh.draw();
     cam.end();
 
 }
@@ -95,5 +104,5 @@ void ofApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
-    
+
 }

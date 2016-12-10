@@ -35,7 +35,9 @@ namespace trees {
     };
 
     /// Returns a tree embryo.
-    trees::Tree sapling();
+    trees::Tree generateSapling();
+
 }
+
 
 #endif /* tree_hpp */
