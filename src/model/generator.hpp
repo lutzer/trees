@@ -13,8 +13,7 @@
 
 #include "tree.hpp"
 
-using namespace trees;
-
-Tree iterateTree(Tree tree, Point sun);
+/// Progresses the given tree one time unit, returning the new tree.
+trees::Tree iterateTree(trees::Tree tree, trees::Point sun);
 
 #endif /* generator_hpp */
