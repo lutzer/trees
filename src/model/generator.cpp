@@ -11,7 +11,7 @@
 using namespace trees;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
-Tree createBranches(Tree tree);
+Tree treeWithUpdatedBranches(Tree tree);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
@@ -21,22 +21,20 @@ Branch mapBranchRecursively(Branch branch, F lambda);
 #pragma mark - Public
 
 Tree iterateTree(Tree tree, pts::Point sun) {
-    return createBranches(tree);
+    return treeWithUpdatedBranches(tree);
 }
 
 #pragma mark - Generator Helpers
 
-Tree createBranches(Tree tree) {
-    auto branchMap = [](Branch branch) {
+Tree treeWithUpdatedBranches(Tree tree) {
+    auto newTree = tree;
+
+    newTree.base = mapBranchRecursively(newTree.base, [](Branch branch) {
         auto newBranch = branch;
         newBranch.length = branch.length + 0.5;
 
         return newBranch;
-    };
-
-    auto newTree = tree;
-    auto newBase = mapBranchRecursively(newTree.base, branchMap);
-    newTree.base = newBase;
+    });
 
     return newTree;
 }
@@ -50,8 +48,7 @@ Branch mapBranchRecursively(Branch branch, F lambda) {
         return lambda(branch);
     }
 
-    // Otherwise, return the branch as well as all of its children mapped.
-
+    // Otherwise, return the branch with all of its children mapped.
     auto children = branch.children;
     vector<Branch> mappedChildren;
     std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [lambda](Branch branch) {
