@@ -19,9 +19,9 @@
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
-		FC60D2001DFC214800354C0D /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1FE1DFC214800354C0D /* tree.cpp */; };
-		FC60D2031DFC216800354C0D /* generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D2011DFC216800354C0D /* generator.cpp */; };
-		FC60D2061DFC451500354C0D /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D2041DFC451500354C0D /* random.cpp */; };
+		FC60D20F1DFC4D7F00354C0D /* generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D2091DFC4D7F00354C0D /* generator.cpp */; };
+		FC60D2101DFC4D7F00354C0D /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D20B1DFC4D7F00354C0D /* random.cpp */; };
+		FC60D2111DFC4D7F00354C0D /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D20D1DFC4D7F00354C0D /* tree.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,12 +81,12 @@
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
-		FC60D1FE1DFC214800354C0D /* tree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tree.cpp; path = src/model/tree.cpp; sourceTree = "<group>"; };
-		FC60D1FF1DFC214800354C0D /* tree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tree.hpp; path = src/model/tree.hpp; sourceTree = "<group>"; };
-		FC60D2011DFC216800354C0D /* generator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = generator.cpp; path = src/model/generator.cpp; sourceTree = "<group>"; };
-		FC60D2021DFC216800354C0D /* generator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = generator.hpp; path = src/model/generator.hpp; sourceTree = "<group>"; };
-		FC60D2041DFC451500354C0D /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = src/model/random.cpp; sourceTree = "<group>"; };
-		FC60D2051DFC451500354C0D /* random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = random.hpp; path = src/model/random.hpp; sourceTree = "<group>"; };
+		FC60D2091DFC4D7F00354C0D /* generator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = generator.cpp; path = src/simulation/generator.cpp; sourceTree = "<group>"; };
+		FC60D20A1DFC4D7F00354C0D /* generator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = generator.hpp; path = src/simulation/generator.hpp; sourceTree = "<group>"; };
+		FC60D20B1DFC4D7F00354C0D /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = src/simulation/random.cpp; sourceTree = "<group>"; };
+		FC60D20C1DFC4D7F00354C0D /* random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = random.hpp; path = src/simulation/random.hpp; sourceTree = "<group>"; };
+		FC60D20D1DFC4D7F00354C0D /* tree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tree.cpp; path = src/simulation/tree.cpp; sourceTree = "<group>"; };
+		FC60D20E1DFC4D7F00354C0D /* tree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tree.hpp; path = src/simulation/tree.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,7 +175,7 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				FC60D1FD1DFC211A00354C0D /* model */,
+				FC60D1FD1DFC211A00354C0D /* simulation */,
 				49BFC8FD1DFC2D9E00A42206 /* TreeModel.cpp */,
 				49BFC8FE1DFC2D9E00A42206 /* TreeModel.hpp */,
 			);
@@ -191,17 +191,17 @@
 			name = openFrameworks;
 			sourceTree = "<group>";
 		};
-		FC60D1FD1DFC211A00354C0D /* model */ = {
+		FC60D1FD1DFC211A00354C0D /* simulation */ = {
 			isa = PBXGroup;
 			children = (
-				FC60D2011DFC216800354C0D /* generator.cpp */,
-				FC60D2021DFC216800354C0D /* generator.hpp */,
-				FC60D2041DFC451500354C0D /* random.cpp */,
-				FC60D2051DFC451500354C0D /* random.hpp */,
-				FC60D1FE1DFC214800354C0D /* tree.cpp */,
-				FC60D1FF1DFC214800354C0D /* tree.hpp */,
+				FC60D2091DFC4D7F00354C0D /* generator.cpp */,
+				FC60D20A1DFC4D7F00354C0D /* generator.hpp */,
+				FC60D20B1DFC4D7F00354C0D /* random.cpp */,
+				FC60D20C1DFC4D7F00354C0D /* random.hpp */,
+				FC60D20D1DFC4D7F00354C0D /* tree.cpp */,
+				FC60D20E1DFC4D7F00354C0D /* tree.hpp */,
 			);
-			name = model;
+			name = simulation;
 			path = ..;
 			sourceTree = "<group>";
 		};
@@ -297,15 +297,15 @@
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
-				FC60D2031DFC216800354C0D /* generator.cpp in Sources */,
+				FC60D20F1DFC4D7F00354C0D /* generator.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
-				FC60D2061DFC451500354C0D /* random.cpp in Sources */,
+				FC60D2101DFC4D7F00354C0D /* random.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				49BFC8FF1DFC2D9E00A42206 /* TreeModel.cpp in Sources */,
-				FC60D2001DFC214800354C0D /* tree.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
+				FC60D2111DFC4D7F00354C0D /* tree.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
