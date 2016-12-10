@@ -19,6 +19,8 @@ static const double GROWTH_RATE = 0.1;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree tree);
+
+/// Determines a new angle for a branch.
 double branchOutAngle(double oldAngle, double variation);
 
 template<typename F>
