@@ -20,7 +20,7 @@ Branch mapBranch(Branch branch, F lambda);
 
 #pragma mark - Public
 
-Tree iterateTree(Tree tree, Point sun) {
+Tree iterateTree(Tree tree, pts::Point sun) {
     return createBranches(tree);
 }
 

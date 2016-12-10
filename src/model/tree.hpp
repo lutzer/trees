@@ -14,19 +14,21 @@
 
 using namespace std;
 
+namespace pts {
+    struct Point {
+        double x, y;
+    };
+}
+
 namespace trees {
     struct Branch {
         double angle, length, thickness;
         vector<Branch> children;
     };
 
-    struct Point {
-        double x, y;
-    };
-
     struct Tree {
         Branch base;
-        Point origin;
+        pts::Point origin;
     };
 
     trees::Tree sapling();

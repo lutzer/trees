@@ -14,6 +14,6 @@
 #include "tree.hpp"
 
 /// Progresses the given tree one time unit, returning the new tree.
-trees::Tree iterateTree(trees::Tree tree, trees::Point sun);
+trees::Tree iterateTree(trees::Tree tree, pts::Point sun);
 
 #endif /* generator_hpp */
