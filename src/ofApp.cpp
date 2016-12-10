@@ -4,7 +4,7 @@
 using namespace trees;
 
 static const int GROUND_SIZE = 100;
-static const int UPDATE_INTERVAL = 250;
+static const int UPDATE_INTERVAL = 200;
 
 //--------------------------------------------------------------
 void ofApp::setup(){

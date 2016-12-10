@@ -45,7 +45,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
         if (randDouble() < 0.1) {
             Branch newChild = {};
             newChild.position = randDouble();
-            newChild.angle = brancheoutAngle(branch.angle,0.2);
+            newChild.angle = brancheoutAngle(branch.angle,BRANCHOUT_ANGLE_VARIATION);
             newChild.length = 0;
             newChild.thickness = 0;
             newBranch.children.insert(newBranch.children.end(), newChild);
@@ -60,7 +60,8 @@ Tree treeWithUpdatedBranches(Tree tree) {
 #pragma mark - Helpers
 
 double brancheoutAngle(double oldAngle, double variation) {
-    return (randDouble(0, M_PI) - M_PI_2) * variation + oldAngle;
+    //return (randDouble(0, M_PI) - M_PI_2) * variation;
+    return 0.1;
 }
 
 template<typename F>

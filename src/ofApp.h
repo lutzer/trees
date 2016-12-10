@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "TreeModel.hpp"
+#include "treeModel.hpp"
 #include "tree.hpp"
 
 class ofApp : public ofBaseApp{
