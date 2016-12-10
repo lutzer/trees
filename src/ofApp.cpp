@@ -5,10 +5,18 @@ using namespace trees;
 
 static const int GROUND_SIZE = 100;
 static const int UPDATE_INTERVAL = 200;
+static const int MAX_ITERATIONS = 100;
+static const int PADDING = 30;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
+
+    // setup gui
+    gui.setup("GUI");
+    gui.setPosition(PADDING, 100);
+    gui.add(iterationSlider.setup("Iterations", 50, 0, MAX_ITERATIONS-1));
+    iterationSlider.addListener(this, &ofApp::iterationSliderChanged);
 
     // this uses depth information for occlusion
     // rather than always drawing things on top of each other
@@ -17,11 +25,6 @@ void ofApp::setup(){
     // this sets the camera's distance from the object
     cam.setDistance(100);
 
-    // setup gui
-    gui.setup("GUI");
-    gui.add(iterationSlider.setup("Iterations", 50, 0, 100));
-    iterationSlider.addListener(this, &ofApp::iterationSliderChanged);
-
     // create ground mesh
     groundMesh.setMode(OF_PRIMITIVE_LINE_LOOP);
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,-GROUND_SIZE/2,0));
@@ -29,27 +32,24 @@ void ofApp::setup(){
     groundMesh.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
 
-    // generate Tree
+    // generate Tree Sappling
     tree = generateSapling();
 
-    // create tree Mesh
+    // create tree Meshes
+    for (int i=0; i<MAX_ITERATIONS; i++) {
+        // grow tree once
+        tree = iterateTree(tree,{0,0});
+        treeMeshList.push_back(TreeModel(tree).getMesh());
+    }
 
     //glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
     //glPointSize(3);// make the points bigger
-
     
     lastUpdateTime = ofGetElapsedTimeMillis();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
-    if ( ofGetElapsedTimeMillis() - lastUpdateTime > UPDATE_INTERVAL ) {
-        // grow tree once
-        tree = iterateTree(tree,{0,0});
-        treeMesh = TreeModel(tree).getMesh();
-        lastUpdateTime = ofGetElapsedTimeMillis();
-    }
 
 }
 
@@ -58,10 +58,12 @@ void ofApp::draw(){
 
     ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
 
+    ofDrawBitmapString("<a>: -iteration, <s>: +iteration", PADDING, PADDING);
+
     // even points can overlap with each other, let's avoid that
     cam.begin();
     groundMesh.draw();
-    treeMesh.draw();
+    treeMeshList[iteration].draw();
     cam.end();
 
     gui.draw();
@@ -69,7 +71,11 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key == 'a') {
+        iteration = max(0,iteration - 1);
+    } else if (key == 's') {
+        iteration = min(MAX_ITERATIONS-1,iteration + 1);
+    }
 }
 
 //--------------------------------------------------------------
@@ -123,5 +129,5 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::iterationSliderChanged(int& value) {
-    std::cout << value << "/n";
+    iteration = value;
 }

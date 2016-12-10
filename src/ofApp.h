@@ -9,11 +9,12 @@ class ofApp : public ofBaseApp{
 
 private:
     ofEasyCam cam;
-    ofMesh treeMesh;
+    vector<ofMesh> treeMeshList;
     trees::Tree tree;
     ofMesh groundMesh;
 
     long lastUpdateTime;
+    int iteration;
 
     // GUI
     ofxPanel gui;
