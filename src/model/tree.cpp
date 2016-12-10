@@ -14,5 +14,5 @@
 using namespace trees;
 
 Tree sapling() {
-    return { { M_PI_2, 1, 1, {} }, { 0, 0 } };
+    return { { 0, M_PI_2, 1, 1, {} }, { 0, 0 } };
 }
