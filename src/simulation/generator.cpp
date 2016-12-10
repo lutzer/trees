@@ -63,8 +63,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
 #pragma mark - Helpers
 
 double branchOutAngle(double oldAngle, double variation) {
-    //return (randDouble(0, M_PI) - M_PI_2) * variation;
-    return randBool() ? 0.2 : -0.2;
+    return randDouble(-variation, variation);
 }
 
 template<typename F>
