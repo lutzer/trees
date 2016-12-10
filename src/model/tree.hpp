@@ -10,7 +10,27 @@
 #define tree_hpp
 
 #include <stdio.h>
+#include <vector>
 
-void func();
+using namespace std;
+
+namespace trees {
+    struct Branch {
+        double angle;
+        double size;
+        double thickness;
+        vector<Branch *> children;
+    };
+
+    struct Point {
+        double x;
+        double y;
+    };
+
+    struct Tree {
+        Branch *base;
+        Point *origin;
+    };
+}
 
 #endif /* tree_hpp */
