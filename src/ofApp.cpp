@@ -14,7 +14,7 @@ void ofApp::setup(){
 
     // setup gui
     gui.setup("GUI");
-    gui.setPosition(PADDING, 100);
+    gui.setPosition(PADDING, 50);
     gui.add(iterationSlider.setup("Iterations", 50, 0, MAX_ITERATIONS-1));
     iterationSlider.addListener(this, &ofApp::iterationSliderChanged);
 

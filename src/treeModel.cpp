@@ -36,7 +36,7 @@ void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch
     // add root of branch
     mesh.addVertex(origin);
 
-    double newAngle = angle + branch.angle;
+    double newAngle = utils::constrainAngle(angle + branch.angle);
 
     // add end of branch
     ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
