@@ -45,7 +45,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
         if (randDouble() < 0.1) {
             Branch newChild = {};
             newChild.position = randDouble();
-            newChild.angle = branchOutAngle(branch.angle,0.2);
+            newChild.angle = branchOutAngle(branch.angle, 0.2);
             newChild.length = 0;
             newChild.thickness = 0;
             newBranch.children.insert(newBranch.children.end(), newChild);
