@@ -16,21 +16,20 @@ using namespace std;
 
 namespace trees {
     struct Branch {
-        double angle;
-        double size;
-        double thickness;
-        vector<Branch *> children;
+        double angle, length, thickness;
+        vector<Branch> children;
     };
 
     struct Point {
-        double x;
-        double y;
+        double x, y;
     };
 
     struct Tree {
-        Branch *base;
-        Point *origin;
+        Branch base;
+        Point origin;
     };
 }
+
+trees::Tree sapling();
 
 #endif /* tree_hpp */
