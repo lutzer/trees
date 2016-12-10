@@ -19,12 +19,14 @@ static const double GROWTH_RATE = 0.1;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree tree);
-double brancheoutAngle(double oldAngle, double variation);
+
+/// Determines a new angle for a branch.
+double branchOutAngle(double oldAngle, double variation);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
 /// lambda to each of them.
-Branch mapBranchRecursively(Branch branch, F lambda);
+Branch mapBranchRecursively(Branch branch, F mapLambda);
 
 #pragma mark - Public
 
@@ -45,7 +47,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
         if (randDouble() < 0.1) {
             Branch newChild = {};
             newChild.position = randDouble();
-            newChild.angle = brancheoutAngle(branch.angle,BRANCHOUT_ANGLE_VARIATION);
+            newChild.angle = branchOutAngle(branch.angle, BRANCHOUT_ANGLE_VARIATION);
             newChild.length = 0;
             newChild.thickness = 0;
             newBranch.children.insert(newBranch.children.end(), newChild);
@@ -59,28 +61,28 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
 #pragma mark - Helpers
 
-double brancheoutAngle(double oldAngle, double variation) {
+double branchOutAngle(double oldAngle, double variation) {
     //return (randDouble(0, M_PI) - M_PI_2) * variation;
     return 0.1;
 }
 
 template<typename F>
-Branch mapBranchRecursively(Branch branch, F lambda) {
+Branch mapBranchRecursively(Branch branch, F mapLambda) {
     // If the given branch has no children, just return the branch mapped.
     if (branch.children.size() == 0) {
-        return lambda(branch);
+        return mapLambda(branch);
     }
 
     // Otherwise, return the branch with all of its children mapped.
     auto children = branch.children;
     vector<Branch> mappedChildren;
-    std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [lambda](Branch branch) {
-        return mapBranchRecursively(branch, lambda);
+    std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [mapLambda](Branch branch) {
+        return mapBranchRecursively(branch, mapLambda);
     });
 
     auto newBranch = branch;
     newBranch.children = mappedChildren;
-    auto mappedBranch = lambda(newBranch);
+    auto mappedBranch = mapLambda(newBranch);
 
     return mappedBranch;
 }
