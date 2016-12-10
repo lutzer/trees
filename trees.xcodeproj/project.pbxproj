@@ -20,6 +20,7 @@
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
 		FC60D2001DFC214800354C0D /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D1FE1DFC214800354C0D /* tree.cpp */; };
 		FC60D2031DFC216800354C0D /* generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D2011DFC216800354C0D /* generator.cpp */; };
+		FC60D2061DFC451500354C0D /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC60D2041DFC451500354C0D /* random.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,8 @@
 		FC60D1FF1DFC214800354C0D /* tree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tree.hpp; path = src/model/tree.hpp; sourceTree = "<group>"; };
 		FC60D2011DFC216800354C0D /* generator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = generator.cpp; path = src/model/generator.cpp; sourceTree = "<group>"; };
 		FC60D2021DFC216800354C0D /* generator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = generator.hpp; path = src/model/generator.hpp; sourceTree = "<group>"; };
+		FC60D2041DFC451500354C0D /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = src/model/random.cpp; sourceTree = "<group>"; };
+		FC60D2051DFC451500354C0D /* random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = random.hpp; path = src/model/random.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +191,8 @@
 			children = (
 				FC60D2011DFC216800354C0D /* generator.cpp */,
 				FC60D2021DFC216800354C0D /* generator.hpp */,
+				FC60D2041DFC451500354C0D /* random.cpp */,
+				FC60D2051DFC451500354C0D /* random.hpp */,
 				FC60D1FE1DFC214800354C0D /* tree.cpp */,
 				FC60D1FF1DFC214800354C0D /* tree.hpp */,
 			);
@@ -289,6 +294,7 @@
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
 				FC60D2031DFC216800354C0D /* generator.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
+				FC60D2061DFC451500354C0D /* random.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				FC60D2001DFC214800354C0D /* tree.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,

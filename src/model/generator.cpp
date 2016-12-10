@@ -31,7 +31,9 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
     newTree.base = mapBranchRecursively(newTree.base, [](Branch branch) {
         auto newBranch = branch;
-        newBranch.length = branch.length + 0.5;
+        newBranch.length = branch.length + 0.5; // Make each branch longer.
+
+        // Create a new child branch?
 
         return newBranch;
     });
