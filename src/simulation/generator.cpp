@@ -15,7 +15,7 @@
 using namespace trees;
 
 static const double BRANCHOUT_ANGLE_VARIATION = 0.05;
-static const double GROWTH_RATE = 1;
+static const double GROWTH_RATE = 0.25;
 static const double BRANCH_POSSIBLITY = 0.1;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
@@ -64,7 +64,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
 double branchOutAngle(double oldAngle, double variation) {
     //return (randDouble(0, M_PI) - M_PI_2) * variation;
-    return 0.1;
+    return randBool() ? 0.2 : -0.2;
 }
 
 template<typename F>

@@ -9,6 +9,7 @@
 #include "ofMain.h"
 #include "treeModel.hpp"
 #include "utils.hpp"
+#include "random.hpp"
 
 // declare private methods
 void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch);
@@ -35,13 +36,19 @@ void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch
     // add root of branch
     mesh.addVertex(origin);
 
-    double newAngle = utils::constrainAngle(angle + branch.angle);
+    double newAngle = angle + branch.angle;
 
     // add end of branch
-    ofPoint endpoint = ofPoint(origin.x + cos(newAngle) * branch.length, 0, origin.y + sin(newAngle) * branch.length);
-    mesh.addVertex(endpoint);
+    ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
+                               0,
+                               origin.z + sin(newAngle) * branch.length
+                               );
+    mesh.addVertex(endPoint);
 
     for (trees::Branch child : branch.children) {
-        addBranchesToMesh(mesh, endpoint, newAngle, child);
+        auto childOrigin = ofPoint(origin.x + (endPoint.x - origin.x) * child.position,
+                                   0,
+                                   origin.z + (endPoint.z - origin.z) * child.position);
+        addBranchesToMesh(mesh, childOrigin, newAngle, child);
     }
 }
