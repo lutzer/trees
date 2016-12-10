@@ -19,7 +19,7 @@ static const double GROWTH_RATE = 0.1;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree tree);
-double brancheoutAngle(double oldAngle, double variation);
+double branchOutAngle(double oldAngle, double variation);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
@@ -45,7 +45,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
         if (randDouble() < 0.1) {
             Branch newChild = {};
             newChild.position = randDouble();
-            newChild.angle = brancheoutAngle(branch.angle,0.2);
+            newChild.angle = branchOutAngle(branch.angle,0.2);
             newChild.length = 0;
             newChild.thickness = 0;
             newBranch.children.insert(newBranch.children.end(), newChild);
@@ -59,7 +59,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
 #pragma mark - Helpers
 
-double brancheoutAngle(double oldAngle, double variation) {
+double branchOutAngle(double oldAngle, double variation) {
     return (randDouble(0, M_PI) - M_PI_2) * variation + oldAngle;
 }
 
