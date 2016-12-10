@@ -17,6 +17,11 @@ void ofApp::setup(){
     // this sets the camera's distance from the object
     cam.setDistance(100);
 
+    // setup gui
+    gui.setup("GUI");
+    gui.add(iterationSlider.setup("Iterations", 50, 0, 100));
+    iterationSlider.addListener(this, &ofApp::iterationSliderChanged);
+
     // create ground mesh
     groundMesh.setMode(OF_PRIMITIVE_LINE_LOOP);
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,-GROUND_SIZE/2,0));
@@ -29,9 +34,8 @@ void ofApp::setup(){
 
     // create tree Mesh
 
-    ofEnableDepthTest();
-    glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
-    glPointSize(3);// make the points bigger
+    //glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
+    //glPointSize(3);// make the points bigger
 
     
     lastUpdateTime = ofGetElapsedTimeMillis();
@@ -60,6 +64,7 @@ void ofApp::draw(){
     treeMesh.draw();
     cam.end();
 
+    gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -115,4 +120,8 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
 
+}
+
+void ofApp::iterationSliderChanged(int& value) {
+    std::cout << value << "/n";
 }
