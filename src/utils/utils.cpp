@@ -11,7 +11,8 @@
 
 double utils::constrainAngle(double x){
     x = fmod(x,M_PI*2);
-    while (x < 0)
-        x += M_PI*2;
+    while (x < 0) {
+        x += M_PI * 2;
+    }
     return x;
 }

@@ -26,7 +26,7 @@ ofMesh TreeModel::getMesh() {
 
     trees::Branch emptyBranch = {};
 
-    addBranchesToMesh(mesh, ofPoint( tree.origin.x, tree.origin.y, 0), 0, tree.base);
+    addBranchesToMesh(mesh, ofPoint(tree.origin.x, tree.origin.y, 0), 0, tree.base);
     return mesh;
 }
 
@@ -37,12 +37,11 @@ void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch
 
     double newAngle = utils::constrainAngle(angle + branch.angle);
 
-
     // add end of branch
     ofPoint endpoint = ofPoint(origin.x + cos(newAngle) * branch.length, 0, origin.y + sin(newAngle) * branch.length);
     mesh.addVertex(endpoint);
 
     for (trees::Branch child : branch.children) {
-        addBranchesToMesh(mesh,endpoint,newAngle,child);
+        addBranchesToMesh(mesh, endpoint, newAngle, child);
     }
 }
