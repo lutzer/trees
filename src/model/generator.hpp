@@ -11,4 +11,10 @@
 
 #include <stdio.h>
 
+#include "tree.hpp"
+
+using namespace trees;
+
+Tree iterateTree(Tree tree, Point sun);
+
 #endif /* generator_hpp */

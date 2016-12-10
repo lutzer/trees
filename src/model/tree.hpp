@@ -28,8 +28,8 @@ namespace trees {
         Branch base;
         Point origin;
     };
-}
 
-trees::Tree sapling();
+    trees::Tree sapling();
+}
 
 #endif /* tree_hpp */

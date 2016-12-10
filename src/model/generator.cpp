@@ -7,3 +7,7 @@
 //
 
 #include "generator.hpp"
+
+Tree iterateTree(Tree tree, Point sun) {
+    return tree;
+}
