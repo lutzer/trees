@@ -11,6 +11,7 @@
 #include <math.h>
 
 #include "random.hpp"
+#include "phototropism.hpp"
 
 using namespace trees;
 
