@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include <vector>
 
-using namespace std;
-
 namespace pts {
     /// A point in space.
     struct Point {
@@ -25,7 +23,7 @@ namespace trees {
     /// Represents a branch on a tree, including some attributes and child branches.
     struct Branch {
         double position, angle, length, thickness;
-        vector<Branch> children;
+        std::vector<Branch> children;
     };
 
     /// Represents a tree, with the root branch (base/stem/trunk) and an origin point.
@@ -35,7 +33,7 @@ namespace trees {
     };
 
     /// Returns a tree embryo.
-    trees::Tree generateSapling();
+    Tree generateSapling();
 }
 
 
