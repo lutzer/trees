@@ -47,7 +47,7 @@ Tree gen::iterateTree(Tree tree, pts::Point sun) {
 
 photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
     auto densities = reduceTreeIntoBins(boundingBox, tree, sun, [](float current, float binIndex, Branch branch) {
-        return current + 0.1; // TODO: Calculate with branch length/thickness instead.
+        return current + branch.thickness; // TODO: Calculate with branch length/thickness instead.
     });
     auto normalizedDensities = photo::normalized(densities);
 
@@ -69,6 +69,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
     newTree.base = mapBranchRecursively(newTree.base, [](Branch branch) {
         auto newBranch = branch;
         newBranch.length = branch.length + GROWTH_RATE; // Make each branch longer.
+        newBranch.thickness = branch.thickness + GROWTH_RATE / (2 * M_PI); // Make each branch thicker.
 
         // Create a new child branch?
         if (randDouble() < BRANCH_POSSIBLITY) {
