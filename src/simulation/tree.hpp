@@ -36,7 +36,6 @@ namespace trees {
 
     /// Returns a tree embryo.
     trees::Tree generateSapling();
-
 }
 
 
