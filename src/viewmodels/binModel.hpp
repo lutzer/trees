@@ -12,13 +12,13 @@
 #include <stdio.h>
 #include "ofMesh.h"
 
-class BinMesh {
+class BinModel {
 
 public:
 
-    BinMesh();
-    BinMesh(float * data, int rows, int columns);
-    ofMesh getMesh(ofPoint pos, ofVec3f binSize);
+    BinModel();
+    BinModel(float * data, int rows, int columns);
+    ofMesh getMesh(ofPoint origin, ofVec3f size);
 
 private:
     float *binData;

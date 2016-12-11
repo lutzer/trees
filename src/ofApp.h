@@ -2,9 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxDatGui.h"
-#include "treeModel.hpp"
 #include "tree.hpp"
-#include "phototropism.hpp"
 
 class ofApp : public ofBaseApp{
 
@@ -14,12 +12,9 @@ private:
     trees::Tree tree;
     pts::Point sun;
 
-    vector<ofMesh> treeMeshList;
     vector<trees::Tree> treeList;
     ofMesh groundMesh;
     ofMesh binMesh;
-
-    photo::LightBins bins;
 
     long lastUpdateTime;
 
