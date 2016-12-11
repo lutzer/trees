@@ -37,7 +37,7 @@ template<typename F>
 photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, pts::Point sun, F reduceLambda);
 
 template<typename F>
-photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, Branch branch, pts::Point sun, F reduceLambda);
+photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch branch, pts::Point sun, F reduceLambda);
 
 #pragma mark - Public
 
@@ -100,13 +100,15 @@ template<typename F>
 photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, pts::Point sun, F reduceLambda) {
     photo::BinArray emptyBins;
     emptyBins.fill(0.0);
-    return reduceBranchIntoBinsRecursively(emptyBins, boundingBox, tree.origin, tree.base, sun, reduceLambda);
+    return reduceBranchIntoBinsRecursively(emptyBins, boundingBox, tree.origin, 0.0, tree.base, sun, reduceLambda);
 }
 
 template<typename F>
-photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, Branch branch, pts::Point sun, F reduceLambda) {
+photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch branch, pts::Point sun, F reduceLambda) {
+    const auto newAngle = angle + branch.angle;
+
     // Get bin indices for the current branch.
-    auto branchEnd = pts::movePoint(point, branch.angle, branch.length);
+    auto branchEnd = pts::movePoint(point, newAngle, branch.length);
     auto binIndices = photo::binIndicesForLine(point, branchEnd, boundingBox);
 
     auto newBins = bins;
@@ -121,9 +123,9 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::Bound
 
     // Otherwise, return the bin array with all of the branch's children reduced into it.
     std::vector<photo::BinArray> mappedChildren;
-    std::transform(branch.children.begin(), branch.children.end(), std::back_inserter(mappedChildren), [bins, boundingBox, point, sun, branch, reduceLambda](Branch child) {
-        auto newPoint = pts::movePoint(point, branch.angle, branch.length * child.position);
-        return reduceBranchIntoBinsRecursively(bins, boundingBox, newPoint, child, sun, reduceLambda);
+    std::transform(branch.children.begin(), branch.children.end(), std::back_inserter(mappedChildren), [bins, boundingBox, point, newAngle, sun, branch, reduceLambda](Branch child) {
+        auto newPoint = pts::movePoint(point, newAngle, branch.length * child.position);
+        return reduceBranchIntoBinsRecursively(bins, boundingBox, newPoint, newAngle, child, sun, reduceLambda);
     });
 
     return std::accumulate(mappedChildren.begin(), mappedChildren.end(), newBins, [](photo::BinArray acc, photo::BinArray curr) {
