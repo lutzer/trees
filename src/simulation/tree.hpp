@@ -12,12 +12,7 @@
 #include <stdio.h>
 #include <vector>
 
-namespace pts {
-    /// A point in space.
-    struct Point {
-        double x, y;
-    };
-}
+#include "point.hpp"
 
 namespace trees {
     /// Represents a branch on a tree, including some attributes and child branches.

@@ -12,8 +12,11 @@
 #include <stdio.h>
 
 #include "tree.hpp"
+#include "phototropism.hpp"
 
 /// Progresses the given tree one time unit, returning the new tree.
 trees::Tree iterateTree(trees::Tree tree, pts::Point sun);
+
+photo::LightBins lightBinsFromTree(trees::Tree tree, pts::Point sun, pts::BoundingBox boundingBox);
 
 #endif /* generator_hpp */

@@ -26,6 +26,7 @@
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
+		FCAF41381DFDE05200C0E120 /* point.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCAF41361DFDE05200C0E120 /* point.cpp */; };
 		FCFDDA3F1DFDC6710062AB69 /* phototropism.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCFDDA3D1DFDC6710062AB69 /* phototropism.cpp */; };
 /* End PBXBuildFile section */
 
@@ -117,6 +118,8 @@
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
 		F59384ED57A7C6A7A8B0351D /* ofxDatGuiEvents.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxDatGuiEvents.h; path = ../../../addons/ofxDatGui/src/core/ofxDatGuiEvents.h; sourceTree = SOURCE_ROOT; };
+		FCAF41361DFDE05200C0E120 /* point.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = point.cpp; path = simulation/point.cpp; sourceTree = "<group>"; };
+		FCAF41371DFDE05200C0E120 /* point.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = point.hpp; path = simulation/point.hpp; sourceTree = "<group>"; };
 		FCFDDA3D1DFDC6710062AB69 /* phototropism.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = phototropism.cpp; path = simulation/phototropism.cpp; sourceTree = "<group>"; };
 		FCFDDA3E1DFDC6710062AB69 /* phototropism.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = phototropism.hpp; path = simulation/phototropism.hpp; sourceTree = "<group>"; };
 		FDA86F4C2F1F1964D35391C6 /* ofxDatGuiButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxDatGuiButton.h; path = ../../../addons/ofxDatGui/src/components/ofxDatGuiButton.h; sourceTree = SOURCE_ROOT; };
@@ -260,6 +263,8 @@
 				1BE150EA06EC4405A0BCB8D5 /* random.hpp */,
 				4CA52BB28171340DFA309B01 /* tree.cpp */,
 				C9F673A5011FCB256364BA8E /* tree.hpp */,
+				FCAF41361DFDE05200C0E120 /* point.cpp */,
+				FCAF41371DFDE05200C0E120 /* point.hpp */,
 			);
 			name = simulation;
 			sourceTree = "<group>";
@@ -416,6 +421,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCAF41381DFDE05200C0E120 /* point.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				DA5798DE2799EF2D1B46BA8F /* generator.cpp in Sources */,
