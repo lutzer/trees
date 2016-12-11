@@ -1,8 +1,9 @@
 #include "ofApp.h"
 #include "generator.hpp"
 #include <iostream>
-#include "binMesh.hpp"
-
+#include "binModel.hpp"
+#include "treeModel.hpp"
+#include "phototropism.hpp"
 
 using namespace trees;
 using namespace std;
@@ -11,6 +12,7 @@ static const int GROUND_SIZE = 100;
 static const int UPDATE_INTERVAL = 200;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
+static const pts::BoundingBox PT_BOUNDINGBOX = {{-100,0},{200,150}};
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -34,16 +36,17 @@ void ofApp::setup(){
     groundMesh.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
 
+    // Setup Sun Position
+    sun = {0,75};
+
     // generate Tree Sappling
     tree = generateSapling();
-    sun = {50,0};
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
         // grow tree once
         tree = gen::iterateTree(tree, { 0,0 });
-        treeMeshList.push_back(TreeModel(tree).getMesh());
         treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
     }
@@ -53,8 +56,6 @@ void ofApp::setup(){
     
     lastUpdateTime = ofGetElapsedTimeMillis();
 
-
-
     this->windowResized(ofGetWidth(), ofGetHeight());
 }
 
@@ -62,9 +63,12 @@ void ofApp::setup(){
 void ofApp::update(){
     iterationSlider->update();
 
-    bins = gen::lightBinsFromTree(treeList[iteration], sun, { { -100, 0 }, { 200, 100 } });
-    BinMesh binVisualisation = BinMesh(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
-    binMesh = binVisualisation.getMesh(ofPoint(-100,0,0), ofPoint(5,5,5));
+    photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
+    BinModel binModel = BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
+
+    ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,0,PT_BOUNDINGBOX.origin.y);
+    ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,0,PT_BOUNDINGBOX.size.height);
+    binMesh = binModel.getMesh(origin, size);
 
 }
 
@@ -73,16 +77,15 @@ void ofApp::draw(){
 
     ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
 
-    // even points can overlap with each other, let's avoid that
     ofEnableDepthTest();
     cam.begin();
     groundMesh.draw();
-    treeMeshList[iteration].draw();
+    TreeModel(treeList[iteration]).getMesh().draw();
     binMesh.draw();
     cam.end();
+    ofDisableDepthTest();
 
     // draw gui
-    ofDisableDepthTest();
     ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n<f>: toggle Fullscreen", PADDING, PADDING);
     iterationSlider->draw();
 }

@@ -16,7 +16,7 @@
 
 using namespace trees;
 
-static const double BRANCHOUT_ANGLE_VARIATION = 0.2;
+static const double BRANCHOUT_ANGLE_VARIATION = 0.5;
 static const double GROWTH_RATE = 0.25;
 static const double BRANCH_POSSIBLITY = 0.1;
 
