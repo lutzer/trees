@@ -36,6 +36,7 @@ void ofApp::setup(){
 
     // generate Tree Sappling
     tree = generateSapling();
+    sun = {50,0};
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
@@ -43,6 +44,7 @@ void ofApp::setup(){
         // grow tree once
         tree = gen::iterateTree(tree, { 0,0 });
         treeMeshList.push_back(TreeModel(tree).getMesh());
+        treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
     }
 
@@ -51,6 +53,8 @@ void ofApp::setup(){
     
     lastUpdateTime = ofGetElapsedTimeMillis();
 
+
+
     this->windowResized(ofGetWidth(), ofGetHeight());
 }
 
@@ -58,9 +62,10 @@ void ofApp::setup(){
 void ofApp::update(){
     iterationSlider->update();
 
-    float data[] = { 0.0 };
-    BinMesh bins = BinMesh(data, 10, 10);
-    binMesh = bins.getMesh(ofPoint(0,0,0), ofPoint(5,5,5));
+    bins = lightBinsFromTree(treeList[iteration], sun, {{-100,0},{100,0}});
+    BinMesh binVisualisation = BinMesh(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
+    binMesh = binVisualisation.getMesh(ofPoint(-100,0,0), ofPoint(5,5,5));
+
 }
 
 //--------------------------------------------------------------

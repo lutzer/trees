@@ -10,6 +10,6 @@
 
 #include <math.h>
 
-pts::Point movePoint(pts::Point point, double angle, double length) {
+pts::Point pts::movePoint(pts::Point point, double angle, double length) {
     return { point.x + cos(angle) * length, point.y + sin(angle) * length };
 }

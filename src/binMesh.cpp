@@ -7,12 +7,13 @@
 //
 
 #include "binMesh.hpp"
+#include <iostream>
 
 static const int OPACITY = 100;
 
 
 BinMesh::BinMesh(float* data, int rows, int columns) {
-    this->bins = data;
+    this->binData = data;
     this->rows =  rows;
     this->columns = columns;
 }
@@ -26,7 +27,9 @@ ofMesh BinMesh::getMesh(ofPoint pos, ofVec3f binSize) {
     for (int i=0; i < rows*columns; i++) {
         ofPoint p1 = ofPoint(pos.x + (i % rows) * binSize.x, pos.y, pos.z + (i / rows) * binSize.z);
 
-        ofColor color(255,0,0,OPACITY);
+        std::cout << binData[i] << std::endl;
+
+        ofColor color(int(binData[i] * 255),0,0,OPACITY);
 
         mesh.addVertex(p1);
         mesh.addColor(color);

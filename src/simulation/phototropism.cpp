@@ -8,7 +8,7 @@
 
 #include "phototropism.hpp"
 
-int binIndexForPoint(pts::Point point, pts::BoundingBox boundingBox) {
+int photo::binIndexForPoint(pts::Point point, pts::BoundingBox boundingBox) {
     auto binSizeX = boundingBox.size.width / (double)photo::binsPerAxis;
     auto binSizeY = boundingBox.size.height / (double)photo::binsPerAxis;
     auto x = (int)(point.x / binSizeX);
@@ -17,7 +17,7 @@ int binIndexForPoint(pts::Point point, pts::BoundingBox boundingBox) {
     return x + y * photo::binsPerAxis;
 }
 
-photo::BinArray combineBins(photo::BinArray bins1, photo::BinArray bins2) {
+photo::BinArray photo::combineBins(photo::BinArray bins1, photo::BinArray bins2) {
     const int binCount = photo::binsPerAxis * photo::binsPerAxis;
     photo::BinArray result;
     result.fill(0.0);
@@ -30,7 +30,7 @@ photo::BinArray combineBins(photo::BinArray bins1, photo::BinArray bins2) {
 }
 
 
-photo::BinArray normalized(photo::BinArray bins) {
+photo::BinArray photo::normalized(photo::BinArray bins) {
     // TODO: Implement this.
     return bins;
 }

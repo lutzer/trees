@@ -21,7 +21,7 @@ public:
     ofMesh getMesh(ofPoint pos, ofVec3f binSize);
 
 private:
-    float *bins;
+    float *binData;
     int rows,columns;
 
 
