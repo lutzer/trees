@@ -62,7 +62,7 @@ void ofApp::setup(){
 void ofApp::update(){
     iterationSlider->update();
 
-    bins = gen::lightBinsFromTree(treeList[iteration], sun, {{-100,0},{100,0}});
+    bins = gen::lightBinsFromTree(treeList[iteration], sun, { { -100, 0 }, { 200, 100 } });
     BinMesh binVisualisation = BinMesh(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
     binMesh = binVisualisation.getMesh(ofPoint(-100,0,0), ofPoint(5,5,5));
 
