@@ -1,11 +1,13 @@
 #include "ofApp.h"
 #include "generator.hpp"
+#include <iostream>
 
 using namespace trees;
+using namespace std;
 
 static const int GROUND_SIZE = 100;
 static const int UPDATE_INTERVAL = 200;
-static const int MAX_ITERATIONS = 100;
+static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
 
 //--------------------------------------------------------------
@@ -14,8 +16,6 @@ void ofApp::setup(){
 
     // setup gui
     iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", 50, 0, MAX_ITERATIONS));
-    iterationSlider->setWidth(ofGetWidth(), .2); // make label area 20% of width //
-    iterationSlider->setPosition(0, ofGetHeight() - iterationSlider->getHeight());
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
 
     // this uses depth information for occlusion
@@ -35,17 +35,21 @@ void ofApp::setup(){
     // generate Tree Sappling
     tree = generateSapling();
 
+    cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i=0; i<=MAX_ITERATIONS; i++) {
         // grow tree once
         tree = iterateTree(tree,{0,0});
         treeMeshList.push_back(TreeModel(tree).getMesh());
+        cout << "Generated iteration " << i << endl;
     }
 
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
     glPointSize(3);// make the points bigger
     
     lastUpdateTime = ofGetElapsedTimeMillis();
+
+    this->windowResized(ofGetWidth(), ofGetHeight());
 }
 
 //--------------------------------------------------------------
@@ -67,16 +71,23 @@ void ofApp::draw(){
 
     // draw gui
     ofDisableDepthTest();
-    ofDrawBitmapString("<a>: -iteration, <s>: +iteration", PADDING, PADDING);
+    ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n<f>: toggle Fullscreen", PADDING, PADDING);
     iterationSlider->draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    if (key == 'a') {
-        iteration = max(iteration.getMin(),iteration -1);
-    } else if (key == 's') {
-        iteration = min(iteration.getMax(),iteration + 1);
+
+    switch (key) {
+        case 'a':
+            iteration = max(iteration.getMin(),iteration -1);
+            break;
+        case 's':
+            iteration = min(iteration.getMax(),iteration + 1);
+            break;
+        case 'f':
+            ofToggleFullscreen();
+            break;
     }
 }
 
@@ -120,7 +131,8 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    iterationSlider->setWidth(ofGetWidth(), .1);
+    iterationSlider->setPosition(0, ofGetHeight() - iterationSlider->getHeight());
 }
 
 //--------------------------------------------------------------

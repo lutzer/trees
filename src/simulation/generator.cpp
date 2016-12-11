@@ -14,7 +14,7 @@
 
 using namespace trees;
 
-static const double BRANCHOUT_ANGLE_VARIATION = 0.05;
+static const double BRANCHOUT_ANGLE_VARIATION = 0.2;
 static const double GROWTH_RATE = 0.25;
 static const double BRANCH_POSSIBLITY = 0.1;
 
@@ -54,6 +54,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
             newBranch.children.insert(newBranch.children.end(), newChild);
         }
 
+
         return newBranch;
     });
 
@@ -63,7 +64,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
 #pragma mark - Helpers
 
 double branchOutAngle(double oldAngle, double variation) {
-    return randDouble(-variation, variation);
+    return randDouble() * variation * 2 - variation;
 }
 
 template<typename F>
