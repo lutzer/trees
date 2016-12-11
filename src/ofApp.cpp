@@ -1,6 +1,8 @@
 #include "ofApp.h"
 #include "generator.hpp"
 #include <iostream>
+#include "binMesh.hpp"
+
 
 using namespace trees;
 using namespace std;
@@ -55,6 +57,10 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     iterationSlider->update();
+
+    float data[] = { 0.0 };
+    BinMesh bins = BinMesh(data, 10, 10);
+    binMesh = bins.getMesh(ofPoint(0,0,0), ofPoint(5,5,5));
 }
 
 //--------------------------------------------------------------
@@ -67,6 +73,7 @@ void ofApp::draw(){
     cam.begin();
     groundMesh.draw();
     treeMeshList[iteration].draw();
+    binMesh.draw();
     cam.end();
 
     // draw gui

@@ -10,6 +10,7 @@
 		16AA7B98D904721672911FB4 /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CA52BB28171340DFA309B01 /* tree.cpp */; };
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
 		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
+		498B7ED71DFDC9E100830DB8 /* binMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 498B7ED51DFDC9E100830DB8 /* binMesh.cpp */; };
 		548D1A7605896471E89FB4CA /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74A63C65F4C0E331A4CA86CC /* utils.cpp */; };
 		5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
 		837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F2C6477A769C03A56D1401 /* ofxSlider.cpp */; };
@@ -75,6 +76,8 @@
 		2834D88A62CD23F3DE2C47D1 /* ofxButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxButton.h; path = ../../../addons/ofxGui/src/ofxButton.h; sourceTree = SOURCE_ROOT; };
 		422C4E1AAC7EC4D30B17702D /* ofxDatGuiIntObject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxDatGuiIntObject.h; path = ../../../addons/ofxDatGui/src/core/ofxDatGuiIntObject.h; sourceTree = SOURCE_ROOT; };
 		4665FD700702FB9818DF9628 /* generator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = generator.cpp; path = src/simulation/generator.cpp; sourceTree = SOURCE_ROOT; };
+		498B7ED51DFDC9E100830DB8 /* binMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binMesh.cpp; sourceTree = "<group>"; };
+		498B7ED61DFDC9E100830DB8 /* binMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = binMesh.hpp; sourceTree = "<group>"; };
 		4CA52BB28171340DFA309B01 /* tree.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tree.cpp; path = src/simulation/tree.cpp; sourceTree = SOURCE_ROOT; };
 		4CEB325647CB1D763820098D /* generator.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = generator.hpp; path = src/simulation/generator.hpp; sourceTree = SOURCE_ROOT; };
 		52AFA1F08C420992CAAAE648 /* ofxSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSlider.h; path = ../../../addons/ofxGui/src/ofxSlider.h; sourceTree = SOURCE_ROOT; };
@@ -308,6 +311,8 @@
 				17ECA50C89BEE25DFFF1C157 /* treeModel.cpp */,
 				0A97E59A08CDB08A4F73869C /* treeModel.hpp */,
 				6B6AD5A931E565B62CDF53FA /* utils */,
+				498B7ED51DFDC9E100830DB8 /* binMesh.cpp */,
+				498B7ED61DFDC9E100830DB8 /* binMesh.hpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -432,6 +437,7 @@
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
+				498B7ED71DFDC9E100830DB8 /* binMesh.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,

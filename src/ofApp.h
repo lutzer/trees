@@ -9,9 +9,12 @@ class ofApp : public ofBaseApp{
 
 private:
     ofEasyCam cam;
-    vector<ofMesh> treeMeshList;
     trees::Tree tree;
+
+
+    vector<ofMesh> treeMeshList;
     ofMesh groundMesh;
+    ofMesh binMesh;
 
     long lastUpdateTime;
 
