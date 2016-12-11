@@ -11,11 +11,15 @@
 
 #include <stdio.h>
 
-static const int binsPerAxis = 16;
+namespace photo {
+    static const int binsPerAxis = 16;
 
-struct LightBins {
-    float densities[binsPerAxis][binsPerAxis];
-    float light[binsPerAxis][binsPerAxis];
-};
+    using Bins = float[binsPerAxis];
+
+    struct LightBins {
+        Bins densities;
+        Bins light;
+    };
+}
 
 #endif /* phototropism_hpp */
