@@ -14,7 +14,7 @@
 namespace photo {
     static const int binsPerAxis = 16;
 
-    using Bins = float[binsPerAxis];
+    using Bins = float[binsPerAxis * binsPerAxis];
 
     struct LightBins {
         Bins densities;
