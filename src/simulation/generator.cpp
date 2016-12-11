@@ -47,14 +47,15 @@ Tree gen::iterateTree(Tree tree, pts::Point sun) {
 
 photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
     auto densities = reduceTreeIntoBins(boundingBox, tree, sun, [](float current, float binIndex, Branch branch) {
-        return current + branch.thickness; // TODO: Calculate with branch length/thickness instead.
+        return current + branch.thickness;
     });
     auto normalizedDensities = photo::normalized(densities);
 
     photo::BinArray light;
     light.fill(0.0);
-    std::transform(normalizedDensities.begin(), normalizedDensities.end(), light.begin(), [normalizedDensities](float density) {
-        // TODO: Take into account all the densities to the sun.
+    std::transform(normalizedDensities.begin(), normalizedDensities.end(), light.begin(), [sun, boundingBox, normalizedDensities](float density) {
+        // TODO: Take into account all the densities between the bin and the sun.
+        const auto sunBinIndex = photo::binIndexForPoint(sun, boundingBox);
         return 1.0 - density;
     });
 
@@ -104,11 +105,14 @@ photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, pts:
 
 template<typename F>
 photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, Branch branch, pts::Point sun, F reduceLambda) {
-    // Get bin index for the current branch.
-    int binIndex = photo::binIndexForPoint(point, boundingBox);
+    // Get bin indices for the current branch.
+    auto branchEnd = pts::movePoint(point, branch.angle, branch.length);
+    auto binIndices = photo::binIndicesForLine(point, branchEnd, boundingBox);
 
     auto newBins = bins;
-    newBins[binIndex] = reduceLambda(newBins[binIndex], binIndex, branch);
+    for (auto binIndex : binIndices) {
+        newBins[binIndex] = reduceLambda(newBins[binIndex], binIndex, branch);
+    }
 
     // If the given branch has no children, return the bin array with the branch reduced into it.
     if (branch.children.size() == 0) {
@@ -118,7 +122,7 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::Bound
     // Otherwise, return the bin array with all of the branch's children reduced into it.
     std::vector<photo::BinArray> mappedChildren;
     std::transform(branch.children.begin(), branch.children.end(), std::back_inserter(mappedChildren), [bins, boundingBox, point, sun, branch, reduceLambda](Branch child) {
-        pts::Point newPoint = pts::movePoint(point, branch.angle, branch.length * child.position);
+        auto newPoint = pts::movePoint(point, branch.angle, branch.length * child.position);
         return reduceBranchIntoBinsRecursively(bins, boundingBox, newPoint, child, sun, reduceLambda);
     });
 
