@@ -14,9 +14,12 @@
 #include "tree.hpp"
 #include "phototropism.hpp"
 
-/// Progresses the given tree one time unit, returning the new tree.
-trees::Tree iterateTree(trees::Tree tree, pts::Point sun);
+namespace gen {
+    /// Progresses the given tree one time unit, returning the new tree.
+    trees::Tree iterateTree(trees::Tree tree, pts::Point sun);
 
-photo::LightBins lightBinsFromTree(trees::Tree tree, pts::Point sun, pts::BoundingBox boundingBox);
+    /// Calculates the leafage density and available light for each bin in the given bounding box.
+    photo::LightBins lightBinsFromTree(trees::Tree tree, pts::Point sun, pts::BoundingBox boundingBox);
+}
 
 #endif /* generator_hpp */

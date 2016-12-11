@@ -39,9 +39,9 @@ void ofApp::setup(){
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
-    for (int i=0; i<=MAX_ITERATIONS; i++) {
+    for (int i = 0; i <= MAX_ITERATIONS; i++) {
         // grow tree once
-        tree = iterateTree(tree,{0,0});
+        tree = gen::iterateTree(tree, { 0,0 });
         treeMeshList.push_back(TreeModel(tree).getMesh());
         cout << "Generated iteration " << i << endl;
     }

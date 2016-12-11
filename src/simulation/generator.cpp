@@ -41,8 +41,24 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::Bound
 
 #pragma mark - Public
 
-Tree iterateTree(Tree tree, pts::Point sun) {
+Tree gen::iterateTree(Tree tree, pts::Point sun) {
     return treeWithUpdatedBranches(tree);
+}
+
+photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
+    auto densities = reduceTreeIntoBins(boundingBox, tree, sun, [](float current, float binIndex, Branch branch) {
+        return current + 0.1; // TODO: Calculate with branch length/thickness instead.
+    });
+    auto normalizedDensities = photo::normalized(densities);
+
+    photo::BinArray light;
+    light.fill(0.0);
+    std::transform(normalizedDensities.begin(), normalizedDensities.end(), light.begin(), [normalizedDensities](float density) {
+        // TODO: Take into account all the densities to the sun.
+        return 1.0 - density;
+    });
+
+    return { normalizedDensities, light };
 }
 
 #pragma mark - Generator Helpers
@@ -74,24 +90,6 @@ Branch generateChildBranch(Branch parent) {
     newChild.thickness = 0;
 
     return newChild;
-}
-
-#pragma mark - Light Bins
-
-photo::LightBins lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
-    auto densities = reduceTreeIntoBins(boundingBox, tree, sun, [](float current, float binIndex, Branch branch) {
-        return current + 0.1; // TODO: Calculate with branch length/thickness instead.
-    });
-    auto normalizedDensities = photo::normalized(densities);
-
-    photo::BinArray light;
-    light.fill(0.0);
-    std::transform(normalizedDensities.begin(), normalizedDensities.end(), light.begin(), [normalizedDensities](float density) {
-        // TODO: Take into account all the densities to the sun.
-        return 1.0 - density;
-    });
-
-    return { normalizedDensities, light };
 }
 
 #pragma mark - Binning Helpers
