@@ -14,11 +14,11 @@
 namespace photo {
     static const int binsPerAxis = 16;
 
-    using Bins = float[binsPerAxis * binsPerAxis];
+    using BinArray = float[binsPerAxis * binsPerAxis];
 
     struct LightBins {
-        Bins densities;
-        Bins light;
+        BinArray densities;
+        BinArray light;
     };
 }
 
