@@ -7,7 +7,6 @@
 //
 
 #include "binModel.hpp"
-#include <iostream>
 
 static const int OPACITY = 100;
 
@@ -30,9 +29,7 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
 
         ofPoint p1 = ofPoint(origin.x + (i % columns) * binSize.x, origin.y + binSize.y, origin.z + (i / rows) * binSize.z);
 
-        std::cout << binData[i] << std::endl;
-
-        ofColor color(int(binData[i] * 255),0,0,OPACITY);
+        ofColor color(int(max/binData[i] * 255),0,0,OPACITY);
 
         // draw first triangle
         mesh.addVertex(p1);
