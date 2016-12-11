@@ -21,8 +21,8 @@ static const double BRANCH_POSSIBLITY = 0.1;
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree tree);
 
-/// Determines a new angle for a branch.
-double branchOutAngle(double oldAngle, double variation);
+/// Creates a new child branch for a given parent.
+Branch generateChildBranch(Branch parent);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
@@ -46,11 +46,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
         // Create a new child branch?
         if (randDouble() < BRANCH_POSSIBLITY) {
-            Branch newChild = {};
-            newChild.position = randDouble();
-            newChild.angle = branchOutAngle(branch.angle, BRANCHOUT_ANGLE_VARIATION);
-            newChild.length = 0;
-            newChild.thickness = 0;
+            Branch newChild = generateChildBranch(newBranch);
             newBranch.children.insert(newBranch.children.end(), newChild);
         }
 
@@ -63,8 +59,13 @@ Tree treeWithUpdatedBranches(Tree tree) {
 
 #pragma mark - Helpers
 
-double branchOutAngle(double oldAngle, double variation) {
-    return randDouble() * variation * 2 - variation;
+Branch generateChildBranch(Branch parent) {
+    Branch newChild = {};
+    newChild.position = randDouble();
+    newChild.angle = randDouble() * BRANCHOUT_ANGLE_VARIATION * 2 - BRANCHOUT_ANGLE_VARIATION;
+    newChild.length = 0;
+    newChild.thickness = 0;
+    return newChild;
 }
 
 template<typename F>
