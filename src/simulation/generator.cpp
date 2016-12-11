@@ -9,6 +9,7 @@
 #include "generator.hpp"
 
 #include <math.h>
+#include <iostream>
 
 #include "random.hpp"
 
@@ -63,6 +64,7 @@ Tree treeWithUpdatedBranches(Tree tree) {
 #pragma mark - Helpers
 
 double branchOutAngle(double oldAngle, double variation) {
+    std::cout << (randDouble(0,variation*2) - variation);
     return randDouble(-variation, variation);
 }
 

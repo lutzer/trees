@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGui.h"
+#include "ofxDatGui.h"
 #include "treeModel.hpp"
 #include "tree.hpp"
 
@@ -14,11 +14,10 @@ private:
     ofMesh groundMesh;
 
     long lastUpdateTime;
-    int iteration;
 
     // GUI
-    ofxPanel gui;
-    ofxIntSlider iterationSlider;
+    ofParameter<int> iteration;
+    ofxDatGuiSlider* iterationSlider;
 
 public:
     void setup();
@@ -37,6 +36,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    void iterationSliderChanged(int& value);
+    void iterationSliderChanged(ofxDatGuiSliderEvent e);
     
 };

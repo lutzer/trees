@@ -13,17 +13,17 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
 
     // setup gui
-    gui.setup("GUI");
-    gui.setPosition(PADDING, 50);
-    gui.add(iterationSlider.setup("Iterations", 50, 0, MAX_ITERATIONS-1));
-    iterationSlider.addListener(this, &ofApp::iterationSliderChanged);
+    iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", 50, 0, MAX_ITERATIONS));
+    iterationSlider->setWidth(ofGetWidth(), .2); // make label area 20% of width //
+    iterationSlider->setPosition(0, ofGetHeight() - iterationSlider->getHeight());
+    iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
 
     // this uses depth information for occlusion
     // rather than always drawing things on top of each other
-    ofEnableDepthTest();
+    //ofEnableDepthTest();
 
     // this sets the camera's distance from the object
-    cam.setDistance(100);
+    cam.setDistance(200);
 
     // create ground mesh
     groundMesh.setMode(OF_PRIMITIVE_LINE_LOOP);
@@ -36,21 +36,21 @@ void ofApp::setup(){
     tree = generateSapling();
 
     // create tree Meshes
-    for (int i=0; i<MAX_ITERATIONS; i++) {
+    for (int i=0; i<=MAX_ITERATIONS; i++) {
         // grow tree once
         tree = iterateTree(tree,{0,0});
         treeMeshList.push_back(TreeModel(tree).getMesh());
     }
 
-    //glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
-    //glPointSize(3);// make the points bigger
+    glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
+    glPointSize(3);// make the points bigger
     
     lastUpdateTime = ofGetElapsedTimeMillis();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    iterationSlider->update();
 }
 
 //--------------------------------------------------------------
@@ -58,23 +58,25 @@ void ofApp::draw(){
 
     ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
 
-    ofDrawBitmapString("<a>: -iteration, <s>: +iteration", PADDING, PADDING);
-
     // even points can overlap with each other, let's avoid that
+    ofEnableDepthTest();
     cam.begin();
     groundMesh.draw();
     treeMeshList[iteration].draw();
     cam.end();
 
-    gui.draw();
+    // draw gui
+    ofDisableDepthTest();
+    ofDrawBitmapString("<a>: -iteration, <s>: +iteration", PADDING, PADDING);
+    iterationSlider->draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if (key == 'a') {
-        iteration = max(0,iteration - 1);
+        iteration = max(iteration.getMin(),iteration -1);
     } else if (key == 's') {
-        iteration = min(MAX_ITERATIONS-1,iteration + 1);
+        iteration = min(iteration.getMax(),iteration + 1);
     }
 }
 
@@ -85,7 +87,10 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    if (y>iterationSlider->getY())
+        cam.disableMouseInput();
+    else
+        cam.enableMouseInput();
 }
 
 //--------------------------------------------------------------
@@ -128,6 +133,6 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
-void ofApp::iterationSliderChanged(int& value) {
-    iteration = value;
+void ofApp::iterationSliderChanged(ofxDatGuiSliderEvent e) {
+    iteration = e.value;
 }
