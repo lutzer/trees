@@ -28,6 +28,7 @@ namespace pts {
         Size size;
     };
 
+    /// Returns the given point moved according to the given angle and length.
     Point movePoint(Point point, double angle, double length);
 }
 
