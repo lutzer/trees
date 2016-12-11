@@ -12,7 +12,7 @@ static const int GROUND_SIZE = 100;
 static const int UPDATE_INTERVAL = 200;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
-static const pts::BoundingBox PT_BOUNDINGBOX = {{-100,0},{200,150}};
+static const pts::BoundingBox PT_BOUNDINGBOX = {{-50,0},{100,100}};
 
 //--------------------------------------------------------------
 void ofApp::setup(){

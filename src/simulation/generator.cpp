@@ -49,17 +49,17 @@ photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::Bounding
     auto densities = reduceTreeIntoBins(boundingBox, tree, sun, [](float current, float binIndex, Branch branch) {
         return current + branch.thickness;
     });
-    auto normalizedDensities = photo::normalized(densities);
+    photo::normalize(densities);
 
     photo::BinArray light;
     light.fill(0.0);
-    std::transform(normalizedDensities.begin(), normalizedDensities.end(), light.begin(), [sun, boundingBox, normalizedDensities](float density) {
+    std::transform(densities.begin(), densities.end(), light.begin(), [sun, boundingBox, densities](float density) {
         // TODO: Take into account all the densities between the bin and the sun.
         const auto sunBinIndex = photo::binIndexForPoint(sun, boundingBox);
         return 1.0 - density;
     });
 
-    return { normalizedDensities, light };
+    return { densities, light };
 }
 
 #pragma mark - Generator Helpers
