@@ -21,6 +21,7 @@ void ofApp::setup(){
     // setup gui
     iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", 50, 0, MAX_ITERATIONS));
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
+    iteration.addListener(this, &ofApp::onIterationChanged);
 
     // this uses depth information for occlusion
     // rather than always drawing things on top of each other
@@ -174,7 +175,10 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+void ofApp::onIterationChanged(int &value) {
+    updateScene = true;
+}
+
 void ofApp::iterationSliderChanged(ofxDatGuiSliderEvent e) {
     iteration = e.value;
-    updateScene = true;
 }

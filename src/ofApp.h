@@ -19,8 +19,10 @@ private:
     ofMesh treeMesh;
     bool updateScene;
 
-    // GUI
+    // Adjustable Parameters
     ofParameter<int> iteration;
+
+    // Gui
     ofxDatGuiSlider* iterationSlider;
 
     long lastUpdateTime;
@@ -42,6 +44,9 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+    /* Event handlers */
+
     void iterationSliderChanged(ofxDatGuiSliderEvent e);
+    void onIterationChanged(int & value);
     
 };
