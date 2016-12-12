@@ -36,11 +36,11 @@ void ofApp::setup(){
     groundMesh.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
 
-    // Setup Sun Position
-    sun = {0,75};
+    // Set Sun Position
+    sun = {0,200};
 
     // generate Tree Sappling
-    tree = generateSapling();
+    trees::Tree tree = generateSapling({0,0});
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
@@ -53,22 +53,34 @@ void ofApp::setup(){
 
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
     glPointSize(3);// make the points bigger
+    //light.enable();
     
     lastUpdateTime = ofGetElapsedTimeMillis();
 
     this->windowResized(ofGetWidth(), ofGetHeight());
+
+    updateScene = true;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     iterationSlider->update();
 
-    photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
-    BinModel binModel = BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
+    if (updateScene) {
 
-    ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,0,PT_BOUNDINGBOX.origin.y);
-    ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,0,PT_BOUNDINGBOX.size.height);
-    binMesh = binModel.getMesh(origin, size);
+        // udate tree mesh
+        treeMesh = TreeModel(treeList[iteration]).getMesh();
+
+        // update bins
+        photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
+        BinModel binModel = BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
+
+        ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,0,PT_BOUNDINGBOX.origin.y);
+        ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,0,PT_BOUNDINGBOX.size.height);
+        binMesh = binModel.getMesh(origin, size);
+
+        updateScene = false;
+    }
 
 }
 
@@ -80,13 +92,15 @@ void ofApp::draw(){
     ofEnableDepthTest();
     cam.begin();
     groundMesh.draw();
-    TreeModel(treeList[iteration]).getMesh().draw();
+    treeMesh.draw();
     binMesh.draw();
     cam.end();
     ofDisableDepthTest();
 
     // draw gui
-    ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n<f>: toggle Fullscreen", PADDING, PADDING);
+    ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n"
+                       "<f>: toggle Fullscreen",
+                       PADDING, PADDING);
     iterationSlider->draw();
 }
 
@@ -162,4 +176,5 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::iterationSliderChanged(ofxDatGuiSliderEvent e) {
     iteration = e.value;
+    updateScene = true;
 }

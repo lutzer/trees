@@ -9,6 +9,10 @@
 #include "binModel.hpp"
 
 static const int OPACITY = 100;
+static const float DEFORMATION_FACTOR = 20.0;
+
+/// adds normals to a mesh
+void setNormals( ofMesh &mesh );
 
 
 BinModel::BinModel(float* data, int rows, int columns) {
@@ -21,7 +25,8 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
 
     ofMesh mesh;
 
-    mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    //mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    int meshIndex = 0;
 
     ofVec3f binSize = ofVec3f(size.x / rows, 0, size.z / columns);
 
@@ -31,23 +36,23 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
 
         ofColor color(binData[i] * 255,0,0,OPACITY);
 
-        // draw first triangle
+        // add 4 points for one bin
         mesh.addVertex(p1);
         mesh.addColor(color);
         mesh.addVertex(ofPoint(p1.x + binSize.x,p1.y,p1.z));
-        mesh.addColor(color);
-        mesh.addVertex(ofPoint(p1.x + binSize.x,p1.y,p1.z + binSize.z));
-        mesh.addColor(color);
-
-        // draw second triangle
-        mesh.addVertex(p1);
         mesh.addColor(color);
         mesh.addVertex(ofPoint(p1.x,p1.y,p1.z + binSize.z));
         mesh.addColor(color);
         mesh.addVertex(ofPoint(p1.x + binSize.x,p1.y,p1.z + binSize.z));
         mesh.addColor(color);
 
+        // add 2 triangles per bin
+        mesh.addTriangle(meshIndex, meshIndex +1, meshIndex +3);
+        mesh.addTriangle(meshIndex, meshIndex +2, meshIndex +3);
+
+        meshIndex += 4;
     }
+
 
     return mesh;
 }

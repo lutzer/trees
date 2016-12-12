@@ -7,20 +7,23 @@
 class ofApp : public ofBaseApp{
 
 private:
-    ofEasyCam cam;
 
-    trees::Tree tree;
+    // simulation objects
     pts::Point sun;
-
     vector<trees::Tree> treeList;
+
+    // scene objects
+    ofEasyCam cam;
     ofMesh groundMesh;
     ofMesh binMesh;
-
-    long lastUpdateTime;
+    ofMesh treeMesh;
+    bool updateScene;
 
     // GUI
     ofParameter<int> iteration;
     ofxDatGuiSlider* iterationSlider;
+
+    long lastUpdateTime;
 
 public:
     void setup();

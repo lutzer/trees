@@ -28,7 +28,7 @@ namespace trees {
     };
 
     /// Returns a tree embryo.
-    Tree generateSapling();
+    Tree generateSapling(pts::Point origin);
 }
 
 
