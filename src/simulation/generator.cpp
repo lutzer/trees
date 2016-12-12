@@ -59,8 +59,8 @@ photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::Bounding
     // build light matrix from densities
     photo::BinArray lightMatrix;
     lightMatrix.fill(0.0);
-    int i = lightMatrix.size() - 1;
-    //for (int i = 0; i < lightMatrix.size(); i++) {
+//    int i = lightMatrix.size() - 1;
+    for (int i = 0; i < lightMatrix.size(); i++) {
 
         pts::Point coord = pts::binToWorld(i, photo::binsPerAxis, photo::binsPerAxis, boundingBox);
 
@@ -70,7 +70,7 @@ photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::Bounding
             densitySum += densities[index];
         }
         lightMatrix[i] = std::max(0.0, 1.0 - densitySum);
-//    }
+    }
     return { densities, lightMatrix };
 }
 

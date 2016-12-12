@@ -20,6 +20,8 @@ namespace utils {
     /// constrains an angle within 0 and 2_PI
     double constrainAngle(double x);
 
+    int constrainRange(int val, int min, int max);
+
     /// Normalizes the given array.
     template<typename TYPE, std::size_t SIZE>
     void normalize(std::array<TYPE,SIZE> &bins) {

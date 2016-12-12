@@ -17,6 +17,10 @@ double utils::constrainAngle(double x){
     return x;
 }
 
+int utils::constrainRange(int val, int min, int max) {
+    return std::max(std::min(val,max),min);
+}
+
 void utils::setNormals( ofMesh &mesh ){
 
     //The number of the vertices
