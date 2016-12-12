@@ -21,6 +21,7 @@ private:
 
     // Adjustable Parameters
     ofParameter<int> iteration;
+    bool showBins;
 
     // Gui
     ofxDatGuiSlider* iterationSlider;

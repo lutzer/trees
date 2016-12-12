@@ -28,22 +28,21 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
     //mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     int meshIndex = 0;
 
-    ofVec3f binSize = ofVec3f(size.x / rows, 0, size.z / columns);
-
+    ofVec3f binSize = ofVec3f(size.x / rows, size.y / columns, 0);
     for (int i=0; i < rows*columns; i++) {
 
-        ofPoint p1 = ofPoint(origin.x + (i % columns) * binSize.x, origin.y + binSize.y, origin.z + (i / rows) * binSize.z);
+        ofPoint p1 = ofPoint(origin.x + (i % columns) * binSize.x, origin.y + (i / rows) * binSize.y, origin.z + binSize.z);
 
         ofColor color(binData[i] * 255,0,0,OPACITY);
 
         // add 4 points for one bin
         mesh.addVertex(p1);
         mesh.addColor(color);
-        mesh.addVertex(ofPoint(p1.x + binSize.x,p1.y,p1.z));
+        mesh.addVertex(ofPoint(p1.x + binSize.x, p1.y, p1.z));
         mesh.addColor(color);
-        mesh.addVertex(ofPoint(p1.x,p1.y,p1.z + binSize.z));
+        mesh.addVertex(ofPoint(p1.x, p1.y + binSize.y, p1.z ));
         mesh.addColor(color);
-        mesh.addVertex(ofPoint(p1.x + binSize.x,p1.y,p1.z + binSize.z));
+        mesh.addVertex(ofPoint(p1.x + binSize.x, p1.y  + binSize.y, p1.z));
         mesh.addColor(color);
 
         // add 2 triangles per bin

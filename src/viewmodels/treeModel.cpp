@@ -36,19 +36,18 @@ void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch
     // add root of branch
     mesh.addVertex(origin);
 
-    double newAngle = utils::constrainAngle(angle + branch.angle);
+    double newAngle = angle + branch.angle;
 
     // add end of branch
     ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
-                               0,
-                               origin.z + sin(newAngle) * branch.length
-                               );
+                               origin.y + sin(newAngle) * branch.length,
+                               0);
     mesh.addVertex(endPoint);
 
     for (trees::Branch child : branch.children) {
         auto childOrigin = ofPoint(origin.x + (endPoint.x - origin.x) * child.position,
-                                   0,
-                                   origin.z + (endPoint.z - origin.z) * child.position);
+                                   origin.y + (endPoint.y - origin.y) * child.position,
+                                   0);
         addBranchesToMesh(mesh, childOrigin, newAngle, child);
     }
 }

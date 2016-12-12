@@ -23,19 +23,16 @@ void ofApp::setup(){
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
     iteration.addListener(this, &ofApp::onIterationChanged);
 
-    // this uses depth information for occlusion
-    // rather than always drawing things on top of each other
-    //ofEnableDepthTest();
-
-    // this sets the camera's distance from the object
+    // set the camera's initial position
     cam.setDistance(200);
+    cam.move(0, 50, 0);
 
     // create ground mesh
     groundMesh.setMode(OF_PRIMITIVE_LINE_LOOP);
-    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,-GROUND_SIZE/2,0));
-    groundMesh.addVertex(ofPoint(GROUND_SIZE/2,-GROUND_SIZE/2,0));
-    groundMesh.addVertex(ofPoint(GROUND_SIZE/2,GROUND_SIZE/2,0));
-    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2,GROUND_SIZE/2,0));
+    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2, 0, -GROUND_SIZE/2));
+    groundMesh.addVertex(ofPoint(GROUND_SIZE/2, 0, -GROUND_SIZE/2));
+    groundMesh.addVertex(ofPoint(GROUND_SIZE/2, 0, GROUND_SIZE/2));
+    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2, 0, GROUND_SIZE/2));
 
     // Set Sun Position
     sun = {0,200};
@@ -54,9 +51,10 @@ void ofApp::setup(){
 
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
     glPointSize(3);// make the points bigger
-    //light.enable();
-    
+
+    // setup parameters
     lastUpdateTime = ofGetElapsedTimeMillis();
+    showBins = true;
 
     this->windowResized(ofGetWidth(), ofGetHeight());
 
@@ -76,8 +74,8 @@ void ofApp::update(){
         photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
         BinModel binModel = BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
 
-        ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,0,PT_BOUNDINGBOX.origin.y);
-        ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,0,PT_BOUNDINGBOX.size.height);
+        ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,PT_BOUNDINGBOX.origin.y,0);
+        ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,PT_BOUNDINGBOX.size.height,0);
         binMesh = binModel.getMesh(origin, size);
 
         updateScene = false;
@@ -94,13 +92,15 @@ void ofApp::draw(){
     cam.begin();
     groundMesh.draw();
     treeMesh.draw();
-    binMesh.draw();
+    if (showBins)
+        binMesh.draw();
     cam.end();
     ofDisableDepthTest();
 
     // draw gui
     ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n"
-                       "<f>: toggle Fullscreen",
+                       "<f>: toggle Fullscreen \n"
+                       "<b>: toggle Bins",
                        PADDING, PADDING);
     iterationSlider->draw();
 }
@@ -117,6 +117,9 @@ void ofApp::keyPressed(int key){
             break;
         case 'f':
             ofToggleFullscreen();
+            break;
+        case 'b':
+            showBins = !showBins;
             break;
     }
 }
