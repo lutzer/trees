@@ -1,6 +1,6 @@
-# TreesViz
+# Trees
 
-Visualisation for the Trees Simulation: https://github.com/erwald/trees
+Plant growth simulation and visualisation
 
 ## Setup Environment
 
