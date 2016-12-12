@@ -47,23 +47,22 @@ Tree gen::iterateTree(Tree tree, pts::Point sun) {
 }
 
 photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
+
+    // calculate densities for each bin
     auto densities = reduceTreeIntoBins(boundingBox, tree, [](float current, float binIndex, Branch branch) {
         return current + branch.thickness;
     });
+
+    // normalize denseties
     utils::normalize(densities);
 
-    // get relative coordinates fo the sun
-    sun.x -= boundingBox.origin.x;
-    sun.y -= boundingBox.origin.y;
-
+    // build light matrix from densities
     photo::BinArray lightMatrix;
     lightMatrix.fill(0.0);
     int i = lightMatrix.size() - 1;
-//    for (int i = 0; i < lightMatrix.size(); i++) {
+    //for (int i = 0; i < lightMatrix.size(); i++) {
 
-        pts::Point coord;
-        coord.x = i % photo::binsPerAxis;
-        coord.y = i / photo::binsPerAxis;
+        pts::Point coord = pts::binToWorld(i, photo::binsPerAxis, photo::binsPerAxis, boundingBox);
 
         vector<int> binIndices = photo::binIndicesForLine(sun, coord, boundingBox);
         float densitySum = 0.0;

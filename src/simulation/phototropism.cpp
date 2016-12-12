@@ -11,18 +11,9 @@
 #include <math.h>
 #include <complex>
 
-int photo::binIndexForPoint(pts::Point point, pts::BoundingBox boundingBox) {
-    const auto binSizeX = boundingBox.size.width / (double)photo::binsPerAxis;
-    const auto binSizeY = boundingBox.size.height / (double)photo::binsPerAxis;
-    const auto x = (int) floor((point.x - boundingBox.origin.x) / binSizeX);
-    const auto y = (int) floor((point.y - boundingBox.origin.y) / binSizeY);
-
-    return x + y * photo::binsPerAxis;
-}
-
 std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::BoundingBox boundingBox) {
-    const auto originBinIndex = photo::binIndexForPoint(origin, boundingBox);
-    const auto destinationBinIndex = photo::binIndexForPoint(destination, boundingBox);
+    const auto originBinIndex = pts::worldtoBin(origin, photo::binsPerAxis, photo::binsPerAxis, boundingBox);
+    const auto destinationBinIndex = pts::worldtoBin(destination, photo::binsPerAxis, photo::binsPerAxis, boundingBox);
 
     const auto rowLength = photo::binsPerAxis;
     const auto destinationX = destinationBinIndex % rowLength;

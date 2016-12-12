@@ -30,6 +30,12 @@ namespace pts {
 
     /// Returns the given point moved according to the given angle and length.
     Point movePoint(Point point, double angle, double length);
+
+    /// Returns the lower left coordinate of the corresponding bin
+    Point binToWorld(int bin, int columns, int rows, BoundingBox boundingBox);
+
+    /// Returns the index of a bin for the coordinate
+    int worldtoBin(Point p, int columns, int rows, BoundingBox boundingBox);
 }
 
 #endif /* point_hpp */

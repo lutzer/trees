@@ -25,9 +25,6 @@ namespace photo {
         BinArray light;
     };
 
-    /// Returns the index for a given point in the given bounding area.
-    int binIndexForPoint(pts::Point point, pts::BoundingBox boundingBox);
-
     /// Returns the indices for a line between the given points in the given bounding area.
     std::vector<int> binIndicesForLine(pts::Point origin, pts::Point destination, pts::BoundingBox boundingBox);
 
