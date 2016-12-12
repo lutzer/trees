@@ -57,18 +57,3 @@ photo::BinArray photo::combineBins(photo::BinArray bins1, photo::BinArray bins2)
 
     return result;
 }
-
-
-void photo::normalize(photo::BinArray &bins) {
-
-    // find maximum
-    float max = 0;
-    for (int i=0; i < bins.size(); i++) {
-        max = std::max(bins[i],max);
-    }
-
-    // normalize
-    for (int i=0; i < bins.size(); i++) {
-        bins[i] = bins[i]/max;
-    }
-}

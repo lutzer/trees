@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include <array>
 
 namespace utils {
 
@@ -18,6 +19,20 @@ namespace utils {
 
     /// constrains an angle within 0 and 2_PI
     double constrainAngle(double x);
+
+    /// Normalizes the given array.
+    template<typename TYPE, std::size_t SIZE>
+    void normalize(std::array<TYPE,SIZE> &bins) {
+        // find maximum
+        TYPE max = 0;
+        for (TYPE val : bins) {
+            max = std::max(val,max);
+        }
+        // normalize
+        for (TYPE &val : bins) {
+            val = val/max;
+        }
+    }
 
     #pragma mark - Drawing Helpers
 

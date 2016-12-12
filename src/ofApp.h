@@ -4,6 +4,12 @@
 #include "ofxDatGui.h"
 #include "tree.hpp"
 
+enum BinVisibilty {
+    HIDDEN = 0,
+    DENSITIES = 1,
+    LIGHT = 2
+};
+
 class ofApp : public ofBaseApp{
 
 private:
@@ -21,7 +27,7 @@ private:
 
     // Adjustable Parameters
     ofParameter<int> iteration;
-    bool showBins;
+    BinVisibilty showBins;
 
     // Gui
     ofxDatGuiSlider* iterationSlider;

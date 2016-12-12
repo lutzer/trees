@@ -13,6 +13,7 @@
 #include <numeric>
 
 #include "random.hpp"
+#include "utils.hpp"
 
 using namespace trees;
 
@@ -34,10 +35,10 @@ Branch mapBranchRecursively(Branch branch, F mapLambda);
 template<typename F>
 /// Iterates over the given tree's branches and, for all of the branches in each bin, reduces them
 /// into a float using the given lambda.
-photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, pts::Point sun, F reduceLambda);
+photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, F reduceLambda);
 
 template<typename F>
-photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch branch, pts::Point sun, F reduceLambda);
+photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch branch, F reduceLambda);
 
 #pragma mark - Public
 
@@ -46,20 +47,32 @@ Tree gen::iterateTree(Tree tree, pts::Point sun) {
 }
 
 photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
-    auto densities = reduceTreeIntoBins(boundingBox, tree, sun, [](float current, float binIndex, Branch branch) {
+    auto densities = reduceTreeIntoBins(boundingBox, tree, [](float current, float binIndex, Branch branch) {
         return current + branch.thickness;
     });
-    photo::normalize(densities);
+    utils::normalize(densities);
 
-    photo::BinArray light;
-    light.fill(0.0);
-    std::transform(densities.begin(), densities.end(), light.begin(), [sun, boundingBox, densities](float density) {
-        // TODO: Take into account all the densities between the bin and the sun.
-        const auto sunBinIndex = photo::binIndexForPoint(sun, boundingBox);
-        return 1.0 - density;
-    });
+    // get relative coordinates fo the sun
+    sun.x -= boundingBox.origin.x;
+    sun.y -= boundingBox.origin.y;
 
-    return { densities, light };
+    photo::BinArray lightMatrix;
+    lightMatrix.fill(0.0);
+    int i = lightMatrix.size() - 1;
+//    for (int i = 0; i < lightMatrix.size(); i++) {
+
+        pts::Point coord;
+        coord.x = i % photo::binsPerAxis;
+        coord.y = i / photo::binsPerAxis;
+
+        vector<int> binIndices = photo::binIndicesForLine(sun, coord, boundingBox);
+        float densitySum = 0.0;
+        for (int index : binIndices) {
+            densitySum += densities[index];
+        }
+        lightMatrix[i] = std::max(0.0, 1.0 - densitySum);
+//    }
+    return { densities, lightMatrix };
 }
 
 #pragma mark - Generator Helpers
@@ -97,14 +110,14 @@ Branch generateChildBranch(Branch parent) {
 #pragma mark - Binning Helpers
 
 template<typename F>
-photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, pts::Point sun, F reduceLambda) {
+photo::BinArray reduceTreeIntoBins(pts::BoundingBox boundingBox, Tree tree, F reduceLambda) {
     photo::BinArray emptyBins;
     emptyBins.fill(0.0);
-    return reduceBranchIntoBinsRecursively(emptyBins, boundingBox, tree.origin, 0.0, tree.base, sun, reduceLambda);
+    return reduceBranchIntoBinsRecursively(emptyBins, boundingBox, tree.origin, 0.0, tree.base, reduceLambda);
 }
 
 template<typename F>
-photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch branch, pts::Point sun, F reduceLambda) {
+photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch branch, F reduceLambda) {
     const auto newAngle = angle + branch.angle;
 
     // Get bin indices for the current branch.
@@ -123,9 +136,9 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::Bound
 
     // Otherwise, return the bin array with all of the branch's children reduced into it.
     std::vector<photo::BinArray> mappedChildren;
-    std::transform(branch.children.begin(), branch.children.end(), std::back_inserter(mappedChildren), [bins, boundingBox, point, newAngle, sun, branch, reduceLambda](Branch child) {
+    std::transform(branch.children.begin(), branch.children.end(), std::back_inserter(mappedChildren), [bins, boundingBox, point, newAngle, branch, reduceLambda](Branch child) {
         auto newPoint = pts::movePoint(point, newAngle, branch.length * child.position);
-        return reduceBranchIntoBinsRecursively(bins, boundingBox, newPoint, newAngle, child, sun, reduceLambda);
+        return reduceBranchIntoBinsRecursively(bins, boundingBox, newPoint, newAngle, child, reduceLambda);
     });
 
     return std::accumulate(mappedChildren.begin(), mappedChildren.end(), newBins, [](photo::BinArray acc, photo::BinArray curr) {

@@ -14,6 +14,12 @@ static const float DEFORMATION_FACTOR = 20.0;
 /// adds normals to a mesh
 void setNormals( ofMesh &mesh );
 
+BinModel::BinModel() {
+    this->binData = NULL;
+    this->rows =  0;
+    this->columns = 0;
+}
+
 
 BinModel::BinModel(float* data, int rows, int columns) {
     this->binData = data;

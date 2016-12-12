@@ -17,8 +17,6 @@ double utils::constrainAngle(double x){
     return x;
 }
 
-
-
 void utils::setNormals( ofMesh &mesh ){
 
     //The number of the vertices

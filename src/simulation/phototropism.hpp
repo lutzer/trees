@@ -33,9 +33,6 @@ namespace photo {
 
     /// Adds the contents of the two given bin arrays together and returns the resulting bin array.
     BinArray combineBins(BinArray bins1, BinArray bins2);
-
-    /// Normalizes the given array.
-    void normalize(BinArray &bins);
 }
 
 #endif /* phototropism_hpp */

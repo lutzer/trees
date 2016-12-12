@@ -9,10 +9,11 @@ using namespace trees;
 using namespace std;
 
 static const int GROUND_SIZE = 100;
-static const int UPDATE_INTERVAL = 200;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
-static const pts::BoundingBox PT_BOUNDINGBOX = {{-50,0},{100,100}};
+static const pts::BoundingBox PT_BOUNDINGBOX = {{-50, 0}, {100, 100}};
+static const pts::Point SUN_POSITION = {-50, 100};
+static const int SUN_RADIUS = 3;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -35,16 +36,16 @@ void ofApp::setup(){
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2, 0, GROUND_SIZE/2));
 
     // Set Sun Position
-    sun = {0,200};
+    sun = SUN_POSITION;
 
     // generate Tree Sappling
-    trees::Tree tree = generateSapling({0,0});
+    trees::Tree tree = generateSapling({0, 0});
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
         // grow tree once
-        tree = gen::iterateTree(tree, { 0,0 });
+        tree = gen::iterateTree(tree, {0, 0});
         treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
     }
@@ -54,7 +55,7 @@ void ofApp::setup(){
 
     // setup parameters
     lastUpdateTime = ofGetElapsedTimeMillis();
-    showBins = true;
+    showBins = DENSITIES;
 
     this->windowResized(ofGetWidth(), ofGetHeight());
 
@@ -72,7 +73,11 @@ void ofApp::update(){
 
         // update bins
         photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
-        BinModel binModel = BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
+        BinModel binModel;
+        if (showBins == LIGHT)
+            binModel = BinModel(bins.light.data(), photo::binsPerAxis, photo::binsPerAxis);
+        else if (showBins == DENSITIES)
+            binModel = BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
 
         ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,PT_BOUNDINGBOX.origin.y,0);
         ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,PT_BOUNDINGBOX.size.height,0);
@@ -92,7 +97,11 @@ void ofApp::draw(){
     cam.begin();
     groundMesh.draw();
     treeMesh.draw();
-    if (showBins)
+
+    // draw sun
+    ofDrawSphere(sun.x, sun.y, SUN_RADIUS);
+
+    if (showBins != HIDDEN)
         binMesh.draw();
     cam.end();
     ofDisableDepthTest();
@@ -100,7 +109,7 @@ void ofApp::draw(){
     // draw gui
     ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n"
                        "<f>: toggle Fullscreen \n"
-                       "<b>: toggle Bins",
+                       "<b>: switch through Bins",
                        PADDING, PADDING);
     iterationSlider->draw();
 }
@@ -119,7 +128,8 @@ void ofApp::keyPressed(int key){
             ofToggleFullscreen();
             break;
         case 'b':
-            showBins = !showBins;
+            showBins = BinVisibilty((showBins + 1) % 3);
+            updateScene = true;
             break;
     }
 }
