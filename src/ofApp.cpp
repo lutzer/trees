@@ -91,13 +91,14 @@ void ofApp::draw(){
 
     ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
 
+    // draw 3d scene
     ofEnableDepthTest();
     cam.begin();
     groundMesh.draw();
     treeMesh.draw();
 
     // draw sun
-    ofDrawSphere(sun.x, sun.y, SUN_RADIUS);
+    ofDrawSphere(sun.x, sun.y, 0, SUN_RADIUS);
 
     if (showBins != HIDDEN)
         binMesh.draw();

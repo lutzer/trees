@@ -10,6 +10,7 @@
 
 #include <math.h>
 #include <complex>
+#include <utils.hpp>
 
 static const float BIN_WIDTH = 5;
 
@@ -27,30 +28,60 @@ pts::SizeInt photo::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
 }
 
 std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
-    const auto originBinIndex = pts::worldtoBin(origin, matrixSize, boundingBox);
-    const auto destinationBinIndex = pts::worldtoBin(destination, matrixSize, boundingBox);
 
-    const auto rowLength = matrixSize.columns;
-    const auto destinationX = destinationBinIndex % rowLength;
-    const auto destinationY = destinationBinIndex / rowLength;
+    int bin1 = pts::worldtoBin(origin, matrixSize, boundingBox);
+    int bin2 = pts::worldtoBin(destination, matrixSize, boundingBox);
+
+    return binIndicesForLine(bin1,bin2,matrixSize);
+}
+
+std::vector<int> photo::binIndicesForLine(int bin1, int bin2, pts::SizeInt matrixSize) {
+
+    pts::PointInt p1 = {bin1 % matrixSize.columns, bin1 / matrixSize.columns};
+    pts::PointInt p2 = {bin2 % matrixSize.columns, bin2 / matrixSize.columns};
+
+    auto points = pointsForLine(p1, p2);
 
     std::vector<int> result;
-    result.push_back(originBinIndex);
-    auto currentBinIndex = originBinIndex;
+    for (auto point : points) {
+        result.push_back(point.x + point.y * matrixSize.columns);
+    }
 
-    while (currentBinIndex != destinationBinIndex) {
-        const auto deltaX = destinationX - currentBinIndex % rowLength;
-        const auto deltaY = destinationY - currentBinIndex / rowLength;
+    return result;
 
-        if (abs(deltaX) > abs(deltaY)) {
-            currentBinIndex = (deltaX > 0 ? currentBinIndex + 1 : currentBinIndex - 1);
-        } else {
-            currentBinIndex = (deltaY > 0 ? currentBinIndex + rowLength : currentBinIndex - rowLength);
+}
+
+std::vector<pts::PointInt> photo::pointsForLine(pts::PointInt p1, pts::PointInt p2) {
+    std::vector<pts::PointInt> points;
+
+    // calculate slope
+    int dx = abs(p2.x - p1.x);
+    int dy = -abs(p2.y - p1.y);
+
+    int sgnx = p2.x > p1.x ? 1 : -1;
+    int sgny = p2.y > p1.y ? 1 : -1;
+
+    // starting error
+    int error = dx+dy;
+
+    // add start point
+    pts::PointInt currentPosition = p1;
+    points.push_back(currentPosition);
+
+    while ( currentPosition.x != p2.x || currentPosition.y != p2.y) {
+
+        if (2 * error > dy) {
+            currentPosition.x += sgnx;
+            error += dy;
         }
-        result.push_back(currentBinIndex);
+        if (2 * error < dx && (currentPosition.x != p2.x || currentPosition.y != p2.y)) {
+            currentPosition.y += sgny;
+            error += dx;
+        }
+        points.push_back(currentPosition);
     }
     
-    return result;
+    return points;
 }
 
 photo::BinArray photo::combineBins(photo::BinArray bins1, photo::BinArray bins2) {

@@ -17,6 +17,10 @@ namespace pts {
         double x, y;
     };
 
+    struct PointInt {
+        int x, y;
+    };
+
     /// A size.
     struct Size {
         double width, height;
@@ -36,7 +40,7 @@ namespace pts {
     /// Returns the given point moved according to the given angle and length.
     Point movePoint(Point point, double angle, double length);
 
-    /// Returns the lower left coordinate of the corresponding bin
+    /// Returns the center coordinate of the corresponding bin
     Point binToWorld(int bin, SizeInt matrixSize, BoundingBox boundingBox);
 
     /// Returns the index of a bin for the coordinate

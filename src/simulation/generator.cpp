@@ -62,9 +62,9 @@ photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::Bounding
     photo::BinArray lightMatrix(matrixSize.columns * matrixSize.rows, 0.0);
     for (int i = 0; i < lightMatrix.size(); i++) {
 
-        pts::Point coord = pts::binToWorld(i, matrixSize, boundingBox);
+        int sunBin = pts::worldtoBin(sun, matrixSize, boundingBox);
 
-        vector<int> binIndices = photo::binIndicesForLine(coord, sun, matrixSize, boundingBox);
+        vector<int> binIndices = photo::binIndicesForLine(i, sunBin, matrixSize);
         float densitySum = 0.0;
         for (int index : binIndices) {
             densitySum += densities[index];

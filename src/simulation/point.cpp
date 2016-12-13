@@ -20,8 +20,8 @@ pts::Point pts::binToWorld(int bin, pts::SizeInt matrixSize, pts::BoundingBox bo
     const auto binSizeX = boundingBox.size.width / matrixSize.columns;
     const auto binSizeY = boundingBox.size.height / matrixSize.rows;
 
-    double x = boundingBox.origin.x + (bin % matrixSize.columns) * binSizeX;
-    double y = boundingBox.origin.y + (bin / matrixSize.columns) * binSizeY;
+    double x = boundingBox.origin.x + (bin % matrixSize.columns) * binSizeX + binSizeX/2;
+    double y = boundingBox.origin.y + (bin / matrixSize.columns) * binSizeY + binSizeY/2;
 
     return {x,y};
 }
