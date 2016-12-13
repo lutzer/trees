@@ -22,6 +22,11 @@ namespace pts {
         double width, height;
     };
 
+    /// Size of a matrix
+    struct SizeInt {
+        int columns, rows;
+    };
+
     /// A bounding box.
     struct BoundingBox {
         Point origin;
@@ -32,10 +37,10 @@ namespace pts {
     Point movePoint(Point point, double angle, double length);
 
     /// Returns the lower left coordinate of the corresponding bin
-    Point binToWorld(int bin, int columns, int rows, BoundingBox boundingBox);
+    Point binToWorld(int bin, SizeInt matrixSize, BoundingBox boundingBox);
 
     /// Returns the index of a bin for the coordinate
-    int worldtoBin(Point p, int columns, int rows, BoundingBox boundingBox);
+    int worldtoBin(Point p, SizeInt matrixSize, BoundingBox boundingBox);
 }
 
 #endif /* point_hpp */

@@ -23,8 +23,8 @@ namespace utils {
     int constrainRange(int val, int min, int max);
 
     /// Normalizes the given array.
-    template<typename TYPE, std::size_t SIZE>
-    void normalize(std::array<TYPE,SIZE> &bins) {
+    template<typename TYPE>
+    void normalize(std::vector<TYPE> &bins) {
         // find maximum
         TYPE max = 0;
         for (TYPE val : bins) {

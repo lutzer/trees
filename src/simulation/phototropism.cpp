@@ -11,11 +11,15 @@
 #include <math.h>
 #include <complex>
 
-std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::BoundingBox boundingBox) {
-    const auto originBinIndex = pts::worldtoBin(origin, photo::binsPerAxis, photo::binsPerAxis, boundingBox);
-    const auto destinationBinIndex = pts::worldtoBin(destination, photo::binsPerAxis, photo::binsPerAxis, boundingBox);
+pts::SizeInt photo::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
+    return {32, 32};
+}
 
-    const auto rowLength = photo::binsPerAxis;
+std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
+    const auto originBinIndex = pts::worldtoBin(origin, matrixSize, boundingBox);
+    const auto destinationBinIndex = pts::worldtoBin(destination, matrixSize, boundingBox);
+
+    const auto rowLength = matrixSize.columns;
     const auto destinationX = destinationBinIndex % rowLength;
     const auto destinationY = destinationBinIndex / rowLength;
 
@@ -34,14 +38,16 @@ std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destinat
         }
         result.push_back(currentBinIndex);
     }
-
+    
     return result;
 }
 
 photo::BinArray photo::combineBins(photo::BinArray bins1, photo::BinArray bins2) {
-    photo::BinArray result;
-    result.fill(0.0);
 
+    if (bins1.size() != bins2.size())
+        throw std::invalid_argument( "arrays must have the same size" );
+
+    photo::BinArray result(bins1.size(),0.0);
     for (int i = 0; i < result.size(); i++) {
         result[i] = bins1[i] + bins2[i];
     }

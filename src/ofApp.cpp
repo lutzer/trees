@@ -12,7 +12,7 @@ static const int GROUND_SIZE = 100;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
 static const pts::BoundingBox PT_BOUNDINGBOX = {{-50, 0}, {100, 100}};
-static const pts::Point SUN_POSITION = {-50, 100};
+static const pts::Point SUN_POSITION = {50, 50};
 static const int SUN_RADIUS = 3;
 
 //--------------------------------------------------------------
@@ -74,8 +74,8 @@ void ofApp::update(){
         // update bins
         photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
         BinModel binModel = (showBins == LIGHT) ?
-            BinModel(bins.light.data(), photo::binsPerAxis, photo::binsPerAxis) :
-            BinModel(bins.densities.data(), photo::binsPerAxis, photo::binsPerAxis);
+            BinModel(bins.light.data(), bins.size.columns, bins.size.rows) :
+            BinModel(bins.densities.data(), bins.size.columns, bins.size.rows);
 
         ofPoint origin = ofPoint(PT_BOUNDINGBOX.origin.x,PT_BOUNDINGBOX.origin.y,0);
         ofVec3f size = ofVec3f(PT_BOUNDINGBOX.size.width,PT_BOUNDINGBOX.size.height,0);

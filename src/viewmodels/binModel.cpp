@@ -8,7 +8,7 @@
 
 #include "binModel.hpp"
 
-static const int OPACITY = 100;
+static const float COLOR_ALPHA = 100;
 static const float DEFORMATION_FACTOR = 20.0;
 
 /// adds normals to a mesh
@@ -39,7 +39,7 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
 
         ofPoint p1 = ofPoint(origin.x + (i % columns) * binSize.x, origin.y + (i / rows) * binSize.y, origin.z + binSize.z);
 
-        ofColor color(binData[i] * 255,0,0,OPACITY);
+        ofColor color = ofColor(binData[i]*255, binData[i]*255 ,0, COLOR_ALPHA);
 
         // add 4 points for one bin
         mesh.addVertex(p1);
