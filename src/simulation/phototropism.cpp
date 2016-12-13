@@ -12,7 +12,7 @@
 #include <complex>
 #include <utils.hpp>
 
-static const float BIN_WIDTH = 5;
+static const float BIN_WIDTH = 2;
 
 pts::SizeInt photo::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
 
@@ -70,11 +70,13 @@ std::vector<pts::PointInt> photo::pointsForLine(pts::PointInt p1, pts::PointInt 
 
     while ( currentPosition.x != p2.x || currentPosition.y != p2.y) {
 
-        if (2 * error > dy) {
+        int err2 = 2 * error;
+
+        if (err2 > dy) {
             currentPosition.x += sgnx;
             error += dy;
         }
-        if (2 * error < dx && (currentPosition.x != p2.x || currentPosition.y != p2.y)) {
+        if (err2 < dx) {
             currentPosition.y += sgny;
             error += dx;
         }
