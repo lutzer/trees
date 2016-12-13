@@ -11,8 +11,19 @@
 #include <math.h>
 #include <complex>
 
+static const float BIN_WIDTH = 5;
+
 pts::SizeInt photo::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
-    return {32, 40};
+
+    if (fmod(boundingBox.size.width, BIN_WIDTH) > 0 || fmod(boundingBox.size.height, BIN_WIDTH) > 0) {
+        std::string message = "bounding box sizes must be a multiple of " + std::to_string(BIN_WIDTH);
+        throw std::invalid_argument(message);
+    }
+
+    int columns = boundingBox.size.width / BIN_WIDTH;
+    int rows = boundingBox.size.height / BIN_WIDTH;
+
+    return {columns, rows};
 }
 
 std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
