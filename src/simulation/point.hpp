@@ -17,6 +17,7 @@ namespace pts {
         double x, y;
     };
 
+    /// A point in a matrix
     struct PointInt {
         int x, y;
     };

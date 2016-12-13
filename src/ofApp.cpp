@@ -44,8 +44,10 @@ void ofApp::setup(){
     cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
+        // caluclate light
+        photo::LightBins bins;
         // grow tree once
-        tree = gen::iterateTree(tree, {0, 0});
+        tree = gen::iterateTree(tree, bins);
         treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
     }

@@ -42,7 +42,7 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::SizeI
 
 #pragma mark - Public
 
-Tree gen::iterateTree(Tree tree, pts::Point sun) {
+Tree gen::iterateTree(Tree tree, photo::LightBins bins) {
     return treeWithUpdatedBranches(tree);
 }
 
