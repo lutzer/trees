@@ -24,17 +24,7 @@ namespace utils {
 
     /// Normalizes the given array.
     template<typename TYPE>
-    void normalize(std::vector<TYPE> &bins) {
-        // find maximum
-        TYPE max = 0;
-        for (TYPE val : bins) {
-            max = std::max(val,max);
-        }
-        // normalize
-        for (TYPE &val : bins) {
-            val = val/max;
-        }
-    }
+    void normalize(std::vector<TYPE> &bins);
 
     #pragma mark - Drawing Helpers
 

@@ -31,8 +31,8 @@ int pts::worldtoBin(pts::Point point, pts::SizeInt matrixSize, pts::BoundingBox 
     const auto binSizeX = boundingBox.size.width / matrixSize.columns;
     const auto binSizeY = boundingBox.size.height / matrixSize.rows;
 
-    int x = (int) floor((point.x - boundingBox.origin.x) / binSizeX);
-    int y = (int) floor((point.y - boundingBox.origin.y) / binSizeY);
+    int x = (int) ((point.x - boundingBox.origin.x) / binSizeX);
+    int y = (int) ((point.y - boundingBox.origin.y) / binSizeY);
 
     x = utils::constrainRange(x, 0, matrixSize.columns - 1);
     y = utils::constrainRange(y, 0, matrixSize.rows - 1 );

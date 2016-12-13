@@ -12,7 +12,7 @@
 #include <complex>
 
 pts::SizeInt photo::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
-    return {32, 32};
+    return {32, 40};
 }
 
 std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {

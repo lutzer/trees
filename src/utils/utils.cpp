@@ -21,6 +21,20 @@ int utils::constrainRange(int val, int min, int max) {
     return std::max(std::min(val,max),min);
 }
 
+// float implementation of normalize
+template<>
+void utils::normalize(std::vector<float> &bins) {
+    // find maximum
+    float max = 0;
+    for (float val : bins) {
+        max = std::max(val,max);
+    }
+    // normalize
+    for (float &val : bins) {
+        val = val/max;
+    }
+}
+
 void utils::setNormals( ofMesh &mesh ){
 
     //The number of the vertices
