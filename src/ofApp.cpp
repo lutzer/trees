@@ -45,7 +45,7 @@ void ofApp::setup(){
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
         // caluclate light
-        photo::LightBins bins = gen::lightBinsFromTree(tree, sun, PT_BOUNDINGBOX);
+        photo::LightBins bins = gen::calculateLightBins(tree, sun, PT_BOUNDINGBOX);
         // grow tree once
         tree = gen::iterateTree(tree, bins);
         treeList.push_back(tree);
@@ -76,7 +76,7 @@ void ofApp::update(){
         treeMesh = TreeModel(treeList[iteration]).getMesh();
 
         // update bins
-        photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
+        photo::LightBins bins = gen::calculateLightBins(treeList[iteration], sun, PT_BOUNDINGBOX);
         BinModel binModel = (showBins == LIGHT) ?
             BinModel(bins.light.data(), bins.size.columns, bins.size.rows) :
             BinModel(bins.densities.data(), bins.size.columns, bins.size.rows);
