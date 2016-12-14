@@ -17,7 +17,13 @@ double utils::constrainAngle(double x){
     return x;
 }
 
+template<>
 int utils::constrainRange(int val, int min, int max) {
+    return std::max(std::min(val,max),min);
+}
+
+template<>
+int utils::constrainRange(float val, float min, float max) {
     return std::max(std::min(val,max),min);
 }
 

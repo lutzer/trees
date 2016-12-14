@@ -34,7 +34,7 @@ namespace photo {
     std::vector<pts::PointInt> pointsForLine(pts::PointInt p1, pts::PointInt p2);
 
     /// Adds the contents of the two given bin arrays together and returns the resulting bin array.
-    BinArray combineBins(BinArray bins1, BinArray bins2);
+    BinArray combineBins(const BinArray &bins1,const BinArray &bins2);
 
 }
 
