@@ -22,7 +22,7 @@ static const double GROWTH_RATE = 0.25;
 static const double BRANCH_POSSIBLITY = 0.1;
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
-Tree treeWithUpdatedBranches(Tree tree);
+Tree treeWithUpdatedBranches(Tree tree, photo::LightBins bins);
 
 /// Creates a new child branch for a given parent.
 Branch generateChildBranch(Branch parent);
@@ -30,7 +30,7 @@ Branch generateChildBranch(Branch parent);
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
 /// lambda to each of them.
-Branch mapBranchRecursively(Branch branch, F mapLambda);
+Branch mapBranchRecursively(Branch branch, const pts::Point origin, const double angle, F mapLambda);
 
 template<typename F>
 /// Iterates over the given tree's branches and, for all of the branches in each bin, reduces them
@@ -43,11 +43,10 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::SizeI
 #pragma mark - Public
 
 Tree gen::iterateTree(Tree tree, photo::LightBins bins) {
-    return treeWithUpdatedBranches(tree);
+    return treeWithUpdatedBranches(tree, bins);
 }
 
 photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::BoundingBox boundingBox) {
-
     pts::SizeInt matrixSize = photo::calculateBinMatrixSize(boundingBox);
 
     // calculate densities for each bin
@@ -76,10 +75,10 @@ photo::LightBins gen::lightBinsFromTree(Tree tree, pts::Point sun, pts::Bounding
 
 #pragma mark - Generator Helpers
 
-Tree treeWithUpdatedBranches(Tree tree) {
+Tree treeWithUpdatedBranches(Tree tree, photo::LightBins bins) {
     auto newTree = tree;
 
-    newTree.base = mapBranchRecursively(newTree.base, [](Branch branch) {
+    newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, [](Branch branch, pts::Point origin, double angle) {
         auto newBranch = branch;
         newBranch.length = branch.length + GROWTH_RATE; // Make each branch longer.
         newBranch.thickness = branch.thickness + GROWTH_RATE / (2 * M_PI); // Make each branch thicker.
@@ -147,22 +146,22 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::SizeI
 #pragma mark - Helpers
 
 template<typename F>
-Branch mapBranchRecursively(Branch branch, F mapLambda) {
+Branch mapBranchRecursively(Branch branch, const pts::Point origin, const double angle, F mapLambda) {
     // If the given branch has no children, just return the branch mapped.
     if (branch.children.size() == 0) {
-        return mapLambda(branch);
+        return mapLambda(branch, origin, angle);
     }
 
     // Otherwise, return the branch with all of its children mapped.
     auto children = branch.children;
     std::vector<Branch> mappedChildren;
     std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [mapLambda](Branch child) {
-        return mapBranchRecursively(child, mapLambda);
+        return mapBranchRecursively(child, {0,0}, 0.0, mapLambda);
     });
 
     auto newBranch = branch;
     newBranch.children = mappedChildren;
-    auto mappedBranch = mapLambda(newBranch);
+    auto mappedBranch = mapLambda(newBranch, origin, angle);
 
     return mappedBranch;
 }

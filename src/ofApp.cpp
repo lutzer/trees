@@ -57,7 +57,9 @@ void ofApp::setup(){
 
     // setup parameters
     lastUpdateTime = ofGetElapsedTimeMillis();
+
     showBins = DENSITIES;
+    showGui = true;
 
     this->windowResized(ofGetWidth(), ofGetHeight());
 
@@ -90,7 +92,6 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
     ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
 
     // draw 3d scene
@@ -108,16 +109,18 @@ void ofApp::draw(){
     ofDisableDepthTest();
 
     // draw gui
-    ofDrawBitmapString("<a>: -iteration, <s>: +iteration \n"
-                       "<f>: toggle Fullscreen \n"
-                       "<b>: switch through Bins",
-                       PADDING, PADDING);
-    iterationSlider->draw();
+    if (showGui) {
+        ofDrawBitmapString("<a>: -iteration, <s>: +iteration\n"
+                           "<f>: toggle Fullscreen\n"
+                           "<b>: switch through Bins\n"
+                           "<g>: toggle GUI",
+                           PADDING, PADDING);
+        iterationSlider->draw();
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
     switch (key) {
         case 'a':
             iteration = max(iteration.getMin(),iteration -1);
@@ -132,6 +135,8 @@ void ofApp::keyPressed(int key){
             showBins = BinVisibilty((showBins + 1) % 3);
             updateScene = true;
             break;
+        case 'g':
+            showGui = !showGui;
     }
 }
 

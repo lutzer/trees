@@ -28,7 +28,6 @@ BinModel::BinModel(float* data, int columns, int rows) {
 }
 
 ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
-
     ofMesh mesh;
 
     //mesh.setMode(OF_PRIMITIVE_TRIANGLES);
@@ -36,7 +35,6 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
 
     ofVec3f binSize = ofVec3f(size.x / columns, size.y / rows, 0);
     for (int i=0; i < rows*columns; i++) {
-
         ofPoint p1 = ofPoint(origin.x + (i % columns) * binSize.x, origin.y + (i / columns) * binSize.y, origin.z + binSize.z);
 
         ofColor color = ofColor(binData[i]*255, binData[i]*255 ,0, COLOR_ALPHA);
@@ -57,7 +55,5 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
 
         meshIndex += 4;
     }
-
-
     return mesh;
 }

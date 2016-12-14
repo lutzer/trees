@@ -32,7 +32,6 @@ ofMesh TreeModel::getMesh() {
 }
 
 void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch) {
-
     // add root of branch
     mesh.addVertex(origin);
 

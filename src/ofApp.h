@@ -13,7 +13,6 @@ enum BinVisibilty {
 class ofApp : public ofBaseApp{
 
 private:
-
     // simulation objects
     pts::Point sun;
     vector<trees::Tree> treeList;
@@ -31,6 +30,7 @@ private:
 
     // Gui
     ofxDatGuiSlider* iterationSlider;
+    bool showGui;
 
     long lastUpdateTime;
 
@@ -52,7 +52,6 @@ public:
     void gotMessage(ofMessage msg);
 
     /* Event handlers */
-
     void iterationSliderChanged(ofxDatGuiSliderEvent e);
     void onIterationChanged(int & value);
     
