@@ -22,9 +22,8 @@ namespace utils {
     double constrainAngle(double x);
 
     template<typename TYPE>
-    int constrainRange(TYPE val, TYPE min, TYPE max) {
-        
-    }
+    /// adjusts value, so its contained between min and max
+    int constrainRange(TYPE val, TYPE min, TYPE max);
 
     template<typename TYPE>
     /// Normalizes the given array.
