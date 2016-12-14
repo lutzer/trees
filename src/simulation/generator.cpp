@@ -18,9 +18,9 @@
 using namespace trees;
 
 static const double BRANCHOUT_ANGLE_VARIATION = 0.5;
-static const double GROWTH_RATE = 0.25;
+static const double GROWTH_RATE = 0.3;
 static const double BRANCH_POSSIBLITY = 0.1;
-static const double DENSITY_MULTIPLIER = 0.2; // multiplied with branch thickness to sum up density values
+static const double DENSITY_MULTIPLIER = 0.1; // multiplied with branch thickness to sum up density values
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBox boundingBox);
@@ -52,7 +52,7 @@ photo::LightBins gen::calculateLightBins(Tree &tree, pts::Point sun, pts::Boundi
 
     // calculate densities for each bin
     auto densities = reduceTreeIntoBins(matrixSize, boundingBox, tree, [](float current, float binIndex, Branch branch) {
-        return current + branch.thickness * DENSITY_MULTIPLIER;
+        return std::min(current + branch.thickness * DENSITY_MULTIPLIER,1.0);
     });
 
     // normalize denseties
@@ -82,22 +82,18 @@ Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBo
     newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, boundingBox, [](Branch branch, pts::Point origin, double angle, photo::LightBins &bins, pts::BoundingBox boundingBox) {
         const auto newAngle = angle + branch.angle;
 
-        // calcuate the bins the branch goes through
+        // take only the light value from the bin where the branch ends
         auto branchEnd = pts::movePoint(origin, newAngle, branch.length);
-        auto binIndices = photo::binIndicesForLine(origin, branchEnd, bins.size, boundingBox);
-
-        // sum up sunlight the branch gets
-        auto lightSum = utils::fold(binIndices, 0.0, [bins](float sum, int index) {
-            return sum + bins.light[index];
-        });
+        int binIndex = pts::worldtoBin(branchEnd, bins.size, boundingBox);
+        auto light = bins.light[binIndex];
 
         auto newBranch = branch;
         // grow branch only if it gets sun light
-        newBranch.length = branch.length + std::min(GROWTH_RATE,lightSum); // Make each branch longer.
+        newBranch.length = branch.length + GROWTH_RATE * light; // Make each branch longer.
         newBranch.thickness = 1;
 
         // Create a new child branch?
-        if (randDouble() < BRANCH_POSSIBLITY * lightSum) {
+        if (randDouble() < BRANCH_POSSIBLITY * light) {
             Branch newChild = generateChildBranch(newBranch);
             newBranch.children.insert(newBranch.children.end(), newChild);
         }

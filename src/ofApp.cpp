@@ -12,7 +12,7 @@ static const int GROUND_SIZE = 100;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
 static const pts::BoundingBox PT_BOUNDINGBOX = {{-50, 0}, {100, 100}};
-static const pts::Point SUN_POSITION = {50, 0};
+static const pts::Point SUN_POSITION = {-50, 0};
 static const int SUN_RADIUS = 3;
 
 //--------------------------------------------------------------
