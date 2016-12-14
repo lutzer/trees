@@ -81,7 +81,7 @@ Tree treeWithUpdatedBranches(Tree tree, photo::LightBins bins) {
     newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, [](Branch branch, pts::Point origin, double angle) {
         auto newBranch = branch;
         newBranch.length = branch.length + GROWTH_RATE; // Make each branch longer.
-        newBranch.thickness = branch.thickness + GROWTH_RATE / (2 * M_PI); // Make each branch thicker.
+        newBranch.thickness = 1;
 
         // Create a new child branch?
         if (randDouble() < BRANCH_POSSIBLITY) {
@@ -100,7 +100,7 @@ Branch generateChildBranch(Branch parent) {
     newChild.position = randDouble();
     newChild.angle = randDouble() * BRANCHOUT_ANGLE_VARIATION * 2 - BRANCHOUT_ANGLE_VARIATION;
     newChild.length = 0;
-    newChild.thickness = 0;
+    newChild.thickness = 1;
 
     return newChild;
 }
@@ -132,13 +132,14 @@ photo::BinArray reduceBranchIntoBinsRecursively(photo::BinArray bins, pts::SizeI
     }
 
     // Otherwise, return the bin array with all of the branch's children reduced into it.
-    std::vector<photo::BinArray> mappedChildren;
-    std::transform(branch.children.begin(), branch.children.end(), std::back_inserter(mappedChildren), [bins, matrixSize, boundingBox, point, newAngle, branch, reduceLambda](Branch child) {
-        auto newPoint = pts::movePoint(point, newAngle, branch.length * child.position);
-        return reduceBranchIntoBinsRecursively(bins, matrixSize, boundingBox, newPoint, newAngle, child, reduceLambda);
-    });
+    std::vector<photo::BinArray> mappedChildren = utils::map<photo::BinArray>(branch.children,
+        [bins, matrixSize, boundingBox, point, newAngle, branch, reduceLambda](Branch child) {
+                auto newPoint = pts::movePoint(point, newAngle, branch.length * child.position);
+                return reduceBranchIntoBinsRecursively(bins, matrixSize, boundingBox, newPoint, newAngle, child, reduceLambda);
+        }
+    );
 
-    return std::accumulate(mappedChildren.begin(), mappedChildren.end(), newBins, [](photo::BinArray acc, photo::BinArray curr) {
+    return utils::fold<photo::BinArray>(mappedChildren, newBins, [](photo::BinArray acc, photo::BinArray curr) {
         return photo::combineBins(acc, curr);
     });
 }
@@ -154,9 +155,8 @@ Branch mapBranchRecursively(Branch branch, const pts::Point origin, const double
 
     // Otherwise, return the branch with all of its children mapped.
     auto children = branch.children;
-    std::vector<Branch> mappedChildren;
-    std::transform(children.begin(), children.end(), std::back_inserter(mappedChildren), [mapLambda](Branch child) {
-        return mapBranchRecursively(child, {0,0}, 0.0, mapLambda);
+    std::vector<Branch> mappedChildren = utils::map<Branch>(children,  [mapLambda, origin, angle](Branch child) {
+        return mapBranchRecursively(child, origin, angle, mapLambda);
     });
 
     auto newBranch = branch;

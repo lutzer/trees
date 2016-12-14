@@ -45,7 +45,7 @@ void ofApp::setup(){
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
         // caluclate light
-        photo::LightBins bins;
+        photo::LightBins bins = gen::lightBinsFromTree(tree, sun, PT_BOUNDINGBOX);
         // grow tree once
         tree = gen::iterateTree(tree, bins);
         treeList.push_back(tree);
