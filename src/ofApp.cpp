@@ -12,7 +12,7 @@ static const int GROUND_SIZE = 100;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
 static const pts::BoundingBox PT_BOUNDINGBOX = {{-50, 0}, {100, 100}};
-static const pts::Point SUN_POSITION = {-50, 50};
+static const pts::Point SUN_POSITION = {-50, 0};
 static const int SUN_RADIUS = 3;
 
 //--------------------------------------------------------------
@@ -39,15 +39,15 @@ void ofApp::setup(){
     sun = SUN_POSITION;
 
     // generate Tree Sappling
-    trees::Tree tree = generateSapling({0, 0});
+    trees::Tree tree = generateSapling({PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width/2, 0});
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
         // caluclate light
-        photo::LightBins bins;
+        photo::LightBins bins = gen::calculateLightBins(tree, sun, PT_BOUNDINGBOX);
         // grow tree once
-        tree = gen::iterateTree(tree, bins);
+        tree = gen::iterateTree(tree, bins, PT_BOUNDINGBOX);
         treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
     }
@@ -76,7 +76,7 @@ void ofApp::update(){
         treeMesh = TreeModel(treeList[iteration]).getMesh();
 
         // update bins
-        photo::LightBins bins = gen::lightBinsFromTree(treeList[iteration], sun, PT_BOUNDINGBOX);
+        photo::LightBins bins = gen::calculateLightBins(treeList[iteration], sun, PT_BOUNDINGBOX);
         BinModel binModel = (showBins == LIGHT) ?
             BinModel(bins.light.data(), bins.size.columns, bins.size.rows) :
             BinModel(bins.densities.data(), bins.size.columns, bins.size.rows);

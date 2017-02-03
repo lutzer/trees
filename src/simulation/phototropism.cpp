@@ -86,7 +86,7 @@ std::vector<pts::PointInt> photo::pointsForLine(pts::PointInt p1, pts::PointInt 
     return points;
 }
 
-photo::BinArray photo::combineBins(photo::BinArray bins1, photo::BinArray bins2) {
+photo::BinArray photo::combineBins(const photo::BinArray &bins1, const photo::BinArray &bins2) {
 
     if (bins1.size() != bins2.size())
         throw std::invalid_argument( "arrays must have the same size" );
