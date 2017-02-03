@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-static unsigned seed = 0;
+static unsigned seed = 1;
 
 /// Returns a random bool.
 bool randBool();

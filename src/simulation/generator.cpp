@@ -18,9 +18,11 @@
 using namespace trees;
 
 static const double BRANCHOUT_ANGLE_VARIATION = 0.5;
-static const double GROWTH_RATE = 0.3;
+static const double GROWTH_RATE = 0.2;
 static const double BRANCH_POSSIBLITY = 0.1;
 static const double DENSITY_MULTIPLIER = 0.1; // multiplied with branch thickness to sum up density values
+static const int MAX_BRANCHES = 50; // maximal branchout number
+static const int MAX_DEPTH = 20; // maximal depth of a tree
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBox boundingBox);
@@ -65,6 +67,7 @@ photo::LightBins gen::calculateLightBins(Tree &tree, pts::Point sun, pts::Boundi
         int sunBin = pts::worldtoBin(sun, matrixSize, boundingBox);
 
         vector<int> binIndices = photo::binIndicesForLine(i, sunBin, matrixSize);
+        binIndices.erase(binIndices.begin()); // remove first element
         float densitySum = 0.0;
         for (int index : binIndices) {
             densitySum += densities[index];
@@ -88,12 +91,15 @@ Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBo
         auto light = bins.light[binIndex];
 
         auto newBranch = branch;
-        // grow branch only if it gets sun light
-        newBranch.length = branch.length + GROWTH_RATE * light; // Make each branch longer.
-        newBranch.thickness = 1;
 
-        // Create a new child branch?
-        if (randDouble() < BRANCH_POSSIBLITY * light) {
+        // grow branch faster if there is no sunlight
+        float growth = GROWTH_RATE / std::max(0.1F,light);
+        newBranch.length = branch.length + growth; // Make each branch longer.
+        //newBranch.thickness = branch.thickness + sqrt(growth);
+
+        // Create a new child branch, possibility depending on the light
+        if (MAX_BRANCHES > newBranch.children.size() && randDouble() < (BRANCH_POSSIBLITY * light)) {
+
             Branch newChild = generateChildBranch(newBranch);
             newBranch.children.insert(newBranch.children.end(), newChild);
         }
