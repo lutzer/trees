@@ -1,10 +1,9 @@
 # Trees
 
-Plant growth simulation and visualisation
+Plant growth simulation and visualisation.
 
-## Setup Environment
+## Set Up Environment
 
 * Install Xcode and download openFrameworks.
-* Clone the repository into openframeworks `apps/myApps` folder
-* Clone `https://github.com/braitsch/ofxDatGui` in openframeworks addons directory
-
+* Clone the repository into openframeworks' `apps/myApps` folder.
+* Clone `https://github.com/braitsch/ofxDatGui` into openFrameworks' `addons` directory.
