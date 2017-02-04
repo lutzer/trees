@@ -17,6 +17,10 @@ namespace rnd {
     /// Returns a random bool.
     bool randBool();
 
+    /// Returns a random bool according to a Bernoulli distribution, with a probability between 0.0
+    /// and 1.0, where 1.0 will always return true and 0.0 will always return false.
+    bool randBoolWithProbability(double probability);
+
     /// Returns a random double between 0.0 and 1.0.
     double randDouble();
 

@@ -19,6 +19,11 @@ bool rnd::randBool() {
     return distribution(engine) == 0;
 }
 
+bool rnd::randBoolWithProbability(double probability) {
+    std::bernoulli_distribution distribution(probability);
+    return distribution(engine);
+}
+
 double rnd::randDouble() {
     return rnd::randDouble(0, 1);
 }

@@ -13,7 +13,7 @@ using namespace trees;
 using namespace std;
 
 static const int GROUND_SIZE = 100;
-static const int MAX_ITERATIONS = 80;
+static const int MAX_ITERATIONS = 100;
 static const int PADDING = 30;
 static const int SUN_RADIUS = 3;
 
@@ -37,16 +37,16 @@ void ofApp::setup() {
 
     // Create ground mesh.
     groundMesh.setMode(OF_PRIMITIVE_LINE_LOOP);
-    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2, 0, -GROUND_SIZE/2));
-    groundMesh.addVertex(ofPoint(GROUND_SIZE/2, 0, -GROUND_SIZE/2));
-    groundMesh.addVertex(ofPoint(GROUND_SIZE/2, 0, GROUND_SIZE/2));
-    groundMesh.addVertex(ofPoint(-GROUND_SIZE/2, 0, GROUND_SIZE/2));
+    groundMesh.addVertex(ofPoint(-GROUND_SIZE / 2, 0, -GROUND_SIZE / 2));
+    groundMesh.addVertex(ofPoint(GROUND_SIZE / 2, 0, -GROUND_SIZE / 2));
+    groundMesh.addVertex(ofPoint(GROUND_SIZE / 2, 0, GROUND_SIZE / 2));
+    groundMesh.addVertex(ofPoint(-GROUND_SIZE / 2, 0, GROUND_SIZE / 2));
 
     // Set tree parameters.
-    const double branchoutAngleMean = 0.0;
-    const double branchoutAngleVariance = 0.5;
+    const double branchoutAngleMean = 0.1;
+    const double branchoutAngleVariance = 0.05;
     const double branchPossibility = 0.08;
-    const double growthRate = 0.3;
+    const double growthRate = 0.5;
     trees::TreeParameters params(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
 
     // Generate sapling.

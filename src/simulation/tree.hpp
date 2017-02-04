@@ -27,13 +27,13 @@ namespace trees {
     /// Defines the rules for how a tree grows.
     struct TreeParameters {
         double branchoutAngleMean;
-        double branchoutAngleVariance;
+        double branchoutAngleStdDeviation;
 
         double branchPossibility;
 
         double growthRate;
 
-        TreeParameters(double branchoutAngleMean, double branchoutAngleVariance, double branchPossibility, double growthRate);
+        TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double growthRate);
         TreeParameters();
     };
 

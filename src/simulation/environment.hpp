@@ -16,7 +16,7 @@
 
 namespace env {
     /// The width and height of the bins in the bounding box.
-    static const float BIN_SIZE = 2;
+    static const float BIN_SIZE = 5;
 
     /// Defines the extent to which branches contribute to density values.
     static const double DENSITY_MULTIPLIER = 0.1;

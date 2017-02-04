@@ -24,9 +24,9 @@ Branch::Branch() {
     Branch(0, M_PI_2, 0, 1);
 }
 
-TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleVariance, double branchPossibility, double growthRate) {
+TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double growthRate) {
     this->branchoutAngleMean = branchoutAngleMean;
-    this->branchoutAngleVariance = branchoutAngleVariance;
+    this->branchoutAngleStdDeviation = branchoutAngleStdDeviation;
     this->growthRate = growthRate;
     this->branchPossibility = branchPossibility;
 }

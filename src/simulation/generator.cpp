@@ -103,10 +103,23 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 }
 
 Branch generateChildBranch(const Branch &parent, const TreeParameters &params) {
-    auto position = rnd::randDouble();
-    auto angle = rnd::randDouble() * params.branchoutAngleVariance * 2 - params.branchoutAngleVariance;
-    auto length = 0;
-    auto thickness = 1;
+    const auto position = rnd::randDouble();
+
+    // Choose the side of the new branch, making it more likely that the branch is on a side where
+    // there are fewer branches already.
+    const auto numberOfChildren = parent.children.size();
+    auto numberOfChildrenWithNegativeAngles = 0;
+    for (auto i = 0; i < numberOfChildren; i++) {
+        if (parent.children[i].angle < 0) {
+            numberOfChildrenWithNegativeAngles++;
+        }
+    }
+    const double branchSideProbability = numberOfChildrenWithNegativeAngles / (double)numberOfChildren;
+    const auto branchSide = rnd::randBoolWithProbability(branchSideProbability) ? 1 : -1;
+    const auto angle = branchSide * M_PI * rnd::randDoubleWithNormDistr(params.branchoutAngleMean, params.branchoutAngleStdDeviation);
+
+    const auto length = 0;
+    const auto thickness = 1;
 
     return Branch(position, angle, length, thickness);
 }
