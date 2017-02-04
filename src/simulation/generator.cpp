@@ -96,8 +96,6 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
             Branch newChild = generateChildBranch(branch, newTree.params);
             branch.children.insert(branch.children.end(), newChild);
         }
-
-
     });
 
     return newTree;
@@ -129,12 +127,12 @@ void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &ma
     auto branchEnd = pts::movePoint(point, newAngle, branch.length);
     auto binIndices = photo::binIndicesForLine(point, branchEnd, matrixSize, boundingBox);
 
-    // apply lambda to any bin the branch passed through
+    // Apply lambda to any bin the branch passed through.
     for (auto binIndex : binIndices) {
         bins[binIndex] = reduceLambda(bins[binIndex], binIndex, branch);
     }
 
-    // recursivly go through children
+    // Recursivly go through children.
     for (trees::Branch child : branch.children) {
         auto childOrigin = pts::movePoint(point, newAngle, branch.length * child.position);
         reduceBranchIntoBinsRecursively(bins, matrixSize, boundingBox, childOrigin, newAngle, child, reduceLambda);
@@ -145,13 +143,12 @@ void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &ma
 
 template<typename F>
 void mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda) {
-
-    // Otherwise, return the branch with all of its children mapped.
+    // Map all of the branch's children (passing along the mapping function; when this recursion
+    // reaches the leaves, it will apply the mapping function there).
     for (auto &childBranch : branch.children) {
         mapBranchRecursively(childBranch, origin, angle, bins, boundingBox, mapLambda);
     }
 
-    // apply function to children
+    // Apply the mapping function to the current branch.
     mapLambda(branch, origin, angle, bins, boundingBox);
-
 }
