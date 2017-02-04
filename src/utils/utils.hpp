@@ -9,30 +9,32 @@
 #ifndef utils_hpp
 #define utils_hpp
 
-#include <stdio.h>
 #include "ofMain.h"
+
+#include <stdio.h>
 #include <vector>
 #include <numeric>
+#include <algorithm>
 
 namespace utils {
 
     #pragma mark - Math Helpers
 
-    /// constrains an angle within 0 and 2_PI
+    /// Constrains an angle within 0 and 2_PI.
     double constrainAngle(double x);
 
     template<typename TYPE>
-    /// adjusts value, so its contained between min and max
+    ///  Adjusts value, so it's contained between min and max.
     int constrainRange(TYPE val, TYPE min, TYPE max);
 
     template<typename TYPE>
     /// Normalizes the given array.
-    void normalize(std::vector<TYPE> &bins);
+    void normalize(const std::vector<TYPE> &bins);
 
     #pragma mark - Drawing Helpers
 
-    /// adds normals to a triangle mesh
-    void setNormals(ofMesh &mesh);
+    /// Adds normals to a triangle mesh.
+    void setNormals(const ofMesh &mesh);
 
     #pragma mark - Mapping Helpers
 
@@ -42,7 +44,7 @@ namespace utils {
     /// wraps std::transform function to iterate over vector
     std::vector<RETURN_TYPE> map(std::vector<INPUT_TYPE> array, F lambda) {
         std::vector<RETURN_TYPE> result;
-        std::transform(array.begin(), array.end(), std::back_inserter(result),lambda);
+        std::transform(array.begin(), array.end(), std::back_inserter(result), lambda);
         return result;
     }
 
@@ -51,7 +53,6 @@ namespace utils {
     RETURN_TYPE fold(std::vector<INPUT_TYPE> array, RETURN_TYPE initial, F lambda) {
         return std::accumulate(array.begin(), array.end(), initial, lambda);
     }
-
-}
+}  // namespace utils
 
 #endif /* utils_hpp */
