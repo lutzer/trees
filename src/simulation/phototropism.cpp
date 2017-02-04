@@ -41,8 +41,8 @@ std::vector<pts::PointInt> photo::pointsForLine(pts::PointInt p1, pts::PointInt 
     int dx = abs(p2.x - p1.x);
     int dy = -abs(p2.y - p1.y);
 
-    int sgnx = p2.x > p1.x ? 1 : -1;
-    int sgny = p2.y > p1.y ? 1 : -1;
+    int sgnx = (p2.x > p1.x) ? 1 : -1;
+    int sgny = (p2.y > p1.y) ? 1 : -1;
 
     // Starting error.
     int error = dx+dy;
