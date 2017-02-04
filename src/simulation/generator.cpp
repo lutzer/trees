@@ -11,6 +11,9 @@
 #include <math.h>
 #include <array>
 #include <numeric>
+#include <algorithm>
+#include <map>
+#include <vector>
 
 #include "random.hpp"
 #include "utils.hpp"
@@ -20,18 +23,18 @@ using namespace trees;
 static const double BRANCHOUT_ANGLE_VARIATION = 0.5;
 static const double GROWTH_RATE = 0.3;
 static const double BRANCH_POSSIBLITY = 0.1;
-static const double DENSITY_MULTIPLIER = 0.1; // multiplied with branch thickness to sum up density values
+static const double DENSITY_MULTIPLIER = 0.1; // Multiplied with branch thickness to sum up density values.
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
-Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBox boundingBox);
+Tree treeWithUpdatedBranches(const Tree &tree, const photo::LightBins &bins, pts::BoundingBox boundingBox);
 
 /// Creates a new child branch for a given parent.
-Branch generateChildBranch(Branch &parent);
+Branch generateChildBranch(const Branch &parent);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
 /// lambda to each of them.
-Branch mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, photo::LightBins bins, pts::BoundingBox boundingBox, F mapLambda);
+Branch mapBranchRecursively(const Branch &branch, const pts::Point origin, const double angle, photo::LightBins bins, pts::BoundingBox boundingBox, F mapLambda);
 
 template<typename F>
 /// Iterates over the given tree's branches and, for all of the branches in each bin, reduces them
@@ -39,29 +42,28 @@ template<typename F>
 photo::BinArray reduceTreeIntoBins(pts::SizeInt matrixSize, pts::BoundingBox boundingBox, Tree tree, F reduceLambda);
 
 template<typename F>
-void reduceBranchIntoBinsRecursively(photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch &branch, F reduceLambda);
+void reduceBranchIntoBinsRecursively(const photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, const Branch &branch, F reduceLambda);
 
 #pragma mark - Public
 
-Tree gen::iterateTree(Tree &tree, photo::LightBins &bins, pts::BoundingBox boundingBox) {
+Tree gen::iterateTree(const Tree &tree, const photo::LightBins &bins, pts::BoundingBox boundingBox) {
     return treeWithUpdatedBranches(tree, bins, boundingBox);
 }
 
-photo::LightBins gen::calculateLightBins(Tree &tree, pts::Point sun, pts::BoundingBox boundingBox) {
+photo::LightBins gen::calculateLightBins(const Tree &tree, pts::Point sun, pts::BoundingBox boundingBox) {
     pts::SizeInt matrixSize = photo::calculateBinMatrixSize(boundingBox);
 
-    // calculate densities for each bin
+    // Calculate the densities for each bin.
     auto densities = reduceTreeIntoBins(matrixSize, boundingBox, tree, [](float current, float binIndex, Branch branch) {
         return std::min(current + branch.thickness * DENSITY_MULTIPLIER,1.0);
     });
 
-    // normalize denseties
+    // Normalize the densities.
     //utils::normalize(densities);
 
-    // build light matrix from densities
+    // Build light matrix from densities.
     photo::BinArray lightMatrix(matrixSize.columns * matrixSize.rows, 0.0);
     for (int i = 0; i < lightMatrix.size(); i++) {
-
         int sunBin = pts::worldtoBin(sun, matrixSize, boundingBox);
 
         vector<int> binIndices = photo::binIndicesForLine(i, sunBin, matrixSize);
@@ -76,19 +78,19 @@ photo::LightBins gen::calculateLightBins(Tree &tree, pts::Point sun, pts::Boundi
 
 #pragma mark - Generator Helpers
 
-Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBox boundingBox) {
+Tree treeWithUpdatedBranches(const Tree &tree, const photo::LightBins &bins, pts::BoundingBox boundingBox) {
     auto newTree = tree;
 
-    newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, boundingBox, [](Branch branch, pts::Point origin, double angle, photo::LightBins &bins, pts::BoundingBox boundingBox) {
+    newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, boundingBox, [](Branch branch, pts::Point origin, double angle, const photo::LightBins &bins, pts::BoundingBox boundingBox) {
         const auto newAngle = angle + branch.angle;
 
-        // take only the light value from the bin where the branch ends
+        // Take only the light value from the bin where the branch ends.
         auto branchEnd = pts::movePoint(origin, newAngle, branch.length);
         int binIndex = pts::worldtoBin(branchEnd, bins.size, boundingBox);
         auto light = bins.light[binIndex];
 
         auto newBranch = branch;
-        // grow branch only if it gets sun light
+        // Grow branch only if it gets sunlight.
         newBranch.length = branch.length + GROWTH_RATE * light; // Make each branch longer.
         newBranch.thickness = 1;
 
@@ -104,7 +106,7 @@ Tree treeWithUpdatedBranches(Tree &tree, photo::LightBins &bins, pts::BoundingBo
     return newTree;
 }
 
-Branch generateChildBranch(Branch &parent) {
+Branch generateChildBranch(const Branch &parent) {
     Branch newChild = {};
     newChild.position = randDouble();
     newChild.angle = randDouble() * BRANCHOUT_ANGLE_VARIATION * 2 - BRANCHOUT_ANGLE_VARIATION;
@@ -124,8 +126,7 @@ photo::BinArray reduceTreeIntoBins(pts::SizeInt matrixSize, pts::BoundingBox bou
 }
 
 template<typename F>
-void reduceBranchIntoBinsRecursively(photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, Branch &branch, F reduceLambda) {
-
+void reduceBranchIntoBinsRecursively(const photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, const Branch &branch, F reduceLambda) {
     const auto newAngle = angle + branch.angle;
 
     // Get bin indices for the current branch.
@@ -147,7 +148,7 @@ void reduceBranchIntoBinsRecursively(photo::BinArray &bins, pts::SizeInt matrixS
 #pragma mark - Helpers
 
 template<typename F>
-Branch mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, photo::LightBins bins, pts::BoundingBox boundingBox, F mapLambda) {
+Branch mapBranchRecursively(const Branch &branch, const pts::Point origin, const double angle, photo::LightBins bins, pts::BoundingBox boundingBox, F mapLambda) {
     // If the given branch has no children, just return the branch mapped.
     if (branch.children.size() == 0) {
         return mapLambda(branch, origin, angle, bins, boundingBox);
