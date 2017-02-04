@@ -6,13 +6,14 @@
 //
 //
 
-#include "ofMain.h"
 #include "treeModel.hpp"
+
+#include "ofMain.h"
 #include "utils.hpp"
 #include "random.hpp"
 
-// declare private methods
-void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch);
+// Declare private methods.
+void addBranchesToMesh(const ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch);
 
 TreeModel::TreeModel() {
 }
@@ -31,22 +32,22 @@ ofMesh TreeModel::getMesh() {
     return mesh;
 }
 
-void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch) {
-    // add root of branch
+void addBranchesToMesh(const ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch) {
+    // Add root of branch.
     mesh.addVertex(origin);
 
     double newAngle = angle + branch.angle;
 
-    // add end of branch
+    // Add end of branch.
     ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
                                origin.y + sin(newAngle) * branch.length,
                                0);
     mesh.addVertex(endPoint);
 
     for (trees::Branch child : branch.children) {
-        auto childOrigin = ofPoint(origin.x + (endPoint.x - origin.x) * child.position,
-                                   origin.y + (endPoint.y - origin.y) * child.position,
-                                   0);
+        const auto childX = origin.x + (endPoint.x - origin.x) * child.position;
+        const auto childY = origin.y + (endPoint.y - origin.y) * child.position;
+        const auto childOrigin = ofPoint(childX, childY, 0);
         addBranchesToMesh(mesh, childOrigin, newAngle, child);
     }
 }

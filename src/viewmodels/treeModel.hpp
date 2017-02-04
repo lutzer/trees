@@ -12,20 +12,14 @@
 #include "tree.hpp"
 #include "ofMesh.h"
 
-
-//class ofMesh;
-
 class TreeModel {
-    
 public:
     TreeModel();
-    TreeModel(trees::Tree tree);
+    explicit TreeModel(trees::Tree tree);
     ofMesh getMesh();
-
 
 private:
     trees::Tree tree;
-
 };
 
 

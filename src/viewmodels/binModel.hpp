@@ -13,18 +13,14 @@
 #include "ofMesh.h"
 
 class BinModel {
-
 public:
-
     BinModel();
     BinModel(float * data, int columns, int rows);
     ofMesh getMesh(ofPoint origin, ofVec3f size);
 
 private:
     float *binData;
-    int rows,columns;
-
-
+    int rows, columns;
 };
 
 #endif /* binMesh_hpp */
