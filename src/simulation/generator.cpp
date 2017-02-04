@@ -78,7 +78,6 @@ env::Bins gen::calculateLightBins(const trees::Tree &tree, const env::Environmen
 #pragma mark - Generator Helpers
 
 Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env::Environment environment) {
-
     trees::Tree newTree = tree;
 
     mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, environment.boundingBox, [newTree](Branch &branch, pts::Point origin, double angle, const env::Bins &bins, pts::BoundingBox boundingBox) {
@@ -91,7 +90,6 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 
         // Grow branch only if it gets sunlight.
         branch.length = branch.length + newTree.params.growthRate; // Make each branch longer.
-        //branch.thickness = 1;
 
         // Create a new child branch?
         if (rnd::randDouble() < newTree.params.branchPossibility) {

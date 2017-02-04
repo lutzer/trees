@@ -15,9 +15,10 @@
 #include "point.hpp"
 
 namespace env {
-
     static const float BIN_SIZE = 2;
-    static const double DENSITY_MULTIPLIER = 0.1; // Multiplied with branch thickness to sum up density values.
+
+    /// Multiplied with branch thickness to sum up density values.
+    static const double DENSITY_MULTIPLIER = 0.1;
 
     using BinArray = std::vector<float>;
 
@@ -25,20 +26,18 @@ namespace env {
         BinArray densities;
         BinArray light;
         pts::SizeInt size;
-
     };
 
     struct Environment {
-
         pts::Point sun;
         pts::BoundingBox boundingBox;
 
         Environment(pts::Point sun, pts::BoundingBox boundingBox);
     };
 
-    /// calculates the size of the bin matrix from the boundingBox dimensions, so that every bin is a square
+    /// Calculates the size of the bin matrix from the bounding box dimensions,
+    /// so that every bin is a square.
     pts::SizeInt calculateBinMatrixSize(pts::BoundingBox boundingBox);
-
 }
 
 #endif /* environment_hpp */
