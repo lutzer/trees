@@ -39,21 +39,21 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
         const auto z = origin.z + binSize.z;
         ofPoint p1 = ofPoint(x, y, z);
 
-        ofColor color = ofColor(binData[i] * 255, binData[i] * 255 , 0, COLOR_ALPHA);
+        ofColor color = ofColor(binData[i] * 255, binData[i] * 255, 0, COLOR_ALPHA);
 
-        // add 4 points for one bin
+        // Add 4 points for one bin.
         mesh.addVertex(p1);
         mesh.addColor(color);
         mesh.addVertex(ofPoint(p1.x + binSize.x, p1.y, p1.z));
         mesh.addColor(color);
         mesh.addVertex(ofPoint(p1.x, p1.y + binSize.y, p1.z));
         mesh.addColor(color);
-        mesh.addVertex(ofPoint(p1.x + binSize.x, p1.y  + binSize.y, p1.z));
+        mesh.addVertex(ofPoint(p1.x + binSize.x, p1.y + binSize.y, p1.z));
         mesh.addColor(color);
 
-        // add 2 triangles per bin
-        mesh.addTriangle(meshIndex, meshIndex +1, meshIndex +3);
-        mesh.addTriangle(meshIndex, meshIndex +2, meshIndex +3);
+        // Add 2 triangles per bin.
+        mesh.addTriangle(meshIndex, meshIndex + 1, meshIndex + 3);
+        mesh.addTriangle(meshIndex, meshIndex + 2, meshIndex + 3);
 
         meshIndex += 4;
     }

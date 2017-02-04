@@ -24,6 +24,7 @@ ofMesh TreeModel::getMesh() {
     mesh.setMode(OF_PRIMITIVE_LINES);
 
     addBranchesToMesh(mesh, ofPoint(tree.origin.x, tree.origin.y, 0), 0, tree.base);
+
     return mesh;
 }
 

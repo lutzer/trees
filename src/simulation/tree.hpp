@@ -15,7 +15,6 @@
 #include "point.hpp"
 
 namespace trees {
-
     /// Represents a branch on a tree, including some attributes and child branches.
     struct Branch {
         double position, angle, length, thickness;
@@ -36,7 +35,6 @@ namespace trees {
 
         TreeParameters(double branchoutAngleMean, double branchoutAngleVariance, double branchPossibility, double growthRate);
         TreeParameters();
-
     };
 
     /// Represents a tree, with the root branch (base/stem/trunk) and an origin point.
@@ -49,7 +47,6 @@ namespace trees {
         /// Returns a tree embryo.
         Tree(pts::Point origin, TreeParameters params);
         Tree();
-
     };
 }
 

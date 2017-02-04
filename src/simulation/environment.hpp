@@ -15,9 +15,10 @@
 #include "point.hpp"
 
 namespace env {
+    /// The width and height of the bins in the bounding box.
     static const float BIN_SIZE = 2;
 
-    /// Multiplied with branch thickness to sum up density values.
+    /// Defines the extent to which branches contribute to density values.
     static const double DENSITY_MULTIPLIER = 0.1;
 
     using BinArray = std::vector<float>;
