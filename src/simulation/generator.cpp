@@ -20,6 +20,8 @@
 
 using namespace trees;
 
+#pragma mark - Private Function Definitions
+
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env::Environment environment);
 
@@ -46,12 +48,11 @@ Tree gen::iterateTree(const Tree &tree, const env::Bins &bins, const env::Enviro
 }
 
 env::Bins gen::calculateLightBins(const trees::Tree &tree, const env::Environment &environment) {
-    
     pts::SizeInt matrixSize = env::calculateBinMatrixSize(environment.boundingBox);
 
     // Calculate the densities for each bin.
-    auto densities = reduceTreeIntoBins(matrixSize, environment.boundingBox, tree, [](float current, float binIndex, Branch branch) {
-        return std::min(current + branch.thickness * env::DENSITY_MULTIPLIER,1.0);
+    const auto densities = reduceTreeIntoBins(matrixSize, environment.boundingBox, tree, [](float current, float binIndex, Branch branch) {
+        return std::min(current + branch.thickness * env::DENSITY_MULTIPLIER, 1.0);
     });
 
     // Build light matrix from densities.
@@ -85,8 +86,8 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 
         // Take only the light value from the bin where the branch ends.
         auto branchEnd = pts::movePoint(origin, newAngle, branch.length);
-        int binIndex = pts::worldtoBin(branchEnd, bins.size, boundingBox);
-        auto light = bins.light[binIndex];
+        const auto binIndex = pts::worldtoBin(branchEnd, bins.size, boundingBox);
+        const auto light = bins.light[binIndex];
 
         // Grow branch only if it gets sunlight.
         branch.length = branch.length + newTree.params.growthRate; // Make each branch longer.
