@@ -1,8 +1,8 @@
 # Trees
 
-Plant growth simulation and visualisation.
+Tree growth simulation and visualisation.
 
-## Set Up Environment
+## Setting up the environment
 
 * Install Xcode and download openFrameworks.
 * Clone the repository into openframeworks' `apps/myApps` folder.
