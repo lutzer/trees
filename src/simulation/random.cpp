@@ -14,16 +14,21 @@ static std::default_random_engine engine(seed);
 
 #pragma mark - Public
 
-bool randBool() {
+bool rnd::randBool() {
     std::uniform_int_distribution<int> distribution(0, 1);
     return distribution(engine) == 0;
 }
 
-double randDouble() {
-    return randDouble(0, 1);
+double rnd::randDouble() {
+    return rnd::randDouble(0, 1);
 }
 
-double randDouble(double minBound, double maxBound) {
+double rnd::randDouble(double minBound, double maxBound) {
     static std::uniform_real_distribution<double> distribution(minBound, maxBound);
+    return distribution(engine);
+}
+
+double rnd::randDoubleWithNormDistr(double mean, double standardDeviation) {
+    static std::normal_distribution<double> distribution(mean, standardDeviation);
     return distribution(engine);
 }

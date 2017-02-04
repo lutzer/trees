@@ -92,7 +92,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         branch->thickness = 1;
 
         // Create a new child branch?
-        if (randDouble() < tree.params->branchPossibility) {
+        if (rnd::randDouble() < tree.params->branchPossibility) {
             Branch* newChild = generateChildBranch(branch, tree.params);
             branch->children.insert(branch->children.end(), newChild);
         }
@@ -102,8 +102,8 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 }
 
 Branch* generateChildBranch(const Branch *parent, const TreeParameters *params) {
-    auto position = randDouble();
-    auto angle = randDouble() * params->branchoutAngleVariance * 2 - params->branchoutAngleVariance;
+    auto position = rnd::randDouble();
+    auto angle = rnd::randDouble() * params->branchoutAngleVariance * 2 - params->branchoutAngleVariance;
     auto length = 0;
     auto thickness = 1;
 
