@@ -37,10 +37,10 @@ TreeParameters::TreeParameters() {
 Tree::Tree(pts::Point origin, TreeParameters params) {
     this->origin = origin;
     this->params = params;
-    this->base = Branch(0, M_PI, 1, 1);
+    this->base = Branch(0, M_PI_2, 1, 1);
 }
 
 Tree::Tree() {
     this->origin = { 0, 0 };
-    this->base = Branch(0, M_PI, 1, 1);
+    this->base = Branch(0, M_PI_2, 1, 1);
 }

@@ -44,7 +44,7 @@ void ofApp::setup(){
     // set tree parameters
     double branchoutAngleMean = 0.0;
     double branchoutAngleVariance = 0.5;
-    double branchPossibility = 0.05;
+    double branchPossibility = 0.1;
     double growthRate = 0.3;
     trees::TreeParameters params(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
 

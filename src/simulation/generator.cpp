@@ -29,7 +29,7 @@ Branch generateChildBranch(const Branch &parent, const TreeParameters &params);
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
 /// lambda to each of them.
-void mapBranchRecursively(Branch branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda);
+void mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda);
 
 template<typename F>
 /// Iterates over the given tree's branches and, for all of the branches in each bin, reduces them
@@ -81,7 +81,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 
     trees::Tree newTree = tree;
 
-    mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, environment.boundingBox, [newTree](Branch branch, pts::Point origin, double angle, const env::Bins &bins, pts::BoundingBox boundingBox) {
+    mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, environment.boundingBox, [newTree](Branch &branch, pts::Point origin, double angle, const env::Bins &bins, pts::BoundingBox boundingBox) {
         const auto newAngle = angle + branch.angle;
 
         // Take only the light value from the bin where the branch ends.
@@ -90,7 +90,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         auto light = bins.light[binIndex];
 
         // Grow branch only if it gets sunlight.
-        branch.length = branch.length + newTree.params.growthRate * light; // Make each branch longer.
+        branch.length = branch.length + newTree.params.growthRate; // Make each branch longer.
         //branch.thickness = 1;
 
         // Create a new child branch?
@@ -98,6 +98,8 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
             Branch newChild = generateChildBranch(branch, newTree.params);
             branch.children.insert(branch.children.end(), newChild);
         }
+
+
     });
 
     return newTree;
@@ -144,15 +146,10 @@ void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &ma
 #pragma mark - Helpers
 
 template<typename F>
-void mapBranchRecursively(Branch branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda) {
-    // If the given branch has no children, just return the branch mapped.
-    if (branch.children.size() == 0) {
-        return mapLambda(branch, origin, angle, bins, boundingBox);
-    }
+void mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda) {
 
     // Otherwise, return the branch with all of its children mapped.
-    auto children = branch.children;
-    for (auto childBranch : children) {
+    for (auto &childBranch : branch.children) {
         mapBranchRecursively(childBranch, origin, angle, bins, boundingBox, mapLambda);
     }
 
