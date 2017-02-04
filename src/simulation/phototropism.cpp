@@ -7,26 +7,11 @@
 //
 
 #include <math.h>
-#include <complex>
 #include <string>
 #include <vector>
 
 #include "phototropism.hpp"
 #include "utils.hpp"
-
-static const float BIN_WIDTH = 2;
-
-pts::SizeInt photo::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
-    if (fmod(boundingBox.size.width, BIN_WIDTH) > 0 || fmod(boundingBox.size.height, BIN_WIDTH) > 0) {
-        std::string message = "bounding box sizes must be a multiple of " + std::to_string(BIN_WIDTH);
-        throw std::invalid_argument(message);
-    }
-
-    int columns = boundingBox.size.width / BIN_WIDTH;
-    int rows = boundingBox.size.height / BIN_WIDTH;
-
-    return {columns, rows};
-}
 
 std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
 
@@ -84,12 +69,12 @@ std::vector<pts::PointInt> photo::pointsForLine(pts::PointInt p1, pts::PointInt 
     return points;
 }
 
-photo::BinArray photo::combineBins(const photo::BinArray &bins1, const photo::BinArray &bins2) {
+env::BinArray photo::combineBins(const env::BinArray &bins1, const env::BinArray &bins2) {
     if (bins1.size() != bins2.size()) {
         throw std::invalid_argument("arrays must have the same size");
     }
 
-    photo::BinArray result(bins1.size(), 0.0);
+    env::BinArray result(bins1.size(), 0.0);
     for (int i = 0; i < result.size(); i++) {
         result[i] = bins1[i] + bins2[i];
     }

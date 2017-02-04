@@ -1,9 +1,11 @@
 #include "ofApp.h"
-#include "generator.hpp"
 #include <iostream>
+
+#include "generator.hpp"
 #include "binModel.hpp"
 #include "treeModel.hpp"
 #include "phototropism.hpp"
+#include "environment.hpp"
 
 using namespace trees;
 using namespace std;
@@ -11,9 +13,12 @@ using namespace std;
 static const int GROUND_SIZE = 100;
 static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
+static const int SUN_RADIUS = 3;
+
+// Set up environment
 static const pts::BoundingBox PT_BOUNDINGBOX = {{-50, 0}, {100, 100}};
 static const pts::Point SUN_POSITION = {-50, 0};
-static const int SUN_RADIUS = 3;
+static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -35,25 +40,27 @@ void ofApp::setup(){
     groundMesh.addVertex(ofPoint(GROUND_SIZE/2, 0, GROUND_SIZE/2));
     groundMesh.addVertex(ofPoint(-GROUND_SIZE/2, 0, GROUND_SIZE/2));
 
-    // Set Sun Position
-    sun = SUN_POSITION;
 
-    // generate Tree Sappling
-    trees::Tree tree = generateSapling({PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width/2, 0});
+    // set tree parameters
+    double branchoutAngleMean = 0.0;
+    double branchoutAngleVariance = 0.5;
+    double branchPossibility = 0.01;
+    double growthRate = 0.3;
+    trees::TreeParameters *params = new trees::TreeParameters(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
 
-    // set tree paameters
-    tree.params.branchoutAngleMean = 0;
-    tree.params.branchoutAngleVariance = 0.5;
-    tree.params.branchPossibility = 0.1;
-    tree.params.growthRate = 0.3;
+
+    // generate Tree Sapling
+    pts::Point treeOrigin = { PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width/2 };
+    trees::Tree tree = trees::Tree( treeOrigin, params );
+
 
     cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
-        // caluclate light
-        photo::LightBins bins = gen::calculateLightBins(tree, sun, PT_BOUNDINGBOX);
+        // calculate light
+        env::Bins bins = gen::calculateLightBins(tree, environment);
         // grow tree once
-        tree = gen::iterateTree(tree, bins, PT_BOUNDINGBOX);
+        tree = gen::iterateTree(tree, bins, environment);
         treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
     }
@@ -82,7 +89,7 @@ void ofApp::update(){
         treeMesh = TreeModel(treeList[iteration]).getMesh();
 
         // update bins
-        photo::LightBins bins = gen::calculateLightBins(treeList[iteration], sun, PT_BOUNDINGBOX);
+        env::Bins bins = gen::calculateLightBins(treeList[iteration], environment);
         BinModel binModel = (showBins == LIGHT) ?
             BinModel(bins.light.data(), bins.size.columns, bins.size.rows) :
             BinModel(bins.densities.data(), bins.size.columns, bins.size.rows);
@@ -107,7 +114,7 @@ void ofApp::draw(){
     treeMesh.draw();
 
     // draw sun
-    ofDrawSphere(sun.x, sun.y, 0, SUN_RADIUS);
+    ofDrawSphere(environment.sun.x, environment.sun.y, 0, SUN_RADIUS);
 
     if (showBins != HIDDEN)
         binMesh.draw();

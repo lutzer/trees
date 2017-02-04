@@ -13,19 +13,9 @@
 #include <vector>
 
 #include "point.hpp"
+#include "environment.hpp"
 
 namespace photo {
-
-    using BinArray = std::vector<float>;
-
-    struct LightBins {
-        BinArray densities;
-        BinArray light;
-        pts::SizeInt size;
-    };
-
-    /// calculates the size of the bin matrix from the boundingBox dimensions, so that every bin is a square
-    pts::SizeInt calculateBinMatrixSize(pts::BoundingBox boundingBox);
 
     /// Returns the indices for a line between the given points in the given bounding area.
     std::vector<int> binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox);
@@ -35,7 +25,7 @@ namespace photo {
     std::vector<pts::PointInt> pointsForLine(pts::PointInt p1, pts::PointInt p2);
 
     /// Adds the contents of the two given bin arrays together and returns the resulting bin array.
-    BinArray combineBins(const BinArray &bins1,const BinArray &bins2);
+    env::BinArray combineBins(const env::BinArray &bins1,const env::BinArray &bins2);
 
 }
 
