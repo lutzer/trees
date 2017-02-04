@@ -16,26 +16,24 @@ pts::Point pts::movePoint(pts::Point point, double angle, double length) {
 }
 
 pts::Point pts::binToWorld(int bin, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
-
     const auto binSizeX = boundingBox.size.width / matrixSize.columns;
     const auto binSizeY = boundingBox.size.height / matrixSize.rows;
 
-    double x = boundingBox.origin.x + (bin % matrixSize.columns) * binSizeX + binSizeX/2;
-    double y = boundingBox.origin.y + (bin / matrixSize.columns) * binSizeY + binSizeY/2;
+    const double x = boundingBox.origin.x + (bin % matrixSize.columns) * binSizeX + binSizeX / 2;
+    const double y = boundingBox.origin.y + (bin / matrixSize.columns) * binSizeY + binSizeY / 2;
 
-    return {x,y};
+    return {x, y};
 }
 
 int pts::worldtoBin(pts::Point point, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
-
     const auto binSizeX = boundingBox.size.width / matrixSize.columns;
     const auto binSizeY = boundingBox.size.height / matrixSize.rows;
 
-    int x = (int) ((point.x - boundingBox.origin.x) / binSizeX);
-    int y = (int) ((point.y - boundingBox.origin.y) / binSizeY);
+    int x = static_cast<int>((point.x - boundingBox.origin.x) / binSizeX);
+    int y = static_cast<int>((point.y - boundingBox.origin.y) / binSizeY);
 
     x = utils::constrainRange(x, 0, matrixSize.columns - 1);
-    y = utils::constrainRange(y, 0, matrixSize.rows - 1 );
+    y = utils::constrainRange(y, 0, matrixSize.rows - 1);
 
     return x + y * matrixSize.columns;
 }

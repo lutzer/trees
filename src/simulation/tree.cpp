@@ -8,11 +8,9 @@
 
 #include "tree.hpp"
 
-#include <iostream>
 #include <math.h>
+#include <iostream>
 
 trees::Tree trees::generateSapling(pts::Point origin) {
     return { { 0, M_PI_2, 1, 1, {} }, origin };
 }
-
-

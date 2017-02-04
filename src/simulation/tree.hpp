@@ -29,7 +29,7 @@ namespace trees {
 
     /// Returns a tree embryo.
     Tree generateSapling(pts::Point origin);
-}
+}  // namespace trees
 
 
 #endif /* tree_hpp */

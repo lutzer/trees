@@ -17,7 +17,7 @@ namespace pts {
         double x, y;
     };
 
-    /// A point in a matrix
+    /// A point in a matrix.
     struct PointInt {
         int x, y;
     };
@@ -27,7 +27,7 @@ namespace pts {
         double width, height;
     };
 
-    /// Size of a matrix
+    /// Size of a matrix.
     struct SizeInt {
         int columns, rows;
     };
@@ -41,10 +41,10 @@ namespace pts {
     /// Returns the given point moved according to the given angle and length.
     Point movePoint(Point point, double angle, double length);
 
-    /// Returns the center coordinate of the corresponding bin
+    /// Returns the center coordinate of the corresponding bin.
     Point binToWorld(int bin, SizeInt matrixSize, BoundingBox boundingBox);
 
-    /// Returns the index of a bin for the coordinate
+    /// Returns the index of a bin for the coordinate.
     int worldtoBin(Point p, SizeInt matrixSize, BoundingBox boundingBox);
 }
 
