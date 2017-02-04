@@ -42,7 +42,7 @@ template<typename F>
 photo::BinArray reduceTreeIntoBins(pts::SizeInt matrixSize, pts::BoundingBox boundingBox, Tree tree, F reduceLambda);
 
 template<typename F>
-void reduceBranchIntoBinsRecursively(const photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, const Branch &branch, F reduceLambda);
+void reduceBranchIntoBinsRecursively(photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, const Branch &branch, F reduceLambda);
 
 #pragma mark - Public
 
@@ -126,7 +126,7 @@ photo::BinArray reduceTreeIntoBins(pts::SizeInt matrixSize, pts::BoundingBox bou
 }
 
 template<typename F>
-void reduceBranchIntoBinsRecursively(const photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, const Branch &branch, F reduceLambda) {
+void reduceBranchIntoBinsRecursively(photo::BinArray &bins, pts::SizeInt matrixSize, pts::BoundingBox boundingBox, pts::Point point, double angle, const Branch &branch, F reduceLambda) {
     const auto newAngle = angle + branch.angle;
 
     // Get bin indices for the current branch.

@@ -35,7 +35,7 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
     ofVec3f binSize = ofVec3f(size.x / columns, size.y / rows, 0);
     for (int i = 0; i < rows * columns; i++) {
         const auto x = origin.x + (i % columns) * binSize.x;
-        const auto y = origin.y + (i / columns) * binSize.y
+        const auto y = origin.y + (i / columns) * binSize.y;
         const auto z = origin.z + binSize.z;
         ofPoint p1 = ofPoint(x, y, z);
 

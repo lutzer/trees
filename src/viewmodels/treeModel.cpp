@@ -13,7 +13,7 @@
 #include "random.hpp"
 
 // Declare private methods.
-void addBranchesToMesh(const ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch);
+void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch);
 
 TreeModel::TreeModel() {
 }
@@ -32,7 +32,7 @@ ofMesh TreeModel::getMesh() {
     return mesh;
 }
 
-void addBranchesToMesh(const ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch) {
+void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, trees::Branch branch) {
     // Add root of branch.
     mesh.addVertex(origin);
 

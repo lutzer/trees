@@ -15,7 +15,7 @@
 class BinModel {
 public:
     BinModel();
-    BinModel(float * data, int columns, int rows);
+    BinModel(float *data, int columns, int rows);
     ofMesh getMesh(ofPoint origin, ofVec3f size);
 
 private:

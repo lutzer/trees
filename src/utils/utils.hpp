@@ -29,12 +29,12 @@ namespace utils {
 
     template<typename TYPE>
     /// Normalizes the given array.
-    void normalize(const std::vector<TYPE> &bins);
+    void normalize(std::vector<TYPE> &bins);
 
     #pragma mark - Drawing Helpers
 
     /// Adds normals to a triangle mesh.
-    void setNormals(const ofMesh &mesh);
+    void setNormals(ofMesh &mesh);
 
     #pragma mark - Mapping Helpers
 
