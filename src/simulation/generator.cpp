@@ -20,16 +20,13 @@
 
 using namespace trees;
 
-static const double BRANCHOUT_ANGLE_VARIATION = 0.5;
-static const double GROWTH_RATE = 0.3;
-static const double BRANCH_POSSIBLITY = 0.1;
 static const double DENSITY_MULTIPLIER = 0.1; // Multiplied with branch thickness to sum up density values.
 
 /// Iterates over every branch of the given tree and creates new branches where appropriate.
 Tree treeWithUpdatedBranches(const Tree &tree, const photo::LightBins &bins, pts::BoundingBox boundingBox);
 
 /// Creates a new child branch for a given parent.
-Branch generateChildBranch(const Branch &parent);
+Branch generateChildBranch(const Branch &parent, const TreeParameters params);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
@@ -81,7 +78,7 @@ photo::LightBins gen::calculateLightBins(const Tree &tree, pts::Point sun, pts::
 Tree treeWithUpdatedBranches(const Tree &tree, const photo::LightBins &bins, pts::BoundingBox boundingBox) {
     auto newTree = tree;
 
-    newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, boundingBox, [](Branch branch, pts::Point origin, double angle, const photo::LightBins &bins, pts::BoundingBox boundingBox) {
+    newTree.base = mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, boundingBox, [tree](Branch branch, pts::Point origin, double angle, const photo::LightBins &bins, pts::BoundingBox boundingBox) {
         const auto newAngle = angle + branch.angle;
 
         // Take only the light value from the bin where the branch ends.
@@ -91,12 +88,12 @@ Tree treeWithUpdatedBranches(const Tree &tree, const photo::LightBins &bins, pts
 
         auto newBranch = branch;
         // Grow branch only if it gets sunlight.
-        newBranch.length = branch.length + GROWTH_RATE * light; // Make each branch longer.
+        newBranch.length = branch.length + tree.params.growthRate * light; // Make each branch longer.
         newBranch.thickness = 1;
 
         // Create a new child branch?
-        if (randDouble() < BRANCH_POSSIBLITY * light) {
-            Branch newChild = generateChildBranch(newBranch);
+        if (randDouble() < tree.params.branchPossibility * light) {
+            Branch newChild = generateChildBranch(newBranch, tree.params);
             newBranch.children.insert(newBranch.children.end(), newChild);
         }
 
@@ -106,10 +103,10 @@ Tree treeWithUpdatedBranches(const Tree &tree, const photo::LightBins &bins, pts
     return newTree;
 }
 
-Branch generateChildBranch(const Branch &parent) {
+Branch generateChildBranch(const Branch &parent, const TreeParameters params) {
     Branch newChild = {};
     newChild.position = randDouble();
-    newChild.angle = randDouble() * BRANCHOUT_ANGLE_VARIATION * 2 - BRANCHOUT_ANGLE_VARIATION;
+    newChild.angle = randDouble() * params.branchoutAngleVariance * 2 - params.branchoutAngleVariance;
     newChild.length = 0;
     newChild.thickness = 1;
 

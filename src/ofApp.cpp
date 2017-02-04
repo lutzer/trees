@@ -41,6 +41,12 @@ void ofApp::setup(){
     // generate Tree Sappling
     trees::Tree tree = generateSapling({PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width/2, 0});
 
+    // set tree paameters
+    tree.params.branchoutAngleMean = 0;
+    tree.params.branchoutAngleVariance = 0.5;
+    tree.params.branchPossibility = 0.1;
+    tree.params.growthRate = 0.3;
+
     cout << "Generating Tree" << endl;
     // create tree Meshes
     for (int i = 0; i <= MAX_ITERATIONS; i++) {
