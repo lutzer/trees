@@ -19,9 +19,10 @@ namespace trees {
     /// Represents a branch on a tree, including some attributes and child branches.
     struct Branch {
         double position, angle, length, thickness;
-        std::vector<Branch*> children;
+        std::vector<Branch> children;
 
         Branch(double position, double angle, double length, double thickness);
+        Branch();
     };
 
     /// Defines the rules for how a tree grows.
@@ -34,6 +35,7 @@ namespace trees {
         double growthRate;
 
         TreeParameters(double branchoutAngleMean, double branchoutAngleVariance, double branchPossibility, double growthRate);
+        TreeParameters();
 
     };
 
@@ -41,11 +43,13 @@ namespace trees {
     struct Tree {
         pts::Point origin;
 
-        Branch *base;
-        TreeParameters *params;
+        Branch base;
+        TreeParameters params;
 
         /// Returns a tree embryo.
-        Tree(pts::Point origin, TreeParameters *params);
+        Tree(pts::Point origin, TreeParameters params);
+        Tree();
+
     };
 }
 

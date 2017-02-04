@@ -13,35 +13,35 @@
 #include "random.hpp"
 
 // Declare private methods.
-void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, const trees::Branch *branch);
+void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, const trees::Branch &branch);
 
 TreeModel::TreeModel(trees::Tree &tree) {
-    this->tree = &tree;
+    this->tree = tree;
 }
 
 ofMesh TreeModel::getMesh() {
     ofMesh mesh;
     mesh.setMode(OF_PRIMITIVE_LINES);
 
-    addBranchesToMesh(mesh, ofPoint(tree->origin.x, tree->origin.y, 0), 0, tree->base);
+    addBranchesToMesh(mesh, ofPoint(tree.origin.x, tree.origin.y, 0), 0, tree.base);
     return mesh;
 }
 
-void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, const trees::Branch *branch) {
+void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, const trees::Branch &branch) {
     // Add root of branch.
     mesh.addVertex(origin);
 
-    double newAngle = angle + branch->angle;
+    double newAngle = angle + branch.angle;
 
     // Add end of branch.
-    ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch->length,
-                               origin.y + sin(newAngle) * branch->length,
+    ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
+                               origin.y + sin(newAngle) * branch.length,
                                0);
     mesh.addVertex(endPoint);
 
-    for (trees::Branch* child : branch->children) {
-        const auto childX = origin.x + (endPoint.x - origin.x) * child->position;
-        const auto childY = origin.y + (endPoint.y - origin.y) * child->position;
+    for (trees::Branch child : branch.children) {
+        const auto childX = origin.x + (endPoint.x - origin.x) * child.position;
+        const auto childY = origin.y + (endPoint.y - origin.y) * child.position;
         const auto childOrigin = ofPoint(childX, childY, 0);
         addBranchesToMesh(mesh, childOrigin, newAngle, child);
     }

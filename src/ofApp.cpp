@@ -44,10 +44,9 @@ void ofApp::setup(){
     // set tree parameters
     double branchoutAngleMean = 0.0;
     double branchoutAngleVariance = 0.5;
-    double branchPossibility = 0.01;
+    double branchPossibility = 0.05;
     double growthRate = 0.3;
-    trees::TreeParameters *params = new trees::TreeParameters(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
-
+    trees::TreeParameters params(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
 
     // generate Tree Sapling
     pts::Point treeOrigin = { PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width/2 };

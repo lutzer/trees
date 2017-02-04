@@ -19,6 +19,9 @@ Branch::Branch(double position, double angle, double length, double thickness) {
     this->length = length;
     this->thickness = thickness;
 }
+Branch::Branch() {
+    Branch(0,M_PI_2,0,1);
+}
 
 TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleVariance, double branchPossibility, double growthRate) {
     this->branchoutAngleMean = branchoutAngleMean;
@@ -27,8 +30,17 @@ TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleV
     this->branchPossibility = branchPossibility;
 }
 
-Tree::Tree(pts::Point origin, TreeParameters *params) {
+TreeParameters::TreeParameters() {
+    TreeParameters(1,1,1,1);
+}
+
+Tree::Tree(pts::Point origin, TreeParameters params) {
     this->origin = origin;
     this->params = params;
-    this->base = new Branch(0, M_PI, 1, 1);
+    this->base = Branch(0, M_PI, 1, 1);
+}
+
+Tree::Tree() {
+    this->origin = { 0, 0 };
+    this->base = Branch(0, M_PI, 1, 1);
 }

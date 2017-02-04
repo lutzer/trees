@@ -19,7 +19,7 @@ public:
     ofMesh getMesh();
 
 private:
-    trees::Tree *tree;
+    trees::Tree tree;
 };
 
 
