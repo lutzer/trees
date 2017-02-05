@@ -26,7 +26,7 @@ int utils::constrainRange(int val, int min, int max) {
 }
 
 template<>
-int utils::constrainRange(float val, float min, float max) {
+float utils::constrainRange(float val, float min, float max) {
     return std::max(std::min(val, max), min);
 }
 
@@ -43,6 +43,10 @@ void utils::normalize(std::vector<float> &bins) {
     for (float &val : bins) {
         val = val / max;
     }
+}
+
+double utils::multiplyWithWeight(double value, double modifier, double weight) {
+    return value * modifier * weight + value * (1.0 - weight);
 }
 
 void utils::setNormals(ofMesh &mesh) {

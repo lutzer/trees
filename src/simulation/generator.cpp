@@ -88,10 +88,12 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         const auto light = bins.light[binIndex];
 
         // Grow branch only if it gets sunlight.
-        branch.length = branch.length + newTree.params.growthRate * light; // Make each branch longer.
+        const auto growth = utils::multiplyWithWeight(newTree.params.growthRate, light, 0.8);
+        branch.length = branch.length + growth; // Make each branch longer.
 
         // Create a new child branch?
-        if (rnd::randDouble() < newTree.params.branchPossibility) {
+        const auto newBranchPossibility = utils::multiplyWithWeight(newTree.params.branchPossibility, light, 1.0);
+        if (rnd::randDouble() < newBranchPossibility) {
             Branch newChild = generateChildBranch(branch, newTree.params);
             branch.children.insert(branch.children.end(), newChild);
         }
@@ -101,7 +103,9 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 }
 
 Branch generateChildBranch(const Branch &parent, const TreeParameters &params) {
-    const auto position = rnd::randDouble();
+    // Make it more probable that a branch appears near the tip of the parent branch rather than at
+    // its base.
+    const auto position = 1 - pow(rnd::randDouble(), 2);
 
     // Choose the side of the new branch, making it more likely that the branch is on a side where
     // there are fewer branches already.
