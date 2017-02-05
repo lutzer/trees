@@ -36,6 +36,9 @@ namespace utils {
     /// Adds normals to a triangle mesh.
     void setNormals(ofMesh &mesh);
 
+    /// checks if point lies within the rectangle
+    bool containsPoint(const ofRectangle &rectangle, const ofPoint &point);
+
     #pragma mark - Mapping Helpers
 
     // TODO: move the symbol definitions to .cpp file

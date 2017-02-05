@@ -17,6 +17,7 @@ private:
     // simulation objects
     pts::Point sun;
     vector<trees::Tree> treeList;
+    trees::TreeParameters treeParams;
 
     // scene objects
     ofEasyCam cam;
@@ -31,6 +32,7 @@ private:
 
     // Gui
     ofxDatGuiSlider* iterationSlider;
+    ofxDatGuiFolder* parameterFolder;
     bool showGui;
 
     long lastUpdateTime;
@@ -39,6 +41,8 @@ public:
     void setup();
     void update();
     void draw();
+
+    void calculateTree();
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -55,4 +59,6 @@ public:
     /* Event handlers */
     void iterationSliderChanged(ofxDatGuiSliderEvent e);
     void onIterationChanged(int &value);
+    void onParamsButtonEvent(ofxDatGuiButtonEvent e);
+    void onParamsSliderEvent(ofxDatGuiSliderEvent e);
 };
