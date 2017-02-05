@@ -24,12 +24,17 @@ namespace utils {
     double constrainAngle(double x);
 
     template<typename TYPE>
-    ///  Adjusts value, so it's contained between min and max.
-    int constrainRange(TYPE val, TYPE min, TYPE max);
+    /// Adjusts the given value, so that it's contained between min and max.
+    TYPE constrainRange(TYPE val, TYPE min, TYPE max);
 
     template<typename TYPE>
     /// Normalizes the given array.
     void normalize(std::vector<TYPE> &bins);
+
+    /// Returns the given value multiplied by the given modifier combined with the original value
+    /// (according to the given weight, where a weight of 1 returns value * modifier and a weight of
+    /// 0 returns the value unchanged).
+    double multiplyWithWeight(double value, double modifier, double weight);
 
     #pragma mark - Drawing Helpers
 
@@ -53,6 +58,6 @@ namespace utils {
     RETURN_TYPE fold(std::vector<INPUT_TYPE> array, RETURN_TYPE initial, F lambda) {
         return std::accumulate(array.begin(), array.end(), initial, lambda);
     }
-}  // namespace utils
+}
 
 #endif /* utils_hpp */

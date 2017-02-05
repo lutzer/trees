@@ -88,10 +88,12 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         const auto light = bins.light[binIndex];
 
         // Grow branch only if it gets sunlight.
-        branch.length = branch.length + newTree.params.growthRate * light; // Make each branch longer.
+        const auto growth = utils::multiplyWithWeight(newTree.params.growthRate, light, 0.8);
+        branch.length = branch.length + growth; // Make each branch longer.
 
         // Create a new child branch?
-        if (rnd::randDouble() < newTree.params.branchPossibility) {
+        const auto newBranchPossibility = utils::multiplyWithWeight(newTree.params.branchPossibility, light, 0.5);
+        if (rnd::randDouble() < newBranchPossibility) {
             Branch newChild = generateChildBranch(branch, newTree.params);
             branch.children.insert(branch.children.end(), newChild);
         }
