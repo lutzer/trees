@@ -3,6 +3,8 @@
 #include <iostream>
 #include <algorithm>
 #include <pthread.h>
+#include <functional>
+#include <math.h>
 
 #include "generator.hpp"
 #include "binModel.hpp"
@@ -15,7 +17,7 @@ using namespace trees;
 using namespace std;
 
 static const int GROUND_SIZE = 100;
-static const int MAX_ITERATIONS = 80;
+static const int MAX_ITERATIONS = 100;
 static const int PADDING = 30;
 static const int SUN_RADIUS = 3;
 
@@ -47,7 +49,7 @@ void ofApp::setup() {
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
     iteration.addListener(this, &ofApp::onIterationChanged);
     parameterFolder = new ofxDatGuiFolder("Parameters", ofColor::fromHex(0xFFD00B));
-    parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 0.1, treeParams.branchPossibility);
+    parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 1.0, treeParams.branchPossibility);
     parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
     parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
@@ -88,12 +90,15 @@ void ofApp::update() {
     iterationSlider->update();
     parameterFolder->update();
 
-    if (updateScene) {
+    if (updateScene && !treeList.empty()) {
+
+        const auto index = std::min((int)iteration,(int)treeList.size()-1);
+
         // Update tree mesh.
-        treeMesh = TreeModel(treeList[iteration]).getMesh();
+        treeMesh = TreeModel(treeList[index]).getMesh();
 
         // Update bins.
-        env::Bins bins = gen::calculateLightBins(treeList[iteration], environment);
+        env::Bins bins = gen::calculateLightBins(treeList[index], environment);
         BinModel binModel = (showBins == LIGHT) ?
             BinModel(bins.light.data(), bins.size.columns, bins.size.rows) :
             BinModel(bins.densities.data(), bins.size.columns, bins.size.rows);
@@ -241,17 +246,25 @@ void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
         treeParams.branchPossibility = e.target->getValue();
 }
 
+void ofApp::onNewIterationCalculated(trees::Tree tree) {
+    treeList.push_back(tree);
+    updateScene = true;
+}
+
 void ofApp::calculateTree() {
 
-    GeneratorThread generatorThread(environment, treeParams, MAX_ITERATIONS);
-    generatorThread.startThread(true); // start thread blocking
+    // stop & delete thread
+    if (generatorThread != 0) {
+        generatorThread->stopThread();
+        generatorThread->waitForThread();
+        delete generatorThread;
+    }
 
     treeList.clear();
 
-    while (generatorThread.isThreadRunning()) {
-        sleep(0.1);
-    }
+    // create new thread
+    generatorThread = new GeneratorThread(environment, treeParams, MAX_ITERATIONS);
+    generatorThread->iterationEventHandler = std::bind(&ofApp::onNewIterationCalculated,this, std::placeholders::_1);
+    generatorThread->startThread();
 
-    treeList.swap(generatorThread.treeList);
-    updateScene = true;
 }

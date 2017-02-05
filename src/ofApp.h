@@ -20,6 +20,9 @@ private:
     vector<trees::Tree> treeList;
     trees::TreeParameters treeParams;
 
+    // thread generates the tree models
+    GeneratorThread *generatorThread = 0;
+
     // scene objects
     ofEasyCam cam;
     ofMesh groundMesh;
@@ -62,4 +65,5 @@ public:
     void onIterationChanged(int &value);
     void onParamsButtonEvent(ofxDatGuiButtonEvent e);
     void onParamsSliderEvent(ofxDatGuiSliderEvent e);
+    void onNewIterationCalculated(trees::Tree tree);
 };

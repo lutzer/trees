@@ -22,7 +22,7 @@ void GeneratorThread::threadedFunction() {
     pts::Point treeOrigin = { environment.boundingBox.origin.x + environment.boundingBox.size.width / 2 };
     trees::Tree tree = trees::Tree(treeOrigin, params);
 
-    cout << "Generating Tree" << endl;
+    cout << "Generating tree" << endl;
     // Create tree iterations.
     for (int i = 0; i <= iterations; i++) {
         // Calculate light.
@@ -30,8 +30,14 @@ void GeneratorThread::threadedFunction() {
 
         // Grow tree once.
         tree = gen::iterateTree(tree, bins, environment);
-        treeList.push_back(tree);
         cout << "Generated iteration " << i << endl;
+
+        if (!isThreadRunning())
+            break;
+
+        if (this->iterationEventHandler != 0) {
+            this->iterationEventHandler(tree);
+        }
     }
     cout << "Tree generation finished" << endl;
 }
