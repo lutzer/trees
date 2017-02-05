@@ -89,3 +89,8 @@ void utils::setNormals(ofMesh &mesh) {
     mesh.clearNormals();
     mesh.addNormals(norm);
 }
+
+
+bool utils::containsPoint(const ofRectangle &rectangle, const ofPoint &point) {
+    return point.x >= rectangle.getMinX() && point.x <= rectangle.getMaxX() && point.y >= rectangle.getMinY() && point.y <= rectangle.getMaxY();
+}

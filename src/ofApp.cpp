@@ -8,12 +8,13 @@
 #include "treeModel.hpp"
 #include "phototropism.hpp"
 #include "environment.hpp"
+#include "utils.hpp"
 
 using namespace trees;
 using namespace std;
 
 static const int GROUND_SIZE = 100;
-static const int MAX_ITERATIONS = 100;
+static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
 static const int SUN_RADIUS = 3;
 
@@ -22,14 +23,36 @@ static const pts::BoundingBox PT_BOUNDINGBOX = { { -50, 0 }, { 100, 100 } };
 static const pts::Point SUN_POSITION = { -50, 0 };
 static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
 
+// Gui Labels
+static const string LABEL_BRANCH_POSSIBILITY = "branch p";
+static const string LABEL_BRANCH_ANGLE = "branch angle";
+static const string LABEL_BRANCH_VAR = "branch var";
+static const string LABEL_GROWTH_RATE = "growth rate";
+static const string LABEl_REDRAW_BUTTON = "REDRAW";
+
 //--------------------------------------------------------------
 void ofApp::setup() {
     ofSetVerticalSync(true);
+
+    // Set default tree parameters.
+    const double branchoutAngleMean = 0.1;
+    const double branchoutAngleVariance = 0.05;
+    const double branchPossibility = 0.08;
+    const double growthRate = 0.5;
+    treeParams = trees::TreeParameters(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
 
     // Setup GUI.
     iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", 50, 0, MAX_ITERATIONS));
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
     iteration.addListener(this, &ofApp::onIterationChanged);
+    parameterFolder = new ofxDatGuiFolder("Parameters", ofColor::fromHex(0xFFD00B));
+    parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 0.1, treeParams.branchPossibility);
+    parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
+    parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
+    parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
+    parameterFolder->addButton(LABEl_REDRAW_BUTTON);
+    parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
+    parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
 
     // Set the camera's initial position.
     cam.setDistance(200);
@@ -42,28 +65,8 @@ void ofApp::setup() {
     groundMesh.addVertex(ofPoint(GROUND_SIZE / 2, 0, GROUND_SIZE / 2));
     groundMesh.addVertex(ofPoint(-GROUND_SIZE / 2, 0, GROUND_SIZE / 2));
 
-    // Set tree parameters.
-    const double branchoutAngleMean = 0.1;
-    const double branchoutAngleVariance = 0.05;
-    const double branchPossibility = 0.08;
-    const double growthRate = 0.5;
-    trees::TreeParameters params(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
-
-    // Generate sapling.
-    pts::Point treeOrigin = { PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width / 2 };
-    trees::Tree tree = trees::Tree(treeOrigin, params);
-
-    cout << "Generating Tree" << endl;
-    // Create tree meshes.
-    for (int i = 0; i <= MAX_ITERATIONS; i++) {
-        // Calculate light.
-        env::Bins bins = gen::calculateLightBins(tree, environment);
-
-        // Grow tree once.
-        tree = gen::iterateTree(tree, bins, environment);
-        treeList.push_back(tree);
-        cout << "Generated iteration " << i << endl;
-    }
+    // calculate the tree
+    this->calculateTree();
 
     glEnable(GL_POINT_SMOOTH); // Use circular points instead of square points.
     glPointSize(3); // Make the points bigger.
@@ -82,6 +85,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::update() {
     iterationSlider->update();
+    parameterFolder->update();
 
     if (updateScene) {
         // Update tree mesh.
@@ -128,6 +132,7 @@ void ofApp::draw() {
                            "<g>: toggle GUI",
                            PADDING, PADDING);
         iterationSlider->draw();
+        parameterFolder->draw();
     }
 }
 
@@ -158,7 +163,13 @@ void ofApp::keyReleased(int key) {
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ) {
-    if (y > iterationSlider->getY()) {
+
+    ofPoint mousePos = ofPoint(x,y);
+
+    // if cursor is on top of a gui element, disable moving the camera
+    if (utils::containsPoint(ofRectangle( iterationSlider->getX(), iterationSlider->getY(), iterationSlider->getWidth(), iterationSlider->getHeight()), mousePos) ||
+        utils::containsPoint(ofRectangle( parameterFolder->getX(), parameterFolder->getY(), parameterFolder->getWidth(), parameterFolder->getHeight()), mousePos))
+    {
         cam.disableMouseInput();
     } else {
         cam.enableMouseInput();
@@ -189,6 +200,7 @@ void ofApp::mouseExited(int x, int y) {
 void ofApp::windowResized(int w, int h) {
     iterationSlider->setWidth(ofGetWidth(), .1);
     iterationSlider->setPosition(0, ofGetHeight() - iterationSlider->getHeight());
+    parameterFolder->setPosition(ofGetWidth() - parameterFolder->getWidth(), 0);
 }
 
 //--------------------------------------------------------------
@@ -205,4 +217,48 @@ void ofApp::onIterationChanged(int &value) {
 
 void ofApp::iterationSliderChanged(ofxDatGuiSliderEvent e) {
     iteration = e.value;
+}
+
+void ofApp::onParamsButtonEvent(ofxDatGuiButtonEvent e) {
+    if (e.target->getName() == LABEl_REDRAW_BUTTON) {
+        this->calculateTree();
+    }
+}
+
+void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
+
+    string sliderName = e.target->getName();
+
+    // update tree params
+    if (sliderName == LABEL_GROWTH_RATE)
+        treeParams.growthRate = e.target->getValue();
+    else if (sliderName == LABEL_BRANCH_VAR)
+        treeParams.branchoutAngleStdDeviation = e.target->getValue();
+    else if (sliderName == LABEL_BRANCH_ANGLE)
+        treeParams.branchoutAngleMean = e.target->getValue();
+    else if (sliderName == LABEL_BRANCH_POSSIBILITY)
+        treeParams.branchPossibility = e.target->getValue();
+}
+
+void ofApp::calculateTree() {
+
+    treeList.clear();
+
+    // Generate sapling.
+    pts::Point treeOrigin = { PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width / 2 };
+    trees::Tree tree = trees::Tree(treeOrigin, treeParams);
+
+    cout << "Generating Tree" << endl;
+    // Create tree meshes.
+    for (int i = 0; i <= MAX_ITERATIONS; i++) {
+        // Calculate light.
+        env::Bins bins = gen::calculateLightBins(tree, environment);
+
+        // Grow tree once.
+        tree = gen::iterateTree(tree, bins, environment);
+        treeList.push_back(tree);
+        cout << "Generated iteration " << i << endl;
+    }
+
+    updateScene = true;
 }
