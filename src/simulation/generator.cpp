@@ -107,14 +107,13 @@ Branch generateChildBranch(const Branch &parent, const TreeParameters &params) {
 
     // Choose the side of the new branch, making it more likely that the branch is on a side where
     // there are fewer branches already.
-    const auto numberOfChildren = parent.children.size();
     auto numberOfChildrenWithNegativeAngles = 0;
-    for (auto i = 0; i < numberOfChildren; i++) {
-        if (parent.children[i].angle < 0) {
+    for (auto &childBranch : parent.children) {
+        if (childBranch.angle < 0) {
             numberOfChildrenWithNegativeAngles++;
         }
     }
-    const double branchSideProbability = numberOfChildrenWithNegativeAngles / (double)numberOfChildren;
+    const double branchSideProbability = numberOfChildrenWithNegativeAngles / (double)parent.children.size();
     const auto branchSide = rnd::randBoolWithProbability(branchSideProbability) ? 1 : -1;
     const auto angle = branchSide * M_PI * rnd::randDoubleWithNormDistr(params.branchoutAngleMean, params.branchoutAngleStdDeviation);
 
@@ -146,8 +145,8 @@ void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &ma
         bins[binIndex] = reduceLambda(bins[binIndex], binIndex, branch);
     }
 
-    // Recursivly go through children.
-    for (trees::Branch child : branch.children) {
+    // Recursively go through children.
+    for (auto child : branch.children) {
         auto childOrigin = pts::movePoint(point, newAngle, branch.length * child.position);
         reduceBranchIntoBinsRecursively(bins, matrixSize, boundingBox, childOrigin, newAngle, child, reduceLambda);
     }
