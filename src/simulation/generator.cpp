@@ -92,7 +92,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         branch.length = branch.length + growth; // Make each branch longer.
 
         // Create a new child branch?
-        const auto newBranchPossibility = utils::multiplyWithWeight(newTree.params.branchPossibility, light, 0.5);
+        const auto newBranchPossibility = utils::multiplyWithWeight(newTree.params.branchPossibility, light, 1.0);
         if (rnd::randDouble() < newBranchPossibility) {
             Branch newChild = generateChildBranch(branch, newTree.params);
             branch.children.insert(branch.children.end(), newChild);

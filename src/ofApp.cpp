@@ -37,7 +37,7 @@ void ofApp::setup() {
     // Set default tree parameters.
     const double branchoutAngleMean = 0.1;
     const double branchoutAngleVariance = 0.05;
-    const double branchPossibility = 0.08;
+    const double branchPossibility = 0.8;
     const double growthRate = 0.5;
     treeParams = trees::TreeParameters(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
 
