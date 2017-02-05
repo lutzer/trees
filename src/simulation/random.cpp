@@ -29,11 +29,11 @@ double rnd::randDouble() {
 }
 
 double rnd::randDouble(double minBound, double maxBound) {
-    static std::uniform_real_distribution<double> distribution(minBound, maxBound);
+    std::uniform_real_distribution<double> distribution(minBound, maxBound);
     return distribution(engine);
 }
 
 double rnd::randDoubleWithNormDistr(double mean, double standardDeviation) {
-    static std::normal_distribution<double> distribution(mean, standardDeviation);
+    std::normal_distribution<double> distribution(mean, standardDeviation);
     return distribution(engine);
 }

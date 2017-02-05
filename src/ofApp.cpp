@@ -14,7 +14,7 @@ using namespace trees;
 using namespace std;
 
 static const int GROUND_SIZE = 100;
-static const int MAX_ITERATIONS = 100;
+static const int MAX_ITERATIONS = 80;
 static const int PADDING = 30;
 static const int SUN_RADIUS = 3;
 
@@ -46,9 +46,9 @@ void ofApp::setup() {
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
     iteration.addListener(this, &ofApp::onIterationChanged);
     parameterFolder = new ofxDatGuiFolder("Parameters", ofColor::fromHex(0xFFD00B));
-    parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 1.0, treeParams.branchPossibility);
-    parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, M_PI, treeParams.branchoutAngleMean);
-    parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, 1.0, treeParams.branchoutAngleStdDeviation);
+    parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 0.1, treeParams.branchPossibility);
+    parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
+    parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
     parameterFolder->addButton(LABEl_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
