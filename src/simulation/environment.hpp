@@ -33,6 +33,7 @@ namespace env {
         pts::Point sun;
         pts::BoundingBox boundingBox;
 
+        Environment();
         Environment(pts::Point sun, pts::BoundingBox boundingBox);
     };
 

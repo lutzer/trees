@@ -15,6 +15,11 @@ env::Environment::Environment(pts::Point sun, pts::BoundingBox boundingBox) {
     this->boundingBox = boundingBox;
 }
 
+env::Environment::Environment() {
+    Environment({0,0}, {{0,0}, {env::BIN_SIZE, env::BIN_SIZE}});
+}
+
+
 pts::SizeInt env::calculateBinMatrixSize(pts::BoundingBox boundingBox) {
     if (fmod(boundingBox.size.width, env::BIN_SIZE) > 0 ||
         fmod(boundingBox.size.height, env::BIN_SIZE) > 0) {

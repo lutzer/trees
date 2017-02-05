@@ -5,6 +5,7 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "tree.hpp"
+#include "generatorThread.hpp"
 
 enum BinVisibilty {
     HIDDEN = 0,

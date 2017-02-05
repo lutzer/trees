@@ -12,6 +12,7 @@
 		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
 		4972B8F31DFE096A00554CDE /* binModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4972B8EF1DFE096A00554CDE /* binModel.cpp */; };
 		4972B8F41DFE096A00554CDE /* treeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4972B8F11DFE096A00554CDE /* treeModel.cpp */; };
+		4975B1161E478FB700C141CB /* generatorThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4975B1141E478FB700C141CB /* generatorThread.cpp */; };
 		497843331E45F4AB00304540 /* environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 497843311E45F4AB00304540 /* environment.cpp */; };
 		548D1A7605896471E89FB4CA /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74A63C65F4C0E331A4CA86CC /* utils.cpp */; };
 		5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
@@ -79,6 +80,8 @@
 		4972B8F01DFE096A00554CDE /* binModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = binModel.hpp; path = viewmodels/binModel.hpp; sourceTree = "<group>"; };
 		4972B8F11DFE096A00554CDE /* treeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = treeModel.cpp; path = viewmodels/treeModel.cpp; sourceTree = "<group>"; };
 		4972B8F21DFE096A00554CDE /* treeModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = treeModel.hpp; path = viewmodels/treeModel.hpp; sourceTree = "<group>"; };
+		4975B1141E478FB700C141CB /* generatorThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = generatorThread.cpp; sourceTree = "<group>"; };
+		4975B1151E478FB700C141CB /* generatorThread.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = generatorThread.hpp; sourceTree = "<group>"; };
 		497843311E45F4AB00304540 /* environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = environment.cpp; path = simulation/environment.cpp; sourceTree = "<group>"; };
 		497843321E45F4AB00304540 /* environment.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = environment.hpp; path = simulation/environment.hpp; sourceTree = "<group>"; };
 		4CA52BB28171340DFA309B01 /* tree.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tree.cpp; path = src/simulation/tree.cpp; sourceTree = SOURCE_ROOT; };
@@ -324,6 +327,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
+				4975B1141E478FB700C141CB /* generatorThread.cpp */,
+				4975B1151E478FB700C141CB /* generatorThread.hpp */,
 				C58CEF4FE80C3BC7F8252269 /* simulation */,
 				6B6AD5A931E565B62CDF53FA /* utils */,
 			);
@@ -450,6 +455,7 @@
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
+				4975B1161E478FB700C141CB /* generatorThread.cpp in Sources */,
 				4972B8F31DFE096A00554CDE /* binModel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,

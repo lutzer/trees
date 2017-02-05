@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <pthread.h>
 
 #include "generator.hpp"
 #include "binModel.hpp"
@@ -242,23 +243,15 @@ void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
 
 void ofApp::calculateTree() {
 
+    GeneratorThread generatorThread(environment, treeParams, MAX_ITERATIONS);
+    generatorThread.startThread(true); // start thread blocking
+
     treeList.clear();
 
-    // Generate sapling.
-    pts::Point treeOrigin = { PT_BOUNDINGBOX.origin.x + PT_BOUNDINGBOX.size.width / 2 };
-    trees::Tree tree = trees::Tree(treeOrigin, treeParams);
-
-    cout << "Generating Tree" << endl;
-    // Create tree meshes.
-    for (int i = 0; i <= MAX_ITERATIONS; i++) {
-        // Calculate light.
-        env::Bins bins = gen::calculateLightBins(tree, environment);
-
-        // Grow tree once.
-        tree = gen::iterateTree(tree, bins, environment);
-        treeList.push_back(tree);
-        cout << "Generated iteration " << i << endl;
+    while (generatorThread.isThreadRunning()) {
+        sleep(0.1);
     }
 
+    treeList.swap(generatorThread.treeList);
     updateScene = true;
 }
