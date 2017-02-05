@@ -82,15 +82,13 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
     trees::Tree newTree = tree;
 
     mapBranchRecursively(newTree.base, newTree.origin, 0.0, bins, environment.boundingBox, [newTree](Branch &branch, pts::Point origin, double angle, const env::Bins &bins, pts::BoundingBox boundingBox) {
-        const auto newAngle = angle + branch.angle;
-
         // Take only the light value from the bin where the branch ends.
-        auto branchEnd = pts::movePoint(origin, newAngle, branch.length);
+        const auto branchEnd = pts::movePoint(origin, angle, branch.length);
         const auto binIndex = pts::worldtoBin(branchEnd, bins.size, boundingBox);
         const auto light = bins.light[binIndex];
 
         // Grow branch only if it gets sunlight.
-        branch.length = branch.length + newTree.params.growthRate; // Make each branch longer.
+        branch.length = branch.length + newTree.params.growthRate * light; // Make each branch longer.
 
         // Create a new child branch?
         if (rnd::randDouble() < newTree.params.branchPossibility) {
@@ -156,12 +154,15 @@ void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &ma
 
 template<typename F>
 void mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda) {
+    const auto currentBranchAngle = angle + branch.angle;
+
     // Map all of the branch's children (passing along the mapping function; when this recursion
     // reaches the leaves, it will apply the mapping function there).
     for (auto &childBranch : branch.children) {
-        mapBranchRecursively(childBranch, origin, angle, bins, boundingBox, mapLambda);
+        const auto childOrigin = pts::movePoint(origin, currentBranchAngle, branch.length * childBranch.position);
+        mapBranchRecursively(childBranch, childOrigin, currentBranchAngle, bins, boundingBox, mapLambda);
     }
 
     // Apply the mapping function to the current branch.
-    mapLambda(branch, origin, angle, bins, boundingBox);
+    mapLambda(branch, origin, currentBranchAngle, bins, boundingBox);
 }
