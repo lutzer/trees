@@ -103,7 +103,9 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 }
 
 Branch generateChildBranch(const Branch &parent, const TreeParameters &params) {
-    const auto position = rnd::randDouble();
+    // Make it more probable that a branch appears near the tip of the parent branch rather than at
+    // its base.
+    const auto position = 1 - pow(rnd::randDouble(), 2);
 
     // Choose the side of the new branch, making it more likely that the branch is on a side where
     // there are fewer branches already.
