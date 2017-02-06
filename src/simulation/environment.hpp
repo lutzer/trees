@@ -16,10 +16,10 @@
 
 namespace env {
     /// The width and height of the bins in the bounding box.
-    static const float BIN_SIZE = 5;
+    static const float BIN_SIZE = 2;
 
     /// Defines the extent to which branches contribute to density values.
-    static const double DENSITY_MULTIPLIER = 0.1;
+    static const double DENSITY_MULTIPLIER = 0.05;
 
     using BinArray = std::vector<float>;
 

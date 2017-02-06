@@ -47,6 +47,9 @@ namespace trees {
         /// Returns a tree embryo.
         Tree(pts::Point origin, TreeParameters params);
         Tree();
+
+        // prints general information about the tree
+        std::string toString();
     };
 }
 

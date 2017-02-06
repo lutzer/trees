@@ -56,17 +56,7 @@ env::Bins gen::calculateLightBins(const trees::Tree &tree, const env::Environmen
     });
 
     // Build light matrix from densities.
-    env::BinArray lightMatrix(matrixSize.columns * matrixSize.rows, 0.0);
-    for (int i = 0; i < lightMatrix.size(); i++) {
-        int sunBin = pts::worldtoBin(environment.sun, matrixSize, environment.boundingBox);
-
-        vector<int> binIndices = photo::binIndicesForLine(i, sunBin, matrixSize);
-        float densitySum = 0.0;
-        for (int index : binIndices) {
-            densitySum += densities[index];
-        }
-        lightMatrix[i] = std::max(0.0, 1.0 - densitySum);
-    }
+    env::BinArray lightMatrix = photo::calculateLightMatrixFromDensities(densities, matrixSize, environment);
 
     env::Bins bins;
     bins.densities = densities;

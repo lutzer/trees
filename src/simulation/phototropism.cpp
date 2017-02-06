@@ -13,6 +13,44 @@
 #include "phototropism.hpp"
 #include "utils.hpp"
 
+env::BinArray photo::calculateLightMatrixFromDensities(const env::BinArray &densities, const pts::SizeInt &matrixSize, const env::Environment &environment) {
+
+    env::BinArray lightMatrix(matrixSize.columns * matrixSize.rows, 0.0);
+
+    // get indizes of all border fields
+    vector<int> borderIndices;
+    // add column indices
+    for (int i=0; i < matrixSize.columns; i++) {
+        borderIndices.push_back(i);
+        borderIndices.push_back(i + (matrixSize.rows-1) * matrixSize.columns);
+    }
+    // add row indices
+    for (int i=0; i < matrixSize.rows; i++) {
+        borderIndices.push_back(i * matrixSize.columns );
+        borderIndices.push_back((i+1) * matrixSize.columns -1 );
+    }
+
+    int sunBin = pts::worldtoBin(environment.sun, matrixSize, environment.boundingBox);
+
+    // fill the matrix by calculating the lines from the sun to all border fields of the matrix
+    for (int i : borderIndices) {
+
+        if (lightMatrix[i] > 0.0)
+            continue;
+
+        vector<int> binIndices = photo::binIndicesForLine(sunBin, i, matrixSize);
+        float densitySum = 0.0;
+        for (int index : binIndices) {
+            densitySum += densities[index];
+            lightMatrix[index] = std::max(0.0, 1.0 - densitySum);
+        }
+    }
+
+
+
+    return lightMatrix;
+}
+
 std::vector<int> photo::binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox) {
 
     int bin1 = pts::worldtoBin(origin, matrixSize, boundingBox);

@@ -30,7 +30,6 @@ void GeneratorThread::threadedFunction() {
 
         // Grow tree once.
         tree = gen::iterateTree(tree, bins, environment);
-        cout << "Generated iteration " << i << endl;
 
         if (!isThreadRunning())
             break;
@@ -40,4 +39,5 @@ void GeneratorThread::threadedFunction() {
         }
     }
     cout << "Tree generation finished" << endl;
+    cout << tree.toString() << endl;
 }

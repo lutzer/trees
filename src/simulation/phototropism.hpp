@@ -17,6 +17,9 @@
 
 namespace photo {
 
+    /// Calculates the light matrix from the density array
+    env::BinArray calculateLightMatrixFromDensities(const env::BinArray &densities, const pts::SizeInt &matrixSize, const env::Environment &environment);
+
     /// Returns the indices for a line between the given points in the given bounding area.
     std::vector<int> binIndicesForLine(pts::Point origin, pts::Point destination, pts::SizeInt matrixSize, pts::BoundingBox boundingBox);
     std::vector<int> binIndicesForLine(int bin1, int bin2, pts::SizeInt matrixSize);

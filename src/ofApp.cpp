@@ -22,9 +22,15 @@ static const int PADDING = 30;
 static const int SUN_RADIUS = 3;
 
 // Set up environment.
-static const pts::BoundingBox PT_BOUNDINGBOX = { { -50, 0 }, { 100, 100 } };
+static const pts::BoundingBox PT_BOUNDINGBOX = { { -100, 0 }, { 200, 150 } };
 static const pts::Point SUN_POSITION = { -50, 0 };
 static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
+
+// Default tree parameters
+static const double BRANCHOUT_ANGLE_MEAN = 0.1;
+static const double BRANCHOUT_ANGLE_VAR = 0.05;
+static const double BRANCH_POSSIBILITY = 0.15;
+static const double GROWTH_RATE = 0.3;
 
 // Gui Labels
 static const string LABEL_BRANCH_POSSIBILITY = "branch p";
@@ -38,14 +44,11 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
 
     // Set default tree parameters.
-    const double branchoutAngleMean = 0.1;
-    const double branchoutAngleVariance = 0.05;
-    const double branchPossibility = 0.8;
-    const double growthRate = 0.5;
-    treeParams = trees::TreeParameters(branchoutAngleMean, branchoutAngleVariance, branchPossibility, growthRate);
+
+    treeParams = trees::TreeParameters(BRANCHOUT_ANGLE_MEAN, BRANCHOUT_ANGLE_VAR, BRANCH_POSSIBILITY, GROWTH_RATE);
 
     // Setup GUI.
-    iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", 50, 0, MAX_ITERATIONS));
+    iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", MAX_ITERATIONS, 0, MAX_ITERATIONS));
     iterationSlider->onSliderEvent(this, &ofApp::iterationSliderChanged);
     iteration.addListener(this, &ofApp::onIterationChanged);
     parameterFolder = new ofxDatGuiFolder("Parameters", ofColor::fromHex(0xFFD00B));
@@ -56,6 +59,7 @@ void ofApp::setup() {
     parameterFolder->addButton(LABEl_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
     parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
+    parameterFolder->expand();
 
     // Set the camera's initial position.
     cam.setDistance(200);
@@ -139,6 +143,9 @@ void ofApp::draw() {
                            PADDING, PADDING);
         iterationSlider->draw();
         parameterFolder->draw();
+        // draw status bar
+        float percentage = std::min((float) treeList.size() / MAX_ITERATIONS, 1.0F);
+        ofDrawBitmapString("Computed Tree: " + ofToString(percentage*100) + "%", PADDING, ofGetHeight() - iterationSlider->getHeight() - PADDING );
     }
 }
 
