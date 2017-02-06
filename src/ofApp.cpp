@@ -30,12 +30,14 @@ static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
 static const double BRANCHOUT_ANGLE_MEAN = 0.1;
 static const double BRANCHOUT_ANGLE_VAR = 0.05;
 static const double BRANCH_POSSIBILITY = 0.15;
+static const double BRANCH_BRANCHOUT_LENGTH = 10.0;
 static const double GROWTH_RATE = 0.3;
 
 // Gui Labels
 static const string LABEL_BRANCH_POSSIBILITY = "branch p";
 static const string LABEL_BRANCH_ANGLE = "branch angle";
 static const string LABEL_BRANCH_VAR = "branch var";
+static const string LABEL_BRANCHOUT_LENGTH = "branch length";
 static const string LABEL_GROWTH_RATE = "growth rate";
 static const string LABEl_REDRAW_BUTTON = "REDRAW";
 
@@ -45,7 +47,7 @@ void ofApp::setup() {
 
     // Set default tree parameters.
 
-    treeParams = trees::TreeParameters(BRANCHOUT_ANGLE_MEAN, BRANCHOUT_ANGLE_VAR, BRANCH_POSSIBILITY, GROWTH_RATE);
+    treeParams = trees::TreeParameters(BRANCHOUT_ANGLE_MEAN, BRANCHOUT_ANGLE_VAR, BRANCH_POSSIBILITY, BRANCH_BRANCHOUT_LENGTH, GROWTH_RATE);
 
     // Setup GUI.
     iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", MAX_ITERATIONS, 0, MAX_ITERATIONS));
@@ -53,9 +55,11 @@ void ofApp::setup() {
     iteration.addListener(this, &ofApp::onIterationChanged);
     parameterFolder = new ofxDatGuiFolder("Parameters", ofColor::fromHex(0xFFD00B));
     parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 1.0, treeParams.branchPossibility);
+    parameterFolder->addSlider(LABEL_BRANCHOUT_LENGTH, 0.0, 100.0, treeParams.branchoutLength);
     parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
     parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
+
     parameterFolder->addButton(LABEl_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
     parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
@@ -251,6 +255,8 @@ void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
         treeParams.branchoutAngleMean = e.target->getValue();
     else if (sliderName == LABEL_BRANCH_POSSIBILITY)
         treeParams.branchPossibility = e.target->getValue();
+    else if (sliderName == LABEL_BRANCHOUT_LENGTH)
+        treeParams.branchoutLength = e.target->getValue();
 }
 
 void ofApp::onNewIterationCalculated(trees::Tree tree) {

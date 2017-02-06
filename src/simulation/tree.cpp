@@ -24,15 +24,16 @@ Branch::Branch() {
     Branch(0, M_PI_2, 0, 1);
 }
 
-TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double growthRate) {
+TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double branchoutLength, double growthRate) {
     this->branchoutAngleMean = branchoutAngleMean;
     this->branchoutAngleStdDeviation = branchoutAngleStdDeviation;
     this->growthRate = growthRate;
     this->branchPossibility = branchPossibility;
+    this->branchoutLength = branchoutLength;
 }
 
 TreeParameters::TreeParameters() {
-    TreeParameters(1, 1, 1, 1);
+    TreeParameters(1, 1, 1, 1, 1);
 }
 
 Tree::Tree(pts::Point origin, TreeParameters params) {

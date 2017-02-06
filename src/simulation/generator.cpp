@@ -26,7 +26,7 @@ using namespace trees;
 Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env::Environment environment);
 
 /// Creates a new child branch for a given parent.
-Branch generateChildBranch(const Branch &parent, const TreeParameters &params);
+Branch generateChildBranch(const Branch &parent,const pts::Point origin, const TreeParameters &params);
 
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
@@ -82,9 +82,10 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         branch.length = branch.length + growth; // Make each branch longer.
 
         // Create a new child branch?
-        const auto newBranchPossibility = utils::multiplyWithWeight(newTree.params.branchPossibility, light, 1.0);
+        const auto newBranchPossibilityModifiedByLength = utils::multiplyWithWeight(newTree.params.branchPossibility, std::min(1.0,branch.length/newTree.params.branchoutLength), 1.0);
+        const auto newBranchPossibility = utils::multiplyWithWeight(newBranchPossibilityModifiedByLength, light, 1.0);
         if (rnd::randDouble() < newBranchPossibility) {
-            Branch newChild = generateChildBranch(branch, newTree.params);
+            Branch newChild = generateChildBranch(branch, origin, newTree.params);
             branch.children.insert(branch.children.end(), newChild);
         }
     });
@@ -92,7 +93,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
     return newTree;
 }
 
-Branch generateChildBranch(const Branch &parent, const TreeParameters &params) {
+Branch generateChildBranch(const Branch &parent,const pts::Point origin, const TreeParameters &params) {
     // Make it more probable that a branch appears near the tip of the parent branch rather than at
     // its base.
     const auto position = 1 - pow(rnd::randDouble(), 2);

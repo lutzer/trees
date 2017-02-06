@@ -25,7 +25,7 @@ env::BinArray photo::calculateLightMatrixFromDensities(const env::BinArray &dens
         borderIndices.push_back(i + (matrixSize.rows-1) * matrixSize.columns);
     }
     // add row indices
-    for (int i=0; i < matrixSize.rows; i++) {
+    for (int i=1; i < matrixSize.rows-1; i++) {
         borderIndices.push_back(i * matrixSize.columns );
         borderIndices.push_back((i+1) * matrixSize.columns -1 );
     }

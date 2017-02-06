@@ -30,10 +30,11 @@ namespace trees {
         double branchoutAngleStdDeviation;
 
         double branchPossibility;
+        double branchoutLength;
 
         double growthRate;
 
-        TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double growthRate);
+        TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double branchoutLength, double growthRate);
         TreeParameters();
     };
 
