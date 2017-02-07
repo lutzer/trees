@@ -66,5 +66,5 @@ public:
     void onIterationChanged(int &value);
     void onParamsButtonEvent(ofxDatGuiButtonEvent e);
     void onParamsSliderEvent(ofxDatGuiSliderEvent e);
-    void onNewIterationCalculated(trees::Tree tree);
+    void onNewIterationCalculated(trees::Tree &tree);
 };

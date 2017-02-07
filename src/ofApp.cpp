@@ -262,7 +262,7 @@ void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
         treeParams.branchoutLength = e.target->getValue();
 }
 
-void ofApp::onNewIterationCalculated(trees::Tree tree) {
+void ofApp::onNewIterationCalculated(trees::Tree &tree) {
     treeList.push_back(tree);
     updateScene = true;
 }
@@ -280,7 +280,7 @@ void ofApp::calculateTree() {
 
     // create new thread
     generatorThread = new GeneratorThread(environment, treeParams, MAX_ITERATIONS);
-    generatorThread->iterationEventHandler = std::bind(&ofApp::onNewIterationCalculated,this, std::placeholders::_1);
+    generatorThread->newTreeGeneratedHandler.add(this, &ofApp::onNewIterationCalculated, 1);
     generatorThread->startThread();
 
 }

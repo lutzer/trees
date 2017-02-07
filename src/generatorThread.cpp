@@ -34,9 +34,8 @@ void GeneratorThread::threadedFunction() {
         if (!isThreadRunning())
             break;
 
-        if (this->iterationEventHandler != 0) {
-            this->iterationEventHandler(tree);
-        }
+        // send event
+        newTreeGeneratedHandler.notify(this, tree);
     }
     cout << "Tree generation finished" << endl;
     cout << tree.toString() << endl;

@@ -17,9 +17,6 @@
 #include "tree.hpp"
 #include "environment.hpp"
 
-typedef std::function<void(trees::Tree)> CallbackFunction;
-
-
 class GeneratorThread : public ofThread {
 
     void threadedFunction();
@@ -31,10 +28,8 @@ class GeneratorThread : public ofThread {
 public:
     GeneratorThread(env::Environment environment, trees::TreeParameters params, int iterations);
 
-    //void setIterationEventHandler(CallbackFunction iterationEventHandler);
-
-    // holds the pointer to the function which is called after each iterations
-    CallbackFunction iterationEventHandler = 0;
+    // event which is called after each iterations
+    ofEvent<trees::Tree> newTreeGeneratedHandler;
 };
 
 #endif /* generatorThread_hpp */
