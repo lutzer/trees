@@ -23,7 +23,7 @@ static const int SUN_RADIUS = 5;
 
 // Set up environment.
 static const pts::BoundingBox PT_BOUNDINGBOX = { { -100, 0 }, { 200, 150 } };
-static const pts::Point SUN_POSITION = { 0, 150 };
+static const pts::Point SUN_POSITION = { -100, 150 };
 static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
 
 // Default tree parameters
@@ -59,7 +59,6 @@ void ofApp::setup() {
     parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
     parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
-
     parameterFolder->addButton(LABEl_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
     parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
@@ -105,6 +104,9 @@ void ofApp::update() {
         // Update tree mesh.
         treeMesh = TreeModel(treeList[index]).getMesh();
 
+        //update info
+        treeInfoString = treeList[index].toString();
+
         // Update bins.
         env::Bins bins = gen::calculateLightBins(treeList[index], environment);
         BinModel binModel = (showBins == LIGHT) ?
@@ -149,7 +151,8 @@ void ofApp::draw() {
         parameterFolder->draw();
         // draw status bar
         float percentage = std::min((float) treeList.size() / MAX_ITERATIONS, 1.0F);
-        ofDrawBitmapString("Computed Tree: " + ofToString(percentage*100) + "%", PADDING, ofGetHeight() - iterationSlider->getHeight() - PADDING );
+        ofDrawBitmapString(treeInfoString, PADDING, ofGetHeight() - iterationSlider->getHeight() - PADDING );
+        ofDrawBitmapString(ofToString(percentage*100) + "%", ofGetWidth() - PADDING - 30, ofGetHeight() - iterationSlider->getHeight() - PADDING );
     }
 }
 

@@ -37,6 +37,7 @@ private:
     // Gui
     ofxDatGuiSlider* iterationSlider;
     ofxDatGuiFolder* parameterFolder;
+    string treeInfoString;
     bool showGui;
 
     long lastUpdateTime;
