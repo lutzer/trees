@@ -19,11 +19,11 @@ using namespace std;
 static const int GROUND_SIZE = 100;
 static const int MAX_ITERATIONS = 100;
 static const int PADDING = 30;
-static const int SUN_RADIUS = 3;
+static const int SUN_RADIUS = 5;
 
 // Set up environment.
 static const pts::BoundingBox PT_BOUNDINGBOX = { { -100, 0 }, { 200, 150 } };
-static const pts::Point SUN_POSITION = { -50, 0 };
+static const pts::Point SUN_POSITION = { 0, 150 };
 static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
 
 // Default tree parameters

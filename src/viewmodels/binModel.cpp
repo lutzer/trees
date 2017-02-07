@@ -30,7 +30,6 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
     ofMesh mesh;
 
     //mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-    int meshIndex = 0;
 
     ofVec3f binSize = ofVec3f(size.x / columns, size.y / rows, 0);
     for (int i = 0; i < rows * columns; i++) {
@@ -52,10 +51,10 @@ ofMesh BinModel::getMesh(ofPoint origin, ofVec3f size) {
         mesh.addColor(color);
 
         // Add 2 triangles per bin.
+        int meshIndex = i*4;
         mesh.addTriangle(meshIndex, meshIndex + 1, meshIndex + 3);
         mesh.addTriangle(meshIndex, meshIndex + 2, meshIndex + 3);
 
-        meshIndex += 4;
     }
     return mesh;
 }
