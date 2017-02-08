@@ -39,15 +39,16 @@ static const string LABEL_BRANCH_ANGLE = "branch angle";
 static const string LABEL_BRANCH_VAR = "branch var";
 static const string LABEL_BRANCHOUT_LENGTH = "branch length";
 static const string LABEL_GROWTH_RATE = "growth rate";
-static const string LABEl_REDRAW_BUTTON = "REDRAW";
+static const string LABEL_TOGGLE_GRAVITY_BUTTON = "TOGGLE GRAVITY";
+static const string LABEL_REDRAW_BUTTON = "REDRAW";
 
 //--------------------------------------------------------------
 void ofApp::setup() {
     ofSetVerticalSync(true);
 
     // Set default tree parameters.
-
     treeParams = trees::TreeParameters(BRANCHOUT_ANGLE_MEAN, BRANCHOUT_ANGLE_VAR, BRANCH_POSSIBILITY, BRANCH_BRANCHOUT_LENGTH, GROWTH_RATE);
+    enableGravity = false;
 
     // Setup GUI.
     iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", MAX_ITERATIONS, 0, MAX_ITERATIONS));
@@ -59,10 +60,12 @@ void ofApp::setup() {
     parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
     parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
-    parameterFolder->addButton(LABEl_REDRAW_BUTTON);
+    parameterFolder->addToggle(LABEL_TOGGLE_GRAVITY_BUTTON);
+    parameterFolder->addButton(LABEL_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
     parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
     parameterFolder->expand();
+
 
     // Set the camera's initial position.
     cam.setDistance(200);
@@ -102,7 +105,7 @@ void ofApp::update() {
         const auto index = std::min((int)iteration,(int)treeList.size()-1);
 
         // Update tree mesh.
-        treeMesh = TreeModel(treeList[index]).getMesh();
+        treeMesh = TreeModel(treeList[index], enableGravity).getMesh();
 
         //update info
         treeInfoString = treeList[index].toString();
@@ -240,9 +243,13 @@ void ofApp::iterationSliderChanged(ofxDatGuiSliderEvent e) {
 }
 
 void ofApp::onParamsButtonEvent(ofxDatGuiButtonEvent e) {
-    if (e.target->getName() == LABEl_REDRAW_BUTTON) {
+    if (e.target->getName() == LABEL_REDRAW_BUTTON) {
         this->calculateTree();
+    } else if (e.target->getName() == LABEL_TOGGLE_GRAVITY_BUTTON) {
+        enableGravity = !enableGravity;
+        updateScene = true;
     }
+
 }
 
 void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {

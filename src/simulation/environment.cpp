@@ -13,6 +13,9 @@
 env::Environment::Environment(pts::Point sun, pts::BoundingBox boundingBox) {
     this->sun = sun;
     this->boundingBox = boundingBox;
+
+    this->gravityVector = pts::createVectorFromAngle(M_PI_2);
+    this->gravityForce = 9.8;
 }
 
 env::Environment::Environment() {

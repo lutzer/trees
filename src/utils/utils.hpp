@@ -36,6 +36,9 @@ namespace utils {
     /// 0 returns the value unchanged).
     double multiplyWithWeight(double value, double modifier, double weight);
 
+    #pragma mark Geometry & Lina Helpers
+
+
     #pragma mark - Drawing Helpers
 
     /// Adds normals to a triangle mesh.

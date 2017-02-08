@@ -20,7 +20,7 @@ void GeneratorThread::threadedFunction() {
 
     // Generate sapling.
     pts::Point treeOrigin = { environment.boundingBox.origin.x + environment.boundingBox.size.width / 2 };
-    trees::Tree tree = trees::Tree(treeOrigin, params);
+    trees::Tree tree = trees::Tree(treeOrigin, M_PI_2, params);
 
     cout << "Generating tree" << endl;
     // Create tree iterations.
@@ -30,6 +30,9 @@ void GeneratorThread::threadedFunction() {
 
         // Grow tree once.
         tree = gen::iterateTree(tree, bins, environment);
+
+        // calculate gravitational forces
+        gen::applyGravitationalForce(tree, environment);
 
         if (!isThreadRunning())
             break;

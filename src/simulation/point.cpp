@@ -11,6 +11,22 @@
 #include <math.h>
 #include <utils.hpp>
 
+double pts::Point::dot(const pts::Point &p) const {
+    return this->x * p.x + this->y * p.y;
+}
+
+double pts::Point::length() const {
+    return sqrt( this->x * this->x + this->y * this->y );
+}
+
+pts::Point pts::Point::operator*(double scalar) const {
+    return { this->x * scalar, this->y * scalar };
+}
+
+pts::Point pts::createVectorFromAngle(double angle) {
+    return {cos(angle), sin(angle)};
+}
+
 pts::Point pts::movePoint(pts::Point point, double angle, double length) {
     return { point.x + cos(angle) * length, point.y + sin(angle) * length };
 }

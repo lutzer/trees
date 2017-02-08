@@ -14,12 +14,13 @@
 
 class TreeModel {
 public:
-    TreeModel();
+    TreeModel(trees::Tree &tree, bool enableGravity);
     explicit TreeModel(trees::Tree &tree);
     ofMesh getMesh();
 
 private:
     trees::Tree tree;
+    bool enableGravity;
 };
 
 

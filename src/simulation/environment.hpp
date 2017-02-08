@@ -19,7 +19,7 @@ namespace env {
     static const float BIN_SIZE = 2;
 
     /// Defines the extent to which branches contribute to density values.
-    static const double DENSITY_MULTIPLIER = 0.05;
+    static const double DENSITY_MULTIPLIER = 0.1;
 
     using BinArray = std::vector<float>;
 
@@ -32,6 +32,9 @@ namespace env {
     struct Environment {
         pts::Point sun;
         pts::BoundingBox boundingBox;
+
+        double gravityForce;
+        pts::Point gravityVector;
 
         Environment();
         Environment(pts::Point sun, pts::BoundingBox boundingBox);

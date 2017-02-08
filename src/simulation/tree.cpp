@@ -11,13 +11,15 @@
 #include <math.h>
 #include <iostream>
 
+#include "environment.hpp"
+
 using namespace trees;
 
-Branch::Branch(double position, double angle, double length, double thickness) {
+Branch::Branch(double position, double angle, double length, double radius) {
     this->position = position;
     this->angle = angle;
     this->length = length;
-    this->thickness = thickness;
+    this->radius = radius;
 }
 
 Branch::Branch() {
@@ -30,31 +32,32 @@ TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleS
     this->growthRate = growthRate;
     this->branchPossibility = branchPossibility;
     this->branchoutLength = branchoutLength;
+    this->massDensity = 1;
+    this->springConstant = 10;
 }
 
 TreeParameters::TreeParameters() {
     TreeParameters(1, 1, 1, 1, 1);
 }
 
-Tree::Tree(pts::Point origin, TreeParameters params) {
+Tree::Tree(pts::Point origin, double trunkAngle, TreeParameters params) {
     this->origin = origin;
     this->params = params;
-    this->base = Branch(0, M_PI_2, 1, 1);
+    this->base = Branch(0, trunkAngle, 1, 1);
 }
 
 Tree::Tree() {
-    this->origin = { 0, 0 };
-    this->base = Branch(0, M_PI_2, 1, 1);
+    Tree({0,0}, M_PI_2, TreeParameters());
 }
 
-void iterateBranches(const Branch &branch, int &numberOfBranches, float &biomass, int &depth, int currentDepth) {
+void iterateBranches(const Branch &branch, int &numberOfBranches, float &volume, int &depth, int currentDepth) {
 
     depth = std::max(depth,currentDepth);
-    biomass += (branch.thickness/2) * (branch.thickness/2) * M_PI * branch.length;
+    volume += branch.radius * branch.radius * M_PI * branch.length;
     numberOfBranches += branch.children.size();
 
     for( auto child : branch.children) {
-        iterateBranches(child, numberOfBranches, biomass, depth, currentDepth + 1);
+        iterateBranches(child, numberOfBranches, volume, depth, currentDepth + 1);
     }
 }
 
@@ -62,10 +65,10 @@ std::string Tree::toString() {
 
     int numberOfBranches = 1;
     int depth = 0;
-    float biomass = 0;
+    float volume = 0;
 
     // calculates depth, number of branches and biomass
-    iterateBranches(this->base, numberOfBranches, biomass, depth, 0);
+    iterateBranches(this->base, numberOfBranches, volume, depth, 0);
 
-    return "Branches: " + std::to_string(numberOfBranches) + ", Depth: " + std::to_string(depth) + ", Biomass: " + std::to_string(biomass);
+    return "Branches: " + std::to_string(numberOfBranches) + ", Depth: " + std::to_string(depth) + ", Volume: " + std::to_string(volume);
 }

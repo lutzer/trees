@@ -15,6 +15,11 @@ namespace pts {
     /// A point in space.
     struct Point {
         double x, y;
+
+        double dot(const Point &p) const;
+        double length() const;
+
+        Point operator*(double scalar) const;
     };
 
     /// A point in a matrix.
@@ -37,6 +42,8 @@ namespace pts {
         Point origin;
         Size size;
     };
+
+    Point createVectorFromAngle(double angle);
 
     /// Returns the given point moved according to the given angle and length.
     Point movePoint(Point point, double angle, double length);

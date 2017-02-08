@@ -28,6 +28,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 /// Creates a new child branch for a given parent.
 Branch generateChildBranch(const Branch &parent,const pts::Point origin, const TreeParameters &params);
 
+
 template<typename F>
 /// Iterates over the given branch and all of its sub-branches recursively, applying the given
 /// lambda to each of them.
@@ -37,6 +38,8 @@ template<typename F>
 /// Iterates over the given tree's branches and, for all of the branches in each bin, reduces them
 /// into a float using the given lambda.
 env::BinArray reduceTreeIntoBins(const pts::SizeInt &matrixSize, const pts::BoundingBox &boundingBox, const Tree &tree, F reduceLambda);
+
+double calculateWeight(Branch &branch, double angle, const trees::TreeParameters params, const env::Environment &environment);
 
 template<typename F>
 void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &matrixSize, const pts::BoundingBox &boundingBox, const pts::Point &point, double angle, const Branch &branch, F reduceLambda);
@@ -52,7 +55,7 @@ env::Bins gen::calculateLightBins(const trees::Tree &tree, const env::Environmen
 
     // Calculate the densities for each bin.
     const auto densities = reduceTreeIntoBins(matrixSize, environment.boundingBox, tree, [](float current, float binIndex, Branch branch) {
-        return std::min(current + branch.thickness * env::DENSITY_MULTIPLIER, 1.0);
+        return std::min(current + branch.radius * env::DENSITY_MULTIPLIER, 1.0);
     });
 
     // Build light matrix from densities.
@@ -64,6 +67,10 @@ env::Bins gen::calculateLightBins(const trees::Tree &tree, const env::Environmen
     bins.size = matrixSize;
 
     return bins;
+}
+
+void gen::applyGravitationalForce(trees::Tree &tree, const env::Environment &environment) {
+    double totalWeight = calculateWeight(tree.base, 0, tree.params, environment);
 }
 
 #pragma mark - Generator Helpers
@@ -143,6 +150,46 @@ void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &ma
         auto childOrigin = pts::movePoint(point, newAngle, branch.length * child.position);
         reduceBranchIntoBinsRecursively(bins, matrixSize, boundingBox, childOrigin, newAngle, child, reduceLambda);
     }
+}
+
+#pragma mark - Gravity Helpers
+
+double calculateWeight(Branch &branch, double angle, const trees::TreeParameters params, const env::Environment &environment) {
+
+    // calculate the weight of this branch
+    double branchWeight = branch.radius * branch.radius * M_PI * branch.length * environment.gravityForce;
+
+    // return weight of empty branch
+    if (branch.children.empty()) {
+        return branchWeight;
+    }
+
+    const auto newAngle = angle + branch.angle;
+
+    //calculate gravitational weigth and force of children pulling down the branch
+    double childrenWeightSum = 0;
+    double totalForce = 0;
+    for (auto &child : branch.children) {
+        double weight = calculateWeight(child, newAngle, params, environment);
+        childrenWeightSum += weight;
+
+        if (weight > 0) {
+            // compute force which pulls down on the branch by this children
+            pts::Point gravityForce = environment.gravityVector * weight;
+
+            // create vector that stands orthagonal on the branch
+            pts::Point leverForce = pts::createVectorFromAngle(newAngle - M_PI_2);
+
+            // calculate the part of the gravitational force, that pulls orthagonal on the branch
+            double force = gravityForce.dot(leverForce) / gravityForce.length();
+            totalForce += child.position * force;
+        }
+    }
+
+    //calculate how much the branch is pulled down
+    branch.gravitationalAngleChange = totalForce / ( params.springConstant * branch.radius * branch.radius );
+
+    return childrenWeightSum + branchWeight;
 }
 
 #pragma mark - Helpers
