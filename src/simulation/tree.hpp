@@ -21,7 +21,9 @@ namespace trees {
         std::vector<Branch> children;
 
         // change of the branch's angle by gravity 
-        double gravitationalAngleChange = 0;
+        double gravityDelta = 0;
+
+        double getAngle() const;
 
         Branch(double position, double angle, double length, double thickness);
         Branch();
@@ -37,7 +39,6 @@ namespace trees {
 
         double growthRate;
 
-        double massDensity;
         double springConstant;
 
         TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double branchoutLength, double growthRate);

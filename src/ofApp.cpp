@@ -39,7 +39,8 @@ static const string LABEL_BRANCH_ANGLE = "branch angle";
 static const string LABEL_BRANCH_VAR = "branch var";
 static const string LABEL_BRANCHOUT_LENGTH = "branch length";
 static const string LABEL_GROWTH_RATE = "growth rate";
-static const string LABEL_TOGGLE_GRAVITY_BUTTON = "TOGGLE GRAVITY";
+static const string LABEL_TOGGLE_GRAVITY_BUTTON = "ENABLE GRAVITY";
+static const string LABEL_BRANCH_FLEXIBILITY = "flexibility";
 static const string LABEL_REDRAW_BUTTON = "REDRAW";
 
 //--------------------------------------------------------------
@@ -61,6 +62,7 @@ void ofApp::setup() {
     parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
     parameterFolder->addToggle(LABEL_TOGGLE_GRAVITY_BUTTON);
+    parameterFolder->addSlider(LABEL_BRANCH_FLEXIBILITY, 1, 100, treeParams.springConstant);
     parameterFolder->addButton(LABEL_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
     parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
@@ -105,7 +107,7 @@ void ofApp::update() {
         const auto index = std::min((int)iteration,(int)treeList.size()-1);
 
         // Update tree mesh.
-        treeMesh = TreeModel(treeList[index], enableGravity).getMesh();
+        treeMesh = TreeModel(treeList[index]).getMesh();
 
         //update info
         treeInfoString = treeList[index].toString();
@@ -267,6 +269,8 @@ void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
         treeParams.branchPossibility = e.target->getValue();
     else if (sliderName == LABEL_BRANCHOUT_LENGTH)
         treeParams.branchoutLength = e.target->getValue();
+    else if (sliderName == LABEL_BRANCH_FLEXIBILITY)
+        treeParams.springConstant = e.target->getValue();
 }
 
 void ofApp::onNewIterationCalculated(trees::Tree &tree) {
@@ -286,7 +290,7 @@ void ofApp::calculateTree() {
     treeList.clear();
 
     // create new thread
-    generatorThread = new GeneratorThread(environment, treeParams, MAX_ITERATIONS);
+    generatorThread = new GeneratorThread(environment, treeParams, MAX_ITERATIONS, enableGravity);
     generatorThread->newTreeGeneratedHandler.add(this, &ofApp::onNewIterationCalculated, 1);
     generatorThread->startThread();
 

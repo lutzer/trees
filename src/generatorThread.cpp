@@ -10,10 +10,11 @@
 
 #include "generator.hpp"
 
-GeneratorThread::GeneratorThread(env::Environment environment, trees::TreeParameters params, int iterations) {
+GeneratorThread::GeneratorThread(env::Environment environment, trees::TreeParameters params, int iterations, bool enableGravity) {
     this->environment = environment;
     this->params = params;
     this->iterations = iterations;
+    this->enableGravity = enableGravity;
 }
 
 void GeneratorThread::threadedFunction() {
@@ -32,7 +33,8 @@ void GeneratorThread::threadedFunction() {
         tree = gen::iterateTree(tree, bins, environment);
 
         // calculate gravitational forces
-        gen::applyGravitationalForce(tree, environment);
+        if (this->enableGravity)
+            gen::applyGravitationalForce(tree, environment);
 
         if (!isThreadRunning())
             break;

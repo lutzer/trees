@@ -26,13 +26,16 @@ Branch::Branch() {
     Branch(0, M_PI_2, 0, 1);
 }
 
+double Branch::getAngle() const {
+    return this->angle + this->gravityDelta;
+}
+
 TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double branchoutLength, double growthRate) {
     this->branchoutAngleMean = branchoutAngleMean;
     this->branchoutAngleStdDeviation = branchoutAngleStdDeviation;
     this->growthRate = growthRate;
     this->branchPossibility = branchPossibility;
     this->branchoutLength = branchoutLength;
-    this->massDensity = 1;
     this->springConstant = 10;
 }
 

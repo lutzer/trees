@@ -86,7 +86,8 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 
         // Grow branch only if it gets sunlight.
         const auto growth = utils::multiplyWithWeight(newTree.params.growthRate, light, 0.8);
-        branch.length = branch.length + growth; // Make each branch longer.
+        branch.length += growth; // Make each branch longer.
+        //branch.radius += sqrt(growth);
 
         // Create a new child branch?
         const auto newBranchPossibilityModifiedByLength = utils::multiplyWithWeight(newTree.params.branchPossibility, std::min(1.0,branch.length/newTree.params.branchoutLength), 1.0);
@@ -109,7 +110,7 @@ Branch generateChildBranch(const Branch &parent,const pts::Point origin, const T
     // there are fewer branches already.
     auto numberOfChildrenWithNegativeAngles = 0;
     for (auto &childBranch : parent.children) {
-        if (childBranch.angle < 0) {
+        if (childBranch.getAngle() < 0) {
             numberOfChildrenWithNegativeAngles++;
         }
     }
@@ -134,7 +135,7 @@ env::BinArray reduceTreeIntoBins(const pts::SizeInt &matrixSize, const pts::Boun
 
 template<typename F>
 void reduceBranchIntoBinsRecursively(env::BinArray &bins, const pts::SizeInt &matrixSize, const pts::BoundingBox &boundingBox, const pts::Point &point, double angle, const Branch &branch, F reduceLambda) {
-    const auto newAngle = angle + branch.angle;
+    const auto newAngle = angle + branch.getAngle();
 
     // Get bin indices for the current branch.
     auto branchEnd = pts::movePoint(point, newAngle, branch.length);
@@ -174,7 +175,7 @@ double calculateWeight(Branch &branch, double angle, const trees::TreeParameters
         childrenWeightSum += weight;
 
         if (weight > 0) {
-            // compute force which pulls down on the branch by this children
+            // compute force which pulls down on the branch by his children
             pts::Point gravityForce = environment.gravityVector * weight;
 
             // create vector that stands orthagonal on the branch
@@ -187,7 +188,7 @@ double calculateWeight(Branch &branch, double angle, const trees::TreeParameters
     }
 
     //calculate how much the branch is pulled down
-    branch.gravitationalAngleChange = totalForce / ( params.springConstant * branch.radius * branch.radius );
+    branch.gravityDelta = totalForce / ( params.springConstant * branch.radius * branch.radius );
 
     return childrenWeightSum + branchWeight;
 }
@@ -196,7 +197,7 @@ double calculateWeight(Branch &branch, double angle, const trees::TreeParameters
 
 template<typename F>
 void mapBranchRecursively(Branch &branch, const pts::Point origin, const double angle, const env::Bins &bins, const pts::BoundingBox &boundingBox, F mapLambda) {
-    const auto currentBranchAngle = angle + branch.angle;
+    const auto currentBranchAngle = angle + branch.getAngle();
 
     // Map all of the branch's children (passing along the mapping function; when this recursion
     // reaches the leaves, it will apply the mapping function there).
