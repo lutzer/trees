@@ -30,17 +30,25 @@ double Branch::getAngle() const {
     return this->angle + this->gravityDelta;
 }
 
+
 TreeParameters::TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double branchoutLength, double growthRate) {
+    TreeParameters();
     this->branchoutAngleMean = branchoutAngleMean;
     this->branchoutAngleStdDeviation = branchoutAngleStdDeviation;
     this->growthRate = growthRate;
     this->branchPossibility = branchPossibility;
     this->branchoutLength = branchoutLength;
-    this->springConstant = 10;
 }
 
 TreeParameters::TreeParameters() {
-    TreeParameters(1, 1, 1, 1, 1);
+    this->branchoutAngleMean = 0.1;
+    this->branchoutAngleStdDeviation = 0.05;
+    this->branchoutPosition = 4.0;
+    this->growthRate = 0.3;
+    this->branchPossibility = 0.15;
+    this->branchoutLength = 10.0;
+    this->springConstant = 10.0;
+    this->enableGravity = true;
 }
 
 Tree::Tree(pts::Point origin, double trunkAngle, TreeParameters params) {

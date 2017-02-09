@@ -26,17 +26,11 @@ static const pts::BoundingBox PT_BOUNDINGBOX = { { -100, 0 }, { 200, 150 } };
 static const pts::Point SUN_POSITION = { -100, 150 };
 static const env::Environment environment(SUN_POSITION, PT_BOUNDINGBOX);
 
-// Default tree parameters
-static const double BRANCHOUT_ANGLE_MEAN = 0.1;
-static const double BRANCHOUT_ANGLE_VAR = 0.05;
-static const double BRANCH_POSSIBILITY = 0.15;
-static const double BRANCH_BRANCHOUT_LENGTH = 10.0;
-static const double GROWTH_RATE = 0.3;
-
 // Gui Labels
-static const string LABEL_BRANCH_POSSIBILITY = "branch p";
+static const string LABEL_BRANCH_POSSIBILITY = "branch prob";
 static const string LABEL_BRANCH_ANGLE = "branch angle";
 static const string LABEL_BRANCH_VAR = "branch var";
+static const string LABEL_BRANCH_POSITION = "branch pos";
 static const string LABEL_BRANCHOUT_LENGTH = "branch length";
 static const string LABEL_GROWTH_RATE = "growth rate";
 static const string LABEL_TOGGLE_GRAVITY_BUTTON = "ENABLE GRAVITY";
@@ -48,8 +42,7 @@ void ofApp::setup() {
     ofSetVerticalSync(true);
 
     // Set default tree parameters.
-    treeParams = trees::TreeParameters(BRANCHOUT_ANGLE_MEAN, BRANCHOUT_ANGLE_VAR, BRANCH_POSSIBILITY, BRANCH_BRANCHOUT_LENGTH, GROWTH_RATE);
-    enableGravity = false;
+    treeParams = trees::TreeParameters();
 
     // Setup GUI.
     iterationSlider = new ofxDatGuiSlider(iteration.set("Iterations", MAX_ITERATIONS, 0, MAX_ITERATIONS));
@@ -57,16 +50,18 @@ void ofApp::setup() {
     iteration.addListener(this, &ofApp::onIterationChanged);
     parameterFolder = new ofxDatGuiFolder("Parameters", ofColor::fromHex(0xFFD00B));
     parameterFolder->addSlider(LABEL_BRANCH_POSSIBILITY, 0.0, 1.0, treeParams.branchPossibility);
+    parameterFolder->addSlider(LABEL_BRANCH_POSITION, 1.0, 16.0, treeParams.branchoutPosition);
     parameterFolder->addSlider(LABEL_BRANCHOUT_LENGTH, 0.0, 100.0, treeParams.branchoutLength);
     parameterFolder->addSlider(LABEL_BRANCH_ANGLE, 0, 1.0, treeParams.branchoutAngleMean);
     parameterFolder->addSlider(LABEL_BRANCH_VAR, 0.0, M_PI_2, treeParams.branchoutAngleStdDeviation);
     parameterFolder->addSlider(LABEL_GROWTH_RATE, 0.0, 1.0, treeParams.growthRate);
-    parameterFolder->addToggle(LABEL_TOGGLE_GRAVITY_BUTTON);
-    parameterFolder->addSlider(LABEL_BRANCH_FLEXIBILITY, 1, 100, treeParams.springConstant);
+    parameterFolder->addToggle(LABEL_TOGGLE_GRAVITY_BUTTON)->setChecked(treeParams.enableGravity);
+    parameterFolder->addSlider(LABEL_BRANCH_FLEXIBILITY, 0.1, 20.0, treeParams.springConstant);
     parameterFolder->addButton(LABEL_REDRAW_BUTTON);
     parameterFolder->onButtonEvent(this, &ofApp::onParamsButtonEvent);
     parameterFolder->onSliderEvent(this, &ofApp::onParamsSliderEvent);
     parameterFolder->expand();
+
 
 
     // Set the camera's initial position.
@@ -248,8 +243,7 @@ void ofApp::onParamsButtonEvent(ofxDatGuiButtonEvent e) {
     if (e.target->getName() == LABEL_REDRAW_BUTTON) {
         this->calculateTree();
     } else if (e.target->getName() == LABEL_TOGGLE_GRAVITY_BUTTON) {
-        enableGravity = !enableGravity;
-        updateScene = true;
+        treeParams.enableGravity = !treeParams.enableGravity;
     }
 
 }
@@ -271,6 +265,8 @@ void ofApp::onParamsSliderEvent(ofxDatGuiSliderEvent e) {
         treeParams.branchoutLength = e.target->getValue();
     else if (sliderName == LABEL_BRANCH_FLEXIBILITY)
         treeParams.springConstant = e.target->getValue();
+    else if (sliderName == LABEL_BRANCH_POSITION)
+        treeParams.branchoutPosition = e.target->getValue();
 }
 
 void ofApp::onNewIterationCalculated(trees::Tree &tree) {
@@ -290,7 +286,7 @@ void ofApp::calculateTree() {
     treeList.clear();
 
     // create new thread
-    generatorThread = new GeneratorThread(environment, treeParams, MAX_ITERATIONS, enableGravity);
+    generatorThread = new GeneratorThread(environment, treeParams, MAX_ITERATIONS);
     generatorThread->newTreeGeneratedHandler.add(this, &ofApp::onNewIterationCalculated, 1);
     generatorThread->startThread();
 

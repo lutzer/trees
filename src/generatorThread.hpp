@@ -26,11 +26,10 @@ class GeneratorThread : public ofThread {
     int iterations;
 
 public:
-    GeneratorThread(env::Environment environment, trees::TreeParameters params, int iterations, bool enableGravity);
+    GeneratorThread(const env::Environment environment,const trees::TreeParameters &params, int iterations);
 
     // event which is called after each iterations
     ofEvent<trees::Tree> newTreeGeneratedHandler;
-    bool enableGravity;
 };
 
 #endif /* generatorThread_hpp */

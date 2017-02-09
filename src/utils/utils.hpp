@@ -47,6 +47,8 @@ namespace utils {
     /// checks if point lies within the rectangle
     bool containsPoint(const ofRectangle &rectangle, const ofPoint &point);
 
+    ofMesh createCylinder(const ofPoint &start, const ofPoint &end, float radius, int radiusSegments);
+
     #pragma mark - Mapping Helpers
 
     // TODO: move the symbol definitions to .cpp file

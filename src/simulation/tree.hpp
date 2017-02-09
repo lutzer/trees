@@ -33,6 +33,7 @@ namespace trees {
     struct TreeParameters {
         double branchoutAngleMean;
         double branchoutAngleStdDeviation;
+        double branchoutPosition;
 
         double branchPossibility;
         double branchoutLength;
@@ -40,6 +41,7 @@ namespace trees {
         double growthRate;
 
         double springConstant;
+        bool enableGravity;
 
         TreeParameters(double branchoutAngleMean, double branchoutAngleStdDeviation, double branchPossibility, double branchoutLength, double growthRate);
         TreeParameters();

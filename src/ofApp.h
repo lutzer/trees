@@ -33,7 +33,6 @@ private:
     // Adjustable Parameters
     ofParameter<int> iteration;
     BinVisibilty showBins;
-    bool enableGravity;
 
     // Gui
     ofxDatGuiSlider* iterationSlider;

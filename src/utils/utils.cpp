@@ -94,3 +94,41 @@ void utils::setNormals(ofMesh &mesh) {
 bool utils::containsPoint(const ofRectangle &rectangle, const ofPoint &point) {
     return point.x >= rectangle.getMinX() && point.x <= rectangle.getMaxX() && point.y >= rectangle.getMinY() && point.y <= rectangle.getMaxY();
 }
+
+ofMesh utils::createCylinder(const ofPoint &start, const ofPoint &end, float radius, int radiusSegments) {
+
+    ofMesh mesh;
+
+    ofPoint lengthVector = (end - start).normalize();
+
+    //get any orthagonalVector to length vector
+    ofPoint orthagonalVector = lengthVector.getPerpendicular(ofPoint(lengthVector.y,lengthVector.z,lengthVector.x));
+
+    //create bottom circle
+    double step = M_PI*2 / radiusSegments;
+    for (int i=0; i < radiusSegments; i++) {
+        mesh.addVertex(start);
+        mesh.addVertex(start + orthagonalVector.getRotatedRad(i * step, lengthVector) * radius);
+        mesh.addVertex(start + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
+    }
+
+    //create top circle
+    for (int i=0; i < radiusSegments; i++) {
+        mesh.addVertex(end);
+        mesh.addVertex(end + orthagonalVector.getRotatedRad(i * step, lengthVector) * radius);
+        mesh.addVertex(end + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
+    }
+
+    //create two connecting polygons per height segment
+    for (int i=0; i < radiusSegments; i++) {
+        mesh.addVertex(end + orthagonalVector.getRotatedRad(i * step, lengthVector) * radius);
+        mesh.addVertex(end + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
+        mesh.addVertex(start + orthagonalVector.getRotatedRad(i * step, lengthVector) * radius);
+
+        mesh.addVertex(start + orthagonalVector.getRotatedRad(i * step, lengthVector) * radius);
+        mesh.addVertex(start + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
+        mesh.addVertex(end + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
+    }
+    
+    return mesh;
+}

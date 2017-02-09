@@ -55,7 +55,7 @@ env::Bins gen::calculateLightBins(const trees::Tree &tree, const env::Environmen
 
     // Calculate the densities for each bin.
     const auto densities = reduceTreeIntoBins(matrixSize, environment.boundingBox, tree, [](float current, float binIndex, Branch branch) {
-        return std::min(current + branch.radius * env::DENSITY_MULTIPLIER, 1.0);
+        return std::min(current + /* branch.radius * */ env::DENSITY_MULTIPLIER, 1.0);
     });
 
     // Build light matrix from densities.
@@ -87,7 +87,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
         // Grow branch only if it gets sunlight.
         const auto growth = utils::multiplyWithWeight(newTree.params.growthRate, light, 0.8);
         branch.length += growth; // Make each branch longer.
-        //branch.radius += sqrt(growth);
+        //branch.radius += sqrt(growth) * newTree.params.branchPossibility;
 
         // Create a new child branch?
         const auto newBranchPossibilityModifiedByLength = utils::multiplyWithWeight(newTree.params.branchPossibility, std::min(1.0,branch.length/newTree.params.branchoutLength), 1.0);
@@ -104,7 +104,7 @@ Tree treeWithUpdatedBranches(const Tree &tree, const env::Bins &bins, const env:
 Branch generateChildBranch(const Branch &parent,const pts::Point origin, const TreeParameters &params) {
     // Make it more probable that a branch appears near the tip of the parent branch rather than at
     // its base.
-    const auto position = 1 - pow(rnd::randDouble(), 2);
+    const auto position = 1 - pow(rnd::randDouble(), params.branchoutPosition);
 
     // Choose the side of the new branch, making it more likely that the branch is on a side where
     // there are fewer branches already.
@@ -188,7 +188,7 @@ double calculateWeight(Branch &branch, double angle, const trees::TreeParameters
     }
 
     //calculate how much the branch is pulled down
-    branch.gravityDelta = totalForce / ( params.springConstant * branch.radius * branch.radius );
+    branch.gravityDelta = totalForce / ( params.springConstant * branch.radius );
 
     return childrenWeightSum + branchWeight;
 }
