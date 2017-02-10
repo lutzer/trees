@@ -18,6 +18,8 @@ static const float CYLINDER_HEIGHT_SEGMENTS = 3;
 // Declare private methods.
 void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, const trees::Branch &branch);
 
+void createBranchMeshes(vector<ofMesh> &meshes, ofPoint origin, double angle, const trees::Branch &branch);
+
 TreeModel::TreeModel(trees::Tree &tree) {
     this->tree = tree;
 }
@@ -29,14 +31,38 @@ ofMesh TreeModel::getMesh() {
     mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
 
     addBranchesToMesh(mesh, ofPoint(tree.origin.x, tree.origin.y, 0), 0.0, tree.base);
+
+    //utils::setNormals(mesh);
+
     return mesh;
+}
+
+vector<ofMesh> TreeModel::getMeshes() {
+    vector<ofMesh> meshes;
+    createBranchMeshes(meshes, ofPoint(tree.origin.x, tree.origin.y, 0), 0.0, tree.base);
+    return meshes;
+}
+
+void createBranchMeshes(vector<ofMesh> &meshes, ofPoint origin, double angle, const trees::Branch &branch) {
+    double newAngle = angle + branch.getAngle();
+    ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
+                               origin.y + sin(newAngle) * branch.length,
+                               0);
+
+    meshes.push_back(utils::createCylinder(origin, endPoint, branch.radius, CYLINDER_RADIUS_SEGMENTS));
+
+    for (trees::Branch child : branch.children) {
+        const auto childX = origin.x + (endPoint.x - origin.x) * child.position;
+        const auto childY = origin.y + (endPoint.y - origin.y) * child.position;
+        const auto childOrigin = ofPoint(childX, childY, 0);
+        createBranchMeshes(meshes, childOrigin, newAngle, child);
+    }
+
 }
 
 void addBranchesToMesh(ofMesh &mesh, ofPoint origin, double angle, const trees::Branch &branch) {
 
     double newAngle = angle + branch.getAngle();
-
-    // Add end of branch.
     ofPoint endPoint = ofPoint(origin.x + cos(newAngle) * branch.length,
                                origin.y + sin(newAngle) * branch.length,
                                0);

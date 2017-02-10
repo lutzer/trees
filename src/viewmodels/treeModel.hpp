@@ -16,6 +16,7 @@ class TreeModel {
 public:
     explicit TreeModel(trees::Tree &tree);
     ofMesh getMesh();
+    vector<ofMesh> getMeshes();
 
 private:
     trees::Tree tree;

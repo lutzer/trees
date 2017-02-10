@@ -102,7 +102,7 @@ void ofApp::update() {
         const auto index = std::min((int)iteration,(int)treeList.size()-1);
 
         // Update tree mesh.
-        treeMesh = TreeModel(treeList[index]).getMesh();
+        treeMeshes = TreeModel(treeList[index]).getMeshes();
 
         //update info
         treeInfoString = treeList[index].toString();
@@ -129,7 +129,8 @@ void ofApp::draw() {
     ofEnableDepthTest();
     cam.begin();
     groundMesh.draw();
-    treeMesh.draw();
+    for (auto mesh : treeMeshes)
+        mesh.draw();
 
     // Draw sun.
     ofDrawSphere(environment.sun.x, environment.sun.y, 0, SUN_RADIUS);

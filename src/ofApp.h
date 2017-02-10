@@ -27,7 +27,7 @@ private:
     ofEasyCam cam;
     ofMesh groundMesh;
     ofMesh binMesh;
-    ofMesh treeMesh;
+    vector<ofMesh> treeMeshes;
     bool updateScene;
 
     // Adjustable Parameters

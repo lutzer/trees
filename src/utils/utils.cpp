@@ -119,6 +119,7 @@ ofMesh utils::createCylinder(const ofPoint &start, const ofPoint &end, float rad
         mesh.addVertex(end + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
     }
 
+
     //create two connecting polygons per height segment
     for (int i=0; i < radiusSegments; i++) {
         mesh.addVertex(end + orthagonalVector.getRotatedRad(i * step, lengthVector) * radius);
@@ -129,6 +130,6 @@ ofMesh utils::createCylinder(const ofPoint &start, const ofPoint &end, float rad
         mesh.addVertex(start + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
         mesh.addVertex(end + orthagonalVector.getRotatedRad((i+1) * step, lengthVector) * radius);
     }
-    
+
     return mesh;
 }
